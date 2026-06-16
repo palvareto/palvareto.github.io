@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)https://spectacular-maamoul-8d16e4.netlify.app/ -->
+<!-- saved from url=(0042)https://palvareto.github.io/selvatici.html -->
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Selvatici">
 <title>Registro Selvatici</title>
-<link href="./Registro Selvatici_1_files/css2" rel="stylesheet">
+<link href="./Registro Selvatici_files/css2" rel="stylesheet">
 <style>
 :root{--verde:#2d5a27;--verde2:#4a8c3f;--scuro:#1a3a15;--ocra:#c8922a;--ocra2:#e8a830;--crema:#f5f0e8;--rosso:#c0392b;--azzurro:#2980b9;--bg:#1c2b1a;--grigio:rgba(255,255,255,0.06);--bordo:rgba(255,255,255,0.12);}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -141,7 +141,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">Benvenuto BORRINI! 🦌</div>
 
 <!-- MODAL GOOGLE SHEET -->
 <div class="modal-overlay" id="modalSheet">
@@ -195,11 +195,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button class="btn-add" style="width:100%;padding:12px;" onclick="copiaPinEChiudi()">📋 Copia PIN e chiudi</button>
   </div>
 </div>
-<div class="pin-overlay" id="pinOverlay" style="display:none;">
+<div class="pin-overlay" id="pinOverlay" style="display: none;">
   <div class="pin-box">
     <div class="pin-title">🦌 Registro Selvatici</div>
     <div class="pin-subtitle">Inserisci il tuo PIN a 4 cifre</div>
-    <div class="pin-display" id="pinDisplay">_ _ _ _</div>
+    <div class="pin-display" id="pinDisplay">● ● ● ●</div>
     <div class="pin-grid">
       <button class="pin-btn" onclick="pinDigit(&#39;1&#39;)">1</button>
       <button class="pin-btn" onclick="pinDigit(&#39;2&#39;)">2</button>
@@ -229,9 +229,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button onclick="installApp()">INSTALLA</button>
   </div>
   <div class="stats-row">
-    <div class="stat-card"><div class="num" id="statZoo">191</div><div class="label">Zooprofilassi</div></div>
-    <div class="stat-card"><div class="num" id="statCras">166</div><div class="label">CRAS</div></div>
-    <div class="stat-card total"><div class="num" id="statTot">357</div><div class="label">Totale</div></div>
+    <div class="stat-card"><div class="num" id="statZoo">192</div><div class="label">Zooprofilassi</div></div>
+    <div class="stat-card"><div class="num" id="statCras">184</div><div class="label">CRAS</div></div>
+    <div class="stat-card total"><div class="num" id="statTot">376</div><div class="label">Totale</div></div>
   </div>
   <div class="section-title">Nuova registrazione</div>
   <div class="main-buttons">
@@ -448,7 +448,10 @@ function vai(id){
 
 // PIN SYSTEM
 var PIN_MAP_DEFAULT = {"1001": "ARISI", "1002": "BANDERA", "1003": "BORRINI", "1004": "CAMBIATI", "1005": "COLLA", "1006": "FUSARI", "1007": "GUARNERI", "1008": "PREANI", "1009": "RIZZI", "1010": "TRENTAROSSI", "1011": "VIVIANI", "1012": "CHIODA", "1013": "PERSONALE VOLONTARIO"};
-var PIN_MAP = JSON.parse(localStorage.getItem('selvatici_pin_map') || JSON.stringify(PIN_MAP_DEFAULT));
+// Forza sincronizzazione dal foglio ad ogni apertura
+localStorage.removeItem('selvatici_pin_map');
+localStorage.removeItem('selvatici_utente');
+var PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT);
 var pinCurrent = '';
 var utenteLoggato = localStorage.getItem('selvatici_utente') || '';
 

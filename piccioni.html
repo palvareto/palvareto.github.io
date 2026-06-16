@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- saved from url=(0041)https://palvareto.github.io/piccioni.html -->
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Piccioni">
 <title>Controllo Piccioni</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="./Controllo Piccioni_files/css2" rel="stylesheet">
 <style>
 :root{--blu:#1a1a2e;--oro:#f5a623;--oro2:#ffc84a;--crema:#f0f0f0;--verde:#27ae60;--rosso:#e74c3c;--grigio:rgba(255,255,255,0.08);--bordo:rgba(255,255,255,0.12);}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -112,7 +113,7 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">👤 Benvenuto, BORRINI</div>
 
 <!-- MODAL GOOGLE SHEET -->
 <div class="modal-overlay" id="modalSheet">
@@ -134,7 +135,7 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
   <div class="modal-box">
     <div class="modal-title">👤 Identificazione</div>
     <div class="modal-text">Inserisci il tuo codice operatore (4 cifre) per identificarti. Verrà richiesto solo questa volta su questo dispositivo.</div>
-    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:'Bebas Neue',sans-serif;">
+    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:&#39;Bebas Neue&#39;,sans-serif;">
     <div id="errLogin" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
     <div class="modal-btns" style="grid-template-columns:1fr;">
       <button class="modal-btn confirm" onclick="verificaPinLogin()">Conferma</button>
@@ -198,9 +199,9 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
     <button onclick="installApp()">INSTALLA</button>
   </div>
   <div class="stats-row">
-    <div class="stat-card"><div class="num" id="statMese">38923</div><div class="label">Questo mese</div></div>
-    <div class="stat-card"><div class="num" id="statAnno">39789</div><div class="label">Anno</div></div>
-    <div class="stat-card total"><div class="num" id="statTot">39789</div><div class="label">Totale</div></div>
+    <div class="stat-card"><div class="num" id="statMese">39505</div><div class="label">Questo mese</div></div>
+    <div class="stat-card"><div class="num" id="statAnno">40371</div><div class="label">Anno</div></div>
+    <div class="stat-card total"><div class="num" id="statTot">40371</div><div class="label">Totale</div></div>
   </div>
   <div class="section-title">Nuova registrazione</div>
   <button class="btn-main" onclick="vai(&#39;screenForm&#39;)">
@@ -291,8 +292,8 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
   <div class="form-group">
     <label class="form-label">Tipo smaltimento</label>
     <div class="smalt-grid">
-      <button class="smalt-btn" id="btnInterramento" onclick="setSmaltimento('Interramento')">🌱 Interramento</button>
-      <button class="smalt-btn" id="btnDitta" onclick="setSmaltimento('Ditta autorizzata')">🏭 Ditta autorizzata</button>
+      <button class="smalt-btn" id="btnInterramento" onclick="setSmaltimento(&#39;Interramento&#39;)">🌱 Interramento</button>
+      <button class="smalt-btn" id="btnDitta" onclick="setSmaltimento(&#39;Ditta autorizzata&#39;)">🏭 Ditta autorizzata</button>
     </div>
   </div>
   <button class="btn-submit" onclick="submitForm()">🐦 Invia Registrazione</button>
@@ -336,13 +337,10 @@ var DEFAULT_PIN_MAP = {
   '1009': 'RIZZI', '1010': 'TRENTAROSSI', '1011': 'VIVIANI', '1012': 'CHIODA',
   '1013': 'TORTINI', '1014': 'MARIOTTI'
 };
-var PIN_MAP = (function(){
-  var saved = localStorage.getItem('piccioni_pinmap_v1');
-  if (saved) {
-    try { var obj = JSON.parse(saved); if (obj && typeof obj === 'object') return obj; } catch(e){}
-  }
-  return Object.assign({}, DEFAULT_PIN_MAP);
-})();
+// Forza sincronizzazione dal foglio ad ogni apertura
+localStorage.removeItem('piccioni_pinmap_v1');
+localStorage.removeItem('piccioni_operatore_v1');
+var PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP);
 function salvaPinMapPiccioni() { localStorage.setItem('piccioni_pinmap_v1', JSON.stringify(PIN_MAP)); }
 
 async function syncPinMapDaSheet() {

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- saved from url=(0039)https://palvareto.github.io/flotta.html -->
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Flotta">
 <title>Registro Flotta</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="./Registro Flotta_files/css2" rel="stylesheet">
 <style>
 :root{--blu:#0D1B2E;--oro:#f5a623;--oro2:#ffc84a;--crema:#e8eaf0;--verde:#27ae60;--rosso:#e74c3c;--grigio:rgba(255,255,255,0.07);--bordo:rgba(255,255,255,0.12);}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -123,7 +124,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">👤 Benvenuto, BORRINI</div>
 
 <div class="modal-overlay" id="modalSheet">
   <div class="modal-box">
@@ -144,7 +145,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   <div class="modal-box">
     <div class="modal-title">👤 Identificazione</div>
     <div class="modal-text">Inserisci il tuo codice operatore (4 cifre) per identificarti. Verrà richiesto solo questa volta su questo dispositivo.</div>
-    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:'Bebas Neue',sans-serif;">
+    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:&#39;Bebas Neue&#39;,sans-serif;">
     <div id="errLogin" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
     <div class="modal-btns" style="grid-template-columns:1fr;">
       <button class="modal-btn confirm" onclick="verificaPinLogin()">Conferma</button>
@@ -191,10 +192,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button onclick="installApp()">INSTALLA</button>
   </div>
   <div class="stats-row">
-    <div class="stat-card"><div class="num" id="statKmOggi">—</div><div class="label">KM oggi</div></div>
-    <div class="stat-card"><div class="num" id="statKmMese">—</div><div class="label">KM mese</div></div>
-    <div class="stat-card"><div class="num" id="statRifMese">—</div><div class="label">Rif. mese</div></div>
-    <div class="stat-card highlight"><div class="num" id="statKmAnno">—</div><div class="label">KM anno</div></div>
+    <div class="stat-card"><div class="num" id="statKmOggi">110</div><div class="label">KM oggi</div></div>
+    <div class="stat-card"><div class="num" id="statKmMese">1802</div><div class="label">KM mese</div></div>
+    <div class="stat-card"><div class="num" id="statRifMese">5</div><div class="label">Rif. mese</div></div>
+    <div class="stat-card highlight"><div class="num" id="statKmAnno">3615</div><div class="label">KM anno</div></div>
   </div>
   <div class="section-title">Nuova registrazione</div>
   <div class="main-buttons">
@@ -365,13 +366,10 @@ var DEFAULT_PIN_MAP = {
   '1009': 'RIZZI', '1010': 'TRENTAROSSI', '1011': 'VIVIANI', '1012': 'CHIODA'
 };
 
-var PIN_MAP = (function(){
-  var saved = localStorage.getItem('flotta_pinmap_v1');
-  if (saved) {
-    try { var obj = JSON.parse(saved); if (obj && typeof obj === 'object') return obj; } catch(e){}
-  }
-  return Object.assign({}, DEFAULT_PIN_MAP);
-})();
+// Forza sincronizzazione dal foglio ad ogni apertura
+localStorage.removeItem('flotta_pinmap_v1');
+localStorage.removeItem('flotta_operatore_v1');
+var PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP);
 
 function salvaPinMap() {
   localStorage.setItem('flotta_pinmap_v1', JSON.stringify(PIN_MAP));
