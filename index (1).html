@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PP Cremona — App</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height:100vh;padding:24px 16px;}
+.header{text-align:center;margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.header-title{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:#f5a623;}
+.header-sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-top:4px;text-transform:uppercase;}
+.app-list{max-width:420px;margin:0 auto;}
+.app-btn{display:flex;align-items:center;gap:14px;padding:18px 16px;border:1px solid rgba(245,166,35,0.3);border-radius:14px;background:linear-gradient(135deg,#16213e,#0a0a1a);margin-bottom:12px;text-decoration:none;color:#e2e8f0;transition:opacity 0.15s;}
+.app-btn:hover{opacity:0.8;}
+.app-icon{font-size:32px;flex-shrink:0;}
+.app-info strong{display:block;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:#fff;}
+.app-info span{font-size:11px;color:rgba(255,255,255,0.4);font-family:'Barlow Condensed',sans-serif;}
+.arrow{margin-left:auto;font-size:20px;opacity:0.3;}
+.footer{text-align:center;margin-top:32px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px;}
+</style>
+</head>
+<body>
+
+<div id="loginOverlay" style="position:fixed;inset:0;background:#0f1115;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <div style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:#f5a623;">PP CREMONA</div>
+    <div style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-top:4px;text-transform:uppercase;">Accesso riservato</div>
+  </div>
+  <input type="password" id="pwdAccesso" placeholder="Password..." style="width:100%;max-width:320px;padding:14px 16px;border-radius:10px;border:1px solid rgba(245,166,35,0.4);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;margin-bottom:8px;outline:none;">
+  <div id="errAccesso" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;"></div>
+  <button onclick="verificaAccesso()" style="width:100%;max-width:320px;padding:14px;border-radius:10px;border:none;background:#f5a623;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Entra</button>
+</div>
+
+<script>
+function verificaAccesso(){
+  var pwd=document.getElementById('pwdAccesso').value;
+  if(pwd==='mGq(h=,#kaEMryFR)Wyx8UXEDUxE:u'){
+    localStorage.setItem('pp_accesso_v1','ok');
+    document.getElementById('loginOverlay').style.display='none';
+  } else {
+    document.getElementById('errAccesso').textContent='❌ Password errata';
+    document.getElementById('pwdAccesso').value='';
+  }
+}
+document.getElementById('pwdAccesso').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAccesso();});
+if(localStorage.getItem('pp_accesso_v1')==='ok'){
+  document.getElementById('loginOverlay').style.display='none';
+}
+</script>
+
+  <div class="header">
+    <div class="header-title">PP CREMONA</div>
+    <div class="header-sub">Polizia Provinciale di Cremona — App</div>
+  </div>
+  <div class="app-list">
+    <a class="app-btn" href="flotta.html">
+      <span class="app-icon">🚗</span>
+      <div class="app-info"><strong>Registro Flotta</strong><span>Chilometri e rifornimenti</span></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="app-btn" href="corvidi.html" style="border-color:rgba(240,208,96,0.3);">
+      <span class="app-icon">🐦‍⬛</span>
+      <div class="app-info"><strong>Controllo Corvidi</strong><span>Cornacchia · Gazza · Piccione · Ibis · Daino...</span></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="app-btn" href="piccioni.html" style="border-color:rgba(245,166,35,0.3);">
+      <span class="app-icon">🐦</span>
+      <div class="app-info"><strong>Controllo Piccioni</strong><span>Registro abbattimenti piccioni</span></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="app-btn" href="selvatici.html" style="border-color:rgba(45,90,39,0.6);">
+      <span class="app-icon">🦌</span>
+      <div class="app-info"><strong>Registro Selvatici</strong><span>Zooprofilassi e CRAS</span></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="app-btn" href="servizio.html" style="border-color:rgba(26,26,46,0.8);">
+      <span class="app-icon">📋</span>
+      <div class="app-info"><strong>Report Servizio</strong><span>Report giornaliero di servizio</span></div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="app-btn" href="turni.html" style="border-color:rgba(39,174,96,0.4);">
+      <span class="app-icon">📅</span>
+      <div class="app-info"><strong>Turni PP Cremona</strong><span>Calendario turni mensile</span></div>
+      <span class="arrow">›</span>
+    </a>
+  </div>
+  <div class="footer">POLIZIA PROVINCIALE DI CREMONA</div>
+</body>
+</html>
