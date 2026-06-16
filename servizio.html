@@ -442,8 +442,9 @@ async function syncPinMapDaSheet() {
   try {
     var res = await fetch(URL_GS + '?action=pinmap');
     var d = await res.json();
-    if (d.pinMap && typeof d.pinMap === 'object') {
-      PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP, d.pinMap);
+    if (d.pinMap && typeof d.pinMap === 'object' && Object.keys(d.pinMap).length > 0) {
+      // Usa SOLO i PIN del foglio (sovrascrive completamente il default)
+      PIN_MAP = d.pinMap;
       salvaPinMapServizio();
     }
   } catch(e) {}
