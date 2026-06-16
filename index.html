@@ -45,77 +45,73 @@ body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-const OTP_URL = 'https://script.google.com/macros/s/AKfycbztRcpG6zgIBCz7wr51PjledAjikKuqQeYsLs5AjbU6NSIYjS49WJ1N3d5knW47RCHibA/exec' ;
+emailjs.init('j7o63OAmMZx3cuMUO');
 
-// Step 1: password, Step 2: OTP
-var step = 1;
+const EMAILJS_SERVICE = 'service_ir5rrso';
+const EMAILJS_TEMPLATE = 'template_sv39hnk';
+const EMAIL_DEST = 'ambientale.poliziaprovincialecr@gmail.com';
+
+var otpGenerato = '';
+var otpScadenza = 0;
 
 function verificaAccesso(){
-  var pwd=document.getElementById('pwdAccesso').value;
-  if(pwd==='mGq(h=,#kaEMryFR)Wyx8UXEDUxE:u'){
-    // Password ok — invia OTP
-    document.getElementById('pwdAccesso').disabled=true;
-    document.getElementById('errAccesso').style.color='#7dcfaa';
-    document.getElementById('errAccesso').textContent='⏳ Invio codice in corso...';
-    // Usa script tag (JSONP) per bypassare CORS di Google Apps Script
-    var script = document.createElement('script');
-    window._otpCallback = function(d){
-      document.head.removeChild(script);
-      if(d.status==='ok'){
-        document.getElementById('stepPwd').style.display='none';
-        document.getElementById('stepOtp').style.display='block';
-        document.getElementById('otpInfo').textContent='📧 Codice inviato a ambientale.poliziaprovincialecr@gmail.com - valido 10 minuti';
-      } else {
-        document.getElementById('errAccesso').style.color='#e74c3c';
-        document.getElementById('errAccesso').textContent='❌ Errore invio: '+d.message;
-        document.getElementById('pwdAccesso').disabled=false;
-      }
-    };
-    script.src = OTP_URL+'?action=sendOTP&callback=_otpCallback';
-    script.onerror = function(){
-      document.getElementById('errAccesso').style.color='#e74c3c';
-      document.getElementById('errAccesso').textContent='❌ Errore di connessione';
-      document.getElementById('pwdAccesso').disabled=false;
-    };
-    document.head.appendChild(script);
+  var pwd = document.getElementById('pwdAccesso').value;
+  if(pwd === 'mGq(h=,#kaEMryFR)Wyx8UXEDUxE:u'){
+    document.getElementById('pwdAccesso').disabled = true;
+    document.getElementById('errAccesso').style.color = '#7dcfaa';
+    document.getElementById('errAccesso').textContent = '⏳ Invio codice in corso...';
+
+    // Genera OTP
+    otpGenerato = Math.floor(100000 + Math.random() * 900000).toString();
+    otpScadenza = Date.now() + 10 * 60 * 1000;
+
+    emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      email: EMAIL_DEST,
+      passcode: otpGenerato,
+      time: new Date(otpScadenza).toLocaleTimeString('it-IT')
+    }).then(function(){
+      document.getElementById('stepPwd').style.display = 'none';
+      document.getElementById('stepOtp').style.display = 'block';
+      document.getElementById('otpInfo').textContent = '📧 Codice inviato a ' + EMAIL_DEST + ' — valido 10 minuti';
+    }, function(err){
+      document.getElementById('errAccesso').style.color = '#e74c3c';
+      document.getElementById('errAccesso').textContent = '❌ Errore invio: ' + JSON.stringify(err);
+      document.getElementById('pwdAccesso').disabled = false;
+    });
   } else {
-    document.getElementById('errAccesso').style.color='#e74c3c';
-    document.getElementById('errAccesso').textContent='❌ Password errata';
-    document.getElementById('pwdAccesso').value='';
+    document.getElementById('errAccesso').style.color = '#e74c3c';
+    document.getElementById('errAccesso').textContent = '❌ Password errata';
+    document.getElementById('pwdAccesso').value = '';
   }
 }
 
 function verificaOTP(){
-  var code=document.getElementById('otpCode').value.trim();
-  if(!code){return;}
-  document.getElementById('errOtp').textContent='⏳ Verifica...';
-  document.getElementById('errOtp').style.color='#7dcfaa';
-  var script2 = document.createElement('script');
-  window._verifyCallback = function(d){
-    document.head.removeChild(script2);
-    if(d.status==='ok'){
-      localStorage.setItem('pp_accesso_v1','ok');
-      document.getElementById('loginOverlay').style.display='none';
-    } else {
-      document.getElementById('errOtp').style.color='#e74c3c';
-      document.getElementById('errOtp').textContent='❌ '+d.message;
-      document.getElementById('otpCode').value='';
-    }
-  };
-  script2.src = OTP_URL+'?action=verifyOTP&code='+encodeURIComponent(code)+'&callback=_verifyCallback';
-  script2.onerror = function(){
-    document.getElementById('errOtp').style.color='#e74c3c';
-    document.getElementById('errOtp').textContent='❌ Errore di connessione';
-  };
-  document.head.appendChild(script2);
+  var code = document.getElementById('otpCode').value.trim();
+  if(!code) return;
+  if(Date.now() > otpScadenza){
+    document.getElementById('errOtp').style.color = '#e74c3c';
+    document.getElementById('errOtp').textContent = '❌ Codice scaduto — ricarica la pagina';
+    return;
+  }
+  if(code === otpGenerato){
+    localStorage.setItem('pp_accesso_v1', 'ok');
+    document.getElementById('loginOverlay').style.display = 'none';
+  } else {
+    document.getElementById('errOtp').style.color = '#e74c3c';
+    document.getElementById('errOtp').textContent = '❌ Codice non valido';
+    document.getElementById('otpCode').value = '';
+  }
 }
 
-document.getElementById('pwdAccesso').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAccesso();});
-
-if(localStorage.getItem('pp_accesso_v1')==='ok'){
-  document.getElementById('loginOverlay').style.display='none';
-}
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('pwdAccesso').addEventListener('keydown', function(e){ if(e.key==='Enter') verificaAccesso(); });
+  document.getElementById('otpCode').addEventListener('keydown', function(e){ if(e.key==='Enter') verificaOTP(); });
+  if(localStorage.getItem('pp_accesso_v1') === 'ok'){
+    document.getElementById('loginOverlay').style.display = 'none';
+  }
+});
 </script>
 
   <div class="header">
