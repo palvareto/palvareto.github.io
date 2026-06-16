@@ -28,23 +28,91 @@ body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height
     <div style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:#f5a623;">PP CREMONA</div>
     <div style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-top:4px;text-transform:uppercase;">Accesso riservato</div>
   </div>
-  <input type="password" id="pwdAccesso" placeholder="Password..." style="width:100%;max-width:320px;padding:14px 16px;border-radius:10px;border:1px solid rgba(245,166,35,0.4);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;margin-bottom:8px;outline:none;">
-  <div id="errAccesso" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;"></div>
-  <button onclick="verificaAccesso()" style="width:100%;max-width:320px;padding:14px;border-radius:10px;border:none;background:#f5a623;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Entra</button>
+
+  <!-- STEP 1: Password -->
+  <div id="stepPwd" style="width:100%;max-width:320px;">
+    <input type="password" id="pwdAccesso" placeholder="Password..." style="width:100%;padding:14px 16px;border-radius:10px;border:1px solid rgba(245,166,35,0.4);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;margin-bottom:8px;outline:none;">
+    <div id="errAccesso" style="font-size:11px;min-height:16px;margin-bottom:8px;"></div>
+    <button onclick="verificaAccesso()" style="width:100%;padding:14px;border-radius:10px;border:none;background:#f5a623;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Continua →</button>
+  </div>
+
+  <!-- STEP 2: OTP -->
+  <div id="stepOtp" style="width:100%;max-width:320px;display:none;">
+    <div id="otpInfo" style="font-size:11px;color:#7dcfaa;margin-bottom:12px;text-align:center;"></div>
+    <input type="number" id="otpCode" placeholder="Codice a 6 cifre..." style="width:100%;padding:14px 16px;border-radius:10px;border:1px solid rgba(125,207,170,0.5);background:rgba(255,255,255,0.05);color:#fff;font-size:22px;margin-bottom:8px;outline:none;text-align:center;letter-spacing:6px;">
+    <div id="errOtp" style="font-size:11px;min-height:16px;margin-bottom:8px;"></div>
+    <button onclick="verificaOTP()" style="width:100%;padding:14px;border-radius:10px;border:none;background:#7dcfaa;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Accedi ✓</button>
+  </div>
 </div>
 
 <script>
+const OTP_URL =  + OTP_URL + ;
+
+// Step 1: password, Step 2: OTP
+var step = 1;
+
 function verificaAccesso(){
   var pwd=document.getElementById('pwdAccesso').value;
   if(pwd==='mGq(h=,#kaEMryFR)Wyx8UXEDUxE:u'){
-    localStorage.setItem('pp_accesso_v1','ok');
-    document.getElementById('loginOverlay').style.display='none';
+    // Password ok — invia OTP
+    document.getElementById('pwdAccesso').disabled=true;
+    document.getElementById('errAccesso').style.color='#7dcfaa';
+    document.getElementById('errAccesso').textContent='⏳ Invio codice in corso...';
+    // Usa script tag (JSONP) per bypassare CORS di Google Apps Script
+    var script = document.createElement('script');
+    window._otpCallback = function(d){
+      document.head.removeChild(script);
+      if(d.status==='ok'){
+        document.getElementById('stepPwd').style.display='none';
+        document.getElementById('stepOtp').style.display='block';
+        document.getElementById('otpInfo').textContent='📧 Codice inviato a ambientale.poliziaprovincialecr@gmail.com - valido 10 minuti';
+      } else {
+        document.getElementById('errAccesso').style.color='#e74c3c';
+        document.getElementById('errAccesso').textContent='❌ Errore invio: '+d.message;
+        document.getElementById('pwdAccesso').disabled=false;
+      }
+    };
+    script.src = OTP_URL+'?action=sendOTP&callback=_otpCallback';
+    script.onerror = function(){
+      document.getElementById('errAccesso').style.color='#e74c3c';
+      document.getElementById('errAccesso').textContent='❌ Errore di connessione';
+      document.getElementById('pwdAccesso').disabled=false;
+    };
+    document.head.appendChild(script);
   } else {
+    document.getElementById('errAccesso').style.color='#e74c3c';
     document.getElementById('errAccesso').textContent='❌ Password errata';
     document.getElementById('pwdAccesso').value='';
   }
 }
+
+function verificaOTP(){
+  var code=document.getElementById('otpCode').value.trim();
+  if(!code){return;}
+  document.getElementById('errOtp').textContent='⏳ Verifica...';
+  document.getElementById('errOtp').style.color='#7dcfaa';
+  var script2 = document.createElement('script');
+  window._verifyCallback = function(d){
+    document.head.removeChild(script2);
+    if(d.status==='ok'){
+      localStorage.setItem('pp_accesso_v1','ok');
+      document.getElementById('loginOverlay').style.display='none';
+    } else {
+      document.getElementById('errOtp').style.color='#e74c3c';
+      document.getElementById('errOtp').textContent='❌ '+d.message;
+      document.getElementById('otpCode').value='';
+    }
+  };
+  script2.src = OTP_URL+'?action=verifyOTP&code='+encodeURIComponent(code)+'&callback=_verifyCallback';
+  script2.onerror = function(){
+    document.getElementById('errOtp').style.color='#e74c3c';
+    document.getElementById('errOtp').textContent='❌ Errore di connessione';
+  };
+  document.head.appendChild(script2);
+}
+
 document.getElementById('pwdAccesso').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAccesso();});
+
 if(localStorage.getItem('pp_accesso_v1')==='ok'){
   document.getElementById('loginOverlay').style.display='none';
 }
