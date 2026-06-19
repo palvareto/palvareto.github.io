@@ -76,19 +76,22 @@ function setStatus(msg,ok){
   el.className='status show '+(ok?'ok':'err');
 }
 
-// Carica targhe dallo storico
+// Carica targhe dal foglio Targhe
 async function caricaTarghe(){
   try{
-    var res=await fetch(URL_GS+'?action=storico');
+    var res=await fetch(URL_GS+'?action=targhe');
     var d=await res.json();
-    var tutto=(d.km||[]).concat(d.rif||[]);
-    var map={};
-    tutto.forEach(function(r){if(r.targa)map[r.targa.toUpperCase()]=true;});
-    var list=Object.keys(map).sort();
+    var list=(d.targhe||[]).sort();
     var sel=document.getElementById('targa');
     sel.innerHTML='<option value="">— Seleziona targa —</option>';
     list.forEach(function(t){sel.innerHTML+='<option>'+t+'</option>';});
-  }catch(e){}
+  }catch(e){
+    // fallback default
+    var def=['YA632AS','YA358AV','YA772AL','YA773AL','YA743AB','YA256AX','YA295AP','YA365AM','YA754AP','YA438AR'];
+    var sel=document.getElementById('targa');
+    sel.innerHTML='<option value="">— Seleziona targa —</option>';
+    def.forEach(function(t){sel.innerHTML+='<option>'+t+'</option>';});
+  }
 }
 caricaTarghe();
 
