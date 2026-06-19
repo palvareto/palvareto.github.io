@@ -424,9 +424,20 @@ const URL_GS = 'https://script.google.com/macros/s/AKfycbzY8hcFw4FJueOFcFaTGJniK
 
 // TARGHE VEICOLI
 var TARGHE_DEFAULT = ['YA632AS','YA358AV','YA772AL','YA773AL','YA743AB','YA256AX','YA295AP','YA365AM','YA754AP','YA438AR'];
+// Usa sempre TARGHE_DEFAULT come base, merge con eventuali aggiunte salvate
 var targhe = (function(){
   var saved = localStorage.getItem('flotta_targhe_v1');
-  if(saved){ try{ var arr=JSON.parse(saved); if(Array.isArray(arr)&&arr.length) return arr; }catch(e){} }
+  if(saved){ 
+    try{ 
+      var arr=JSON.parse(saved); 
+      if(Array.isArray(arr)&&arr.length){
+        // Merge: aggiungi le targhe default che mancano
+        TARGHE_DEFAULT.forEach(function(t){ if(arr.indexOf(t)<0) arr.push(t); });
+        arr.sort();
+        return arr;
+      } 
+    }catch(e){} 
+  }
   return TARGHE_DEFAULT.slice();
 })();
 function salvaTarghe(){ localStorage.setItem('flotta_targhe_v1', JSON.stringify(targhe)); }
@@ -1190,6 +1201,14 @@ async function generaStampaTutto(){
 
 syncPinMapDaSheet().then(checkLogin);
 loadStats();
+// Popola subito i select targhe con i valori default
+setTimeout(function(){
+  renderSelectTarghe('kmTarga', false);
+  renderSelectTarghe('rifTarga', false);
+  renderSelectTarghe('filtraTarga', true);
+  renderSelectTarghe('kmStampaTarga', false);
+  renderSelectTarghe('rifStampaTarga', false);
+}, 100);
 </script>
 
 
