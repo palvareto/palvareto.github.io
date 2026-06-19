@@ -178,6 +178,33 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
       <button class="modal-btn cancel" style="width:100%;margin-top:12px;" onclick="chiudiModalAgenti()">Chiudi</button>
     </div>
   </div>
+
+<!-- MODAL GESTIONE TARGHE -->
+<div class="modal-overlay" id="modalTarghe">
+  <div class="modal-box large">
+    <div id="targhePwdSection">
+      <div class="modal-title">🔒 Gestione Targhe</div>
+      <div class="modal-text">Inserisci la password per gestire i veicoli</div>
+      <input type="password" class="form-input" id="pwdTarghe" placeholder="Password..." style="margin-bottom:6px;">
+      <div id="errTarghe" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="chiudiModalTarghe()">Annulla</button>
+        <button class="modal-btn confirm" onclick="verificaPasswordTarghe()">Accedi</button>
+      </div>
+    </div>
+    <div id="targheManagerSection" style="display:none;">
+      <div class="modal-title">🚗 Veicoli</div>
+      <div id="targheManagerList" style="max-height:200px;overflow-y:auto;margin-bottom:12px;"></div>
+      <div style="display:flex;gap:8px;margin-bottom:6px;">
+        <input type="text" class="form-input" id="nuovaTarga" placeholder="Es. YA123AB..." style="font-size:13px;padding:8px 10px;text-transform:uppercase;">
+        <button class="modal-btn confirm" onclick="aggiungiTarga()" style="white-space:nowrap;padding:8px 12px;">+ Aggiungi</button>
+      </div>
+      <div id="errNuovaTarga" style="font-size:11px;color:#e74c3c;min-height:14px;margin-bottom:8px;"></div>
+      <button class="modal-btn cancel" onclick="chiudiModalTarghe()" style="width:100%;">Chiudi</button>
+    </div>
+  </div>
+</div>
+
 </div>
 <div class="header">
   <div class="header-icon">🚗</div>
@@ -215,6 +242,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   <button class="btn-report" style="color:#7dcfaa;border-color:rgba(39,174,96,0.3);background:rgba(39,174,96,0.08);" onclick="vai(&#39;screenConsumi&#39;)">⛽ &nbsp;Consumo per veicolo</button>
   <button class="btn-report" style="color:#f0d060;border-color:rgba(240,208,96,0.3);background:rgba(240,208,96,0.06);margin-top:8px;" onclick="vai(&#39;screenStampaKm&#39;)">🖨️ &nbsp;Stampa Scheda Viaggio Mensile</button>
   <button class="btn-report" style="color:#7dcfaa;border-color:rgba(39,174,96,0.3);background:rgba(39,174,96,0.06);margin-top:8px;" onclick="vai(&#39;screenStampaRif&#39;)">🖨️ &nbsp;Stampa Foglio Carburante</button>
+  <button class="btn-report" style="color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.06);margin-top:8px;" onclick="apriGestioneTarghe()">🚗 &nbsp;Gestisci veicoli</button>
   <button class="btn-sheet" onclick="apriModalSheet()">📊 &nbsp;Apri Google Sheet</button>
 </div>
 
@@ -233,12 +261,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa <span class="req">*</span></label>
-    <select class="form-select" id="kmTarga">
-      <option value="">— Seleziona —</option>
-      <option>YA632AS</option><option>YA358AV</option><option>YA772AL</option>
-      <option>YA773AL</option><option>YA743AB</option><option>YA256AX</option>
-      <option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option>
-    </select>
+    <select class="form-select" id="kmTarga"><option value="">— Seleziona —</option></select>
   </div>
   <div class="form-group">
     <label class="form-label">Conducente <span class="req">*</span></label>
@@ -271,12 +294,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa <span class="req">*</span></label>
-    <select class="form-select" id="rifTarga">
-      <option value="">— Seleziona —</option>
-      <option>YA632AS</option><option>YA358AV</option><option>YA772AL</option>
-      <option>YA773AL</option><option>YA743AB</option><option>YA256AX</option>
-      <option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option>
-    </select>
+    <select class="form-select" id="rifTarga"><option value="">— Seleziona —</option></select>
   </div>
   <div class="form-group">
     <label class="form-label">Conducente <span class="req">*</span></label>
@@ -322,12 +340,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button class="tab-btn" id="tabRif" onclick="switchTab(&#39;rif&#39;)">⛽ Rifornimenti</button>
   </div>
   <div class="filter-row">
-    <select class="form-select" id="filtraTarga" onchange="renderStorico()">
-      <option value="">Tutte le targhe</option>
-      <option>YA632AS</option><option>YA358AV</option><option>YA772AL</option>
-      <option>YA773AL</option><option>YA743AB</option><option>YA256AX</option>
-      <option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option>
-    </select>
+    <select class="form-select" id="filtraTarga" onchange="renderStorico()"><option value="">Tutte le targhe</option></select>
     <select class="form-select" id="filtraConducente" onchange="renderStorico()">
       <option value="">Tutti</option>
       <option>ARISI</option><option>BANDERA</option><option>BORRINI</option>
@@ -360,12 +373,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa veicolo <span style="color:#f5a623;">*</span></label>
-    <select class="form-select" id="kmStampaTarga">
-      <option value="">— Seleziona targa —</option>
-      <option>YA094GX</option><option>YA107GX</option><option>YA108GX</option>
-      <option>YA109GX</option><option>YA110GX</option><option>YA111GX</option>
-      <option>YA112GX</option><option>YA113GX</option><option>YA114GX</option><option>YA115GX</option>
-    </select>
+    <select class="form-select" id="kmStampaTarga"><option value="">— Caricamento targhe... —</option></select>
   </div>
   <button class="btn-submit" onclick="generaStampaKm()">🖨️ Genera Scheda Viaggio</button>
   <div id="anteprimaKm" style="margin-top:16px;"></div>
@@ -383,12 +391,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa veicolo <span style="color:#f5a623;">*</span></label>
-    <select class="form-select" id="rifStampaTarga">
-      <option value="">— Seleziona targa —</option>
-      <option>YA094GX</option><option>YA107GX</option><option>YA108GX</option>
-      <option>YA109GX</option><option>YA110GX</option><option>YA111GX</option>
-      <option>YA112GX</option><option>YA113GX</option><option>YA114GX</option><option>YA115GX</option>
-    </select>
+    <select class="form-select" id="rifStampaTarga"><option value="">— Caricamento targhe... —</option></select>
   </div>
   <button class="btn-submit" onclick="generaStampaRif()" style="background:linear-gradient(135deg,#16213e,#27ae60);">🖨️ Genera Foglio Carburante</button>
   <div id="anteprimaRif" style="margin-top:16px;"></div>
@@ -396,6 +399,22 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 
 <script>
 const URL_GS = 'https://script.google.com/macros/s/AKfycbzY8hcFw4FJueOFcFaTGJniKu64Y-36fFeJ6FDsGC1N_GpuxMYteCTrtknnsivOakY/exec';
+
+// TARGHE VEICOLI
+var TARGHE_DEFAULT = ['YA632AS','YA358AV','YA772AL','YA773AL','YA743AB','YA256AX','YA295AP','YA365AM','YA754AP','YA438AR'];
+var targhe = (function(){
+  var saved = localStorage.getItem('flotta_targhe_v1');
+  if(saved){ try{ var arr=JSON.parse(saved); if(Array.isArray(arr)&&arr.length) return arr; }catch(e){} }
+  return TARGHE_DEFAULT.slice();
+})();
+function salvaTarghe(){ localStorage.setItem('flotta_targhe_v1', JSON.stringify(targhe)); }
+function renderSelectTarghe(selectId, withAll){
+  var sel = document.getElementById(selectId);
+  if(!sel) return;
+  var current = sel.value;
+  sel.innerHTML = withAll ? '<option value="">Tutte le targhe</option>' : '<option value="">— Seleziona —</option>';
+  targhe.forEach(function(t){ sel.innerHTML += '<option'+(t===current?' selected':'')+'>'+t+'</option>'; });
+}
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mfferoe17zbeW0Pe_WLhe1GM3oNr00YEkMHOdF16fL4/edit';
 
 // PWA
@@ -786,11 +805,16 @@ function initStampaKm(){
   var now=new Date();
   document.getElementById('kmStampaMese').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   document.getElementById('anteprimaKm').innerHTML='';
+  caricaTargheStampa('kmStampaTarga');
 }
 function initStampaRif(){
   var now=new Date();
   document.getElementById('rifStampaMese').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   document.getElementById('anteprimaRif').innerHTML='';
+  caricaTargheStampa('rifStampaTarga');
+}
+function caricaTargheStampa(selectId){
+  renderSelectTarghe(selectId, false);
 }
 function nomeMese(n){return['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'][n];}
 
@@ -853,6 +877,67 @@ async function generaStampaRif(){
     document.getElementById('anteprimaRif').innerHTML='<div style="text-align:center;color:#7dcfaa;padding:12px;">✅ '+righe.length+' rifornimenti per '+targa+' in '+meseLabel+'</div>';
   }catch(e){document.getElementById('anteprimaRif').innerHTML='<div style="text-align:center;color:#e74c3c;padding:16px;">⚠️ Errore: '+e.message+'</div>';}
 }
+
+
+// ============================================================
+//  GESTIONE TARGHE VEICOLI
+// ============================================================
+function apriGestioneTarghe(){
+  document.getElementById('pwdTarghe').value='';
+  document.getElementById('errTarghe').textContent='';
+  document.getElementById('targhePwdSection').style.display='block';
+  document.getElementById('targheManagerSection').style.display='none';
+  document.getElementById('modalTarghe').classList.add('show');
+}
+function chiudiModalTarghe(){ document.getElementById('modalTarghe').classList.remove('show'); }
+function verificaPasswordTarghe(){
+  if(document.getElementById('pwdTarghe').value==='12345611'){
+    document.getElementById('targhePwdSection').style.display='none';
+    document.getElementById('targheManagerSection').style.display='block';
+    renderTargheManager();
+  } else {
+    document.getElementById('errTarghe').textContent='❌ Password errata';
+    document.getElementById('pwdTarghe').value='';
+  }
+}
+document.getElementById('pwdTarghe').addEventListener('keydown',function(e){if(e.key==='Enter')verificaPasswordTarghe();});
+
+function renderTargheManager(){
+  var list=document.getElementById('targheManagerList');
+  list.innerHTML='';
+  targhe.forEach(function(t){
+    var div=document.createElement('div');
+    div.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:13px;';
+    var sp=document.createElement('span');sp.textContent='🚗 '+t;
+    var btn=document.createElement('button');
+    btn.textContent='Rimuovi';
+    btn.style.cssText='background:rgba(231,76,60,0.2);border:1px solid rgba(231,76,60,0.4);border-radius:6px;color:#e74c3c;cursor:pointer;font-size:12px;padding:3px 8px;font-family:Barlow Condensed,sans-serif;';
+    btn.onclick=(function(targa){return function(){
+      var idx=targhe.indexOf(targa);
+      if(idx>=0){ targhe.splice(idx,1); salvaTarghe(); renderTargheManager(); }
+    };})(t);
+    div.appendChild(sp);div.appendChild(btn);list.appendChild(div);
+  });
+}
+
+function aggiungiTarga(){
+  var input=document.getElementById('nuovaTarga');
+  var errEl=document.getElementById('errNuovaTarga');
+  var val=input.value.trim().toUpperCase();
+  errEl.textContent='';
+  if(!val){ errEl.textContent='⚠️ Inserisci una targa'; return; }
+  if(targhe.indexOf(val)>=0){ errEl.textContent='⚠️ Targa già presente'; return; }
+  targhe.push(val);
+  targhe.sort();
+  salvaTarghe();
+  input.value='';
+  renderTargheManager();
+  toast('✅ Targa '+val+' aggiunta!');
+}
+document.getElementById('nuovaTarga').addEventListener('keydown',function(e){
+  if(e.key==='Enter') aggiungiTarga();
+  else this.value=this.value.toUpperCase();
+});
 
 syncPinMapDaSheet().then(checkLogin);
 loadStats();
