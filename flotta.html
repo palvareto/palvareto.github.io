@@ -838,7 +838,15 @@ async function generaStampaKm(){
     var rows='';
     righe.forEach(function(r){
       var kmI=(parseInt(r.kmFinali)||0)-(parseInt(r.kmGiorno)||0);
-      rows+='<tr><td>'+r.dataOra+'</td><td>'+(r.conducente||'')+'</td><td></td><td>'+kmI+'</td><td>'+(r.kmFinali||'')+'</td><td>'+(r.kmGiorno||0)+'</td></tr>';
+      var turnoKm=(function(dt){
+        if(!dt) return '';
+        var hm=dt.indexOf(',')>=0?dt.split(',')[1].trim():dt.split(' ')[1]||'';
+        var h=parseInt(hm.split(':')[0])||0;
+        if(h>=7&&h<13) return '7/13';
+        if(h>=13&&h<19) return '13/19';
+        return '19/7';
+      })(r.dataOra);
+      rows+='<tr><td>'+r.dataOra.split(',')[0]+'</td><td>'+(r.conducente||'')+'</td><td>'+turnoKm+'</td><td>'+kmI+'</td><td>'+(r.kmFinali||'')+'</td><td>'+(r.kmGiorno||0)+'</td></tr>';
     });
     for(var i=righe.length;i<30;i++) rows+='<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>';
     var html='<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Scheda Viaggio - '+targa+' - '+meseLabel+'</title><style>@page{margin:12mm;size:A4 portrait;}body{font-family:Arial,sans-serif;font-size:10px;color:#000;margin:0;padding:0;}.header{text-align:center;margin-bottom:8px;border-bottom:2px solid #000;padding-bottom:6px;}.titolo{font-size:16px;font-weight:bold;letter-spacing:1px;}.sub{font-size:14px;font-weight:bold;}.prov{font-size:11px;text-align:left;margin-bottom:4px;}.mese-targa{display:flex;gap:40px;margin:6px 0;font-size:11px;}.mese-targa strong{min-width:100px;border-bottom:1px solid #000;display:inline-block;}table{width:100%;border-collapse:collapse;margin-top:6px;}th{background:#e0e0e0;font-size:9px;font-weight:bold;text-align:center;padding:4px 2px;border:1px solid #000;}td{font-size:9px;padding:2px 3px;border:1px solid #000;height:13px;}td:nth-child(1){width:12%;text-align:center;}td:nth-child(2){width:35%;}td:nth-child(3){width:10%;text-align:center;}td:nth-child(4){width:12%;text-align:right;}td:nth-child(5){width:12%;text-align:right;}td:nth-child(6){width:12%;text-align:right;}.no-print{margin-top:20px;text-align:center;}@media print{.no-print{display:none;}}</style></head><body><div class="header"><div class="titolo">POLIZIA LOCALE</div><div class="sub">SCHEDA VIAGGIO MENSILE</div></div><div class="prov">Provincia di Cremona</div><div class="mese-targa"><div>MESE &nbsp;<strong>'+meseLabel+'</strong></div><div>TARGA VEICOLO &nbsp;<strong>'+targa+'</strong></div></div><table><thead><tr><th>DATA</th><th>PERSONE A BORDO</th><th>TURNO</th><th>KM INIZIO</th><th>KM FINE</th><th>KM PERCORSI</th></tr></thead><tbody>'+rows+'</tbody></table><div class="no-print"><button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a1a2e;color:#f5a623;border:none;border-radius:8px;">🖨️ Stampa / Salva PDF</button><button onclick="window.close()" style="margin-left:12px;padding:12px 20px;font-size:14px;cursor:pointer;">✕ Chiudi</button></div></body></html>';
