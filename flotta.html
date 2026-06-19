@@ -425,21 +425,24 @@ const URL_GS = 'https://script.google.com/macros/s/AKfycbzY8hcFw4FJueOFcFaTGJniK
 // TARGHE VEICOLI
 var TARGHE_DEFAULT = ['YA632AS','YA358AV','YA772AL','YA773AL','YA743AB','YA256AX','YA295AP','YA365AM','YA754AP','YA438AR'];
 // Usa sempre TARGHE_DEFAULT come base, merge con eventuali aggiunte salvate
-var targhe = (function(){
-  var saved = localStorage.getItem('flotta_targhe_v1');
-  if(saved){ 
-    try{ 
-      var arr=JSON.parse(saved); 
-      if(Array.isArray(arr)&&arr.length){
-        // Merge: aggiungi le targhe default che mancano
-        TARGHE_DEFAULT.forEach(function(t){ if(arr.indexOf(t)<0) arr.push(t); });
-        arr.sort();
-        return arr;
-      } 
-    }catch(e){} 
-  }
-  return TARGHE_DEFAULT.slice();
-})();
+// Targhe caricate dal foglio Google
+var targhe = TARGHE_DEFAULT.slice();
+async function caricaTargheDalFoglio(){
+  try{
+    var res = await fetch(URL_GS + '?action=targhe');
+    var d = await res.json();
+    if(d.targhe && Array.isArray(d.targhe) && d.targhe.length > 0){
+      targhe = d.targhe;
+      // Aggiorna tutti i select
+      ['kmTarga','rifTarga','filtraTarga','kmStampaTarga','rifStampaTarga'].forEach(function(id){
+        var sel = document.getElementById(id);
+        if(!sel) return;
+        var withAll = id === 'filtraTarga';
+        renderSelectTarghe(id, withAll);
+      });
+    }
+  }catch(e){}
+}
 function salvaTarghe(){ localStorage.setItem('flotta_targhe_v1', JSON.stringify(targhe)); }
 function renderSelectTarghe(selectId, withAll){
   var sel = document.getElementById(selectId);
@@ -1040,7 +1043,13 @@ function renderTargheManager(){
     btn.style.cssText='background:rgba(231,76,60,0.2);border:1px solid rgba(231,76,60,0.4);border-radius:6px;color:#e74c3c;cursor:pointer;font-size:12px;padding:3px 8px;font-family:Barlow Condensed,sans-serif;';
     btn.onclick=(function(targa){return function(){
       var idx=targhe.indexOf(targa);
-      if(idx>=0){ targhe.splice(idx,1); salvaTarghe(); renderTargheManager(); }
+      if(idx>=0){ 
+      fetch(URL_GS, {method:'POST', body:JSON.stringify({tipo:'TARGA_REMOVE', targa:targa})}).catch(function(){});
+      targhe.splice(idx,1); salvaTarghe(); renderTargheManager();
+      ['kmTarga','rifTarga','filtraTarga','kmStampaTarga','rifStampaTarga'].forEach(function(id){
+        renderSelectTarghe(id, id==='filtraTarga');
+      });
+    }
     };})(t);
     div.appendChild(sp);div.appendChild(btn);list.appendChild(div);
   });
@@ -1056,8 +1065,12 @@ function aggiungiTarga(){
   targhe.push(val);
   targhe.sort();
   salvaTarghe();
+  fetch(URL_GS, {method:'POST', body:JSON.stringify({tipo:'TARGA_ADD', targa:val})}).catch(function(){});
   input.value='';
   renderTargheManager();
+  ['kmTarga','rifTarga','filtraTarga','kmStampaTarga','rifStampaTarga'].forEach(function(id){
+    renderSelectTarghe(id, id==='filtraTarga');
+  });
   toast('✅ Targa '+val+' aggiunta!');
 }
 document.addEventListener('DOMContentLoaded', function(){
@@ -1201,14 +1214,10 @@ async function generaStampaTutto(){
 
 syncPinMapDaSheet().then(checkLogin);
 loadStats();
-// Popola subito i select targhe con i valori default
-setTimeout(function(){
-  renderSelectTarghe('kmTarga', false);
-  renderSelectTarghe('rifTarga', false);
-  renderSelectTarghe('filtraTarga', true);
-  renderSelectTarghe('kmStampaTarga', false);
-  renderSelectTarghe('rifStampaTarga', false);
-}, 100);
+// Popola select con default poi aggiorna dal foglio
+['kmTarga','rifTarga','kmStampaTarga','rifStampaTarga'].forEach(function(id){ renderSelectTarghe(id, false); });
+renderSelectTarghe('filtraTarga', true);
+caricaTargheDalFoglio();
 </script>
 
 
