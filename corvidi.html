@@ -1797,14 +1797,21 @@ function cercaCacciatore(val){
   var q=val.trim().toUpperCase();
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
-  var html='';
+  lista.innerHTML='';
   trovati.forEach(function(c){
-    var cf=(c.cf||'').replace(/'/g,"\\'");
-    var nome=(c.nome||'').replace(/'/g,"\\'");
-    var cognome=(c.cognome||'').replace(/'/g,"\\'");
-    html+='<div class="autocomplete-item" onclick="selezionaCacciatoreDirectly(\''+cognome+'\',\''+nome+'\',\''+cf+'\',\'\')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small></div>';
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small>';
+    div.onclick=(function(cc){return function(){
+      document.getElementById('fCognome').value=cc.cognome||'';
+      document.getElementById('fNome').value=cc.nome||'';
+      document.getElementById('fCF').value=cc.cf||'';
+      lista.classList.remove('show');
+      document.getElementById('nuovoCacBox').classList.remove('show');
+      nuovoCacciatore=false;
+    };})(c);
+    lista.appendChild(div);
   });
-  lista.innerHTML=html;
   var btnNuovo=document.createElement('div');
   btnNuovo.className='autocomplete-item';
   btnNuovo.style.color='#7dcfaa';btnNuovo.style.fontStyle='italic';
