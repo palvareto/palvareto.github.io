@@ -1798,9 +1798,11 @@ function cercaCacciatore(val){
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
   var html='';
-  trovati.forEach(function(c,i){
-    var idx=cacciatori.indexOf(c);
-    html+='<div class="autocomplete-item" onclick="selezionaCacciatore('+idx+')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+c.cf+'</small></div>';
+  trovati.forEach(function(c){
+    var cf=(c.cf||'').replace(/'/g,"\\'");
+    var nome=(c.nome||'').replace(/'/g,"\\'");
+    var cognome=(c.cognome||'').replace(/'/g,"\\'");
+    html+='<div class="autocomplete-item" onclick="selezionaCacciatoreDirectly(\''+cognome+'\',\''+nome+'\',\''+cf+'\',\'\')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small></div>';
   });
   lista.innerHTML=html;
   var btnNuovo=document.createElement('div');
@@ -1812,6 +1814,15 @@ function cercaCacciatore(val){
   lista.classList.add('show');
 }
 
+function selezionaCacciatoreDirectly(cognome, nome, cf, email){
+  document.getElementById('fCognome').value=cognome;
+  document.getElementById('fNome').value=nome;
+  document.getElementById('fCF').value=cf||'';
+  if(document.getElementById('fEmail')) document.getElementById('fEmail').value=email||'';
+  document.getElementById('autocompleteList').classList.remove('show');
+  document.getElementById('nuovoCacBox').classList.remove('show');
+  nuovoCacciatore=false;
+}
 function selezionaCacciatore(idx){
   var c=cacciatori[idx];
   document.getElementById('fCognome').value=c.cognome;
@@ -1868,10 +1879,10 @@ async function generaStampaEsenzioneCorvidi(){
     html += '<div class="footer">Stampato il '+new Date().toLocaleDateString("it-IT")+' — Totale: '+records.length+' nominativi</div>';
     html += '<div class="no-print"><button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#0d1b2a;color:#e8c547;border:none;border-radius:8px;">🖨️ Stampa / Salva PDF</button><button onclick="window.close()" style="margin-left:12px;padding:12px 20px;font-size:14px;cursor:pointer;">✕ Chiudi</button></div>';
     html += '</body></html>';
-    var win = window.open('','_blank');
-    win.document.write(html);
-    win.document.close();
-    document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#7dcfaa;padding:12px;">✅ '+records.length+' nominativi per anno '+anno+'<br><small style="color:rgba(224,225,221,0.4);">📊 Foglio "Esenzione Tassa '+anno+'" aggiornato nel Google Sheet</small></div>';
+    var blob = new Blob([html], {type:'text/html'});
+    var url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#7dcfaa;padding:12px;">✅ '+records.length+' nominativi per anno '+anno+'<br><small style="color:rgba(224,225,221,0.4);">📊 Foglio Esenzione Tassa '+anno+' aggiornato nel Google Sheet</small></div>';
   }catch(e){
     document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#e63946;padding:16px;">⚠️ Errore: '+e.message+'</div>';
   }
