@@ -1040,18 +1040,10 @@ var agenti = (function(){
 })();
 function salvaAgentiCorvidi() { localStorage.setItem('corvidi_agenti_v1', JSON.stringify(agenti)); }
 
-var DEFAULT_PIN_MAP = {
-  '1001': 'ARISI', '1002': 'BANDERA', '1003': 'BORRINI', '1004': 'CAMBIATI',
-  '1005': 'COLLA', '1006': 'FUSARI', '1007': 'GUARNERI', '1008': 'PREANI',
-  '1009': 'RIZZI', '1010': 'TRENTAROSSI', '1011': 'VIVIANI', '1012': 'CHIODA'
-};
-var PIN_MAP = (function(){
-  var saved = localStorage.getItem('corvidi_pinmap_v1');
-  if (saved) {
-    try { var obj = JSON.parse(saved); if (obj && typeof obj === 'object') return obj; } catch(e){}
-  }
-  return Object.assign({}, DEFAULT_PIN_MAP);
-})();
+var DEFAULT_PIN_MAP = {'7342':'ARISI','2916':'BANDERA','5483':'BORRINI','8751':'CAMBIATI','3629':'COLLA','3688':'FUSARI','4817':'GUARNERI','9364':'PREANI','6193':'RIZZI','2748':'TRENTAROSSI','2766':'VIVIANI','5522':'CHIODA','1013':'TORTINI','1014':'MARIOTTI'};
+localStorage.removeItem('corvidi_pinmap_v1');
+localStorage.removeItem('corvidi_operatore_v1');
+var PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP);
 function salvaPinMapCorvidi() { localStorage.setItem('corvidi_pinmap_v1', JSON.stringify(PIN_MAP)); }
 
 async function syncPinMapDaSheet() {
