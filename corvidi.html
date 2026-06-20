@@ -276,15 +276,23 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="fCF" placeholder="Codice fiscale">
   </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="fEmail" placeholder="Email">
+  </div>
   <div class="nuovo-cac-box" id="nuovoCacBox">
     <div class="nuovo-cac-label">✨ Nuovo operatore</div>
     <div class="form-group" style="margin-bottom:8px;">
       <label class="form-label">Nome <span class="req">*</span></label>
       <input type="text" class="form-input" id="fNuovoNome" placeholder="Nome">
     </div>
-    <div class="form-group" style="margin-bottom:0;">
+    <div class="form-group" style="margin-bottom:8px;">
       <label class="form-label">Codice Fiscale</label>
       <input type="text" class="form-input" id="fNuovoCF" placeholder="Codice fiscale">
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Email</label>
+      <input type="text" class="form-input" id="fNuovaEmail" placeholder="Email">
     </div>
   </div>
   <div class="form-group">
@@ -523,6 +531,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="iOp1CF" placeholder="Codice fiscale">
   </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="iOp1Email" placeholder="Email">
+  </div>
 
   <div class="form-divider">👤 Operatore 2</div>
   <div class="form-group">
@@ -550,6 +562,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="iOp2CF" placeholder="Codice fiscale">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="iOp2Email" placeholder="Email">
   </div>
 
   <div class="form-divider">👤 Operatore 3</div>
@@ -579,6 +595,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="iOp3CF" placeholder="Codice fiscale">
   </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="iOp3Email" placeholder="Email">
+  </div>
 
   <div class="form-divider">👤 Operatore 4</div>
   <div class="form-group">
@@ -606,6 +626,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="iOp4CF" placeholder="Codice fiscale">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="iOp4Email" placeholder="Email">
   </div>
 
   <button class="btn-submit" onclick="submitIbis()">🦢 Invia Scheda Ibis</button>
@@ -767,6 +791,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="cmAg1CF" placeholder="Codice fiscale">
   </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="cmAg1Email" placeholder="Email">
+  </div>
 
   <div class="form-divider">👤 Agente 2</div>
   <div class="form-group">
@@ -783,6 +811,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="cmAg2CF" placeholder="Codice fiscale">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="cmAg2Email" placeholder="Email">
   </div>
 
   <button class="btn-submit" onclick="submitCormorano()">🦅 Invia Scheda Cormorano</button>
@@ -894,6 +926,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <input type="text" class="form-input" id="scInc1CF" placeholder="Codice fiscale">
   </div>
   <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="scInc1Email" placeholder="Email">
+  </div>
+  <div class="form-group">
     <label class="form-label">Qualifica</label>
     <select class="form-select" id="scQual1">
       <option value="">— Seleziona —</option>
@@ -919,6 +955,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Codice Fiscale</label>
     <input type="text" class="form-input" id="scInc2CF" placeholder="Codice fiscale">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Email</label>
+    <input type="text" class="form-input" id="scInc2Email" placeholder="Email">
   </div>
   <div class="form-group">
     <label class="form-label">Qualifica</label>
@@ -1299,7 +1339,13 @@ async function submitForm(){
   if(!capi||parseInt(capi)<1){toast('Inserisci il numero di capi abbattuti',true);return;}
   var nome=nuovoCacciatore?document.getElementById('fNuovoNome').value.trim():document.getElementById('fNome').value.trim();
   var cf=nuovoCacciatore?document.getElementById('fNuovoCF').value.trim():document.getElementById('fCF').value.trim();
-  if(nuovoCacciatore&&nome){cacciatori.push({cognome,nome,cf,email:''});cacciatori.sort(function(a,b){return a.cognome.localeCompare(b.cognome);});}
+  var emailOp=nuovoCacciatore?(document.getElementById('fNuovaEmail')?document.getElementById('fNuovaEmail').value.trim():''):(document.getElementById('fEmail')?document.getElementById('fEmail').value.trim():'');
+  if(nuovoCacciatore&&nome){
+    cacciatori.push({cognome:cognome,nome:nome,cf:cf,email:emailOp});
+    cacciatori.sort(function(a,b){return a.cognome.localeCompare(b.cognome);});
+    // Salva nuovo operatore sul foglio
+    fetch(URL_GS,{method:'POST',body:JSON.stringify({tipo:'NUOVO_OPERATORE',cognome:cognome,nome:nome,cf:cf,email:emailOp})}).catch(function(){});
+  }
   var payload={
     tipo:'CORVIDI',data:fmt(data),cognome,nome,cf,qualifica,comune,
     ubicazione:document.getElementById('fUbicazione').value.trim(),
@@ -1316,7 +1362,7 @@ async function submitForm(){
 }
 
 function resetForm(){
-  ['fCognome','fNome','fCF','fNuovoNome','fNuovoCF','fComune','fUbicazione','fGpsLat','fGpsLon','fUsoSuolo','fCodiceGabbia','fVisti','fNote'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['fCognome','fNome','fCF','fEmail','fNuovoNome','fNuovoCF','fNuovaEmail','fComune','fUbicazione','fGpsLat','fGpsLon','fUsoSuolo','fCodiceGabbia','fVisti','fNote'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('nuovoCacBox').classList.remove('show');
   nuovoCacciatore=false;
   document.getElementById('fCapi').value='';document.getElementById('fScopo').value='';document.getElementById('fMezzi').value='';document.getElementById('fDestinazione').value='';
@@ -1391,6 +1437,7 @@ function cercaOperatoreIbis(n,val){
       document.getElementById('iOp'+n+'Cognome').value=cc.cognome||'';
       document.getElementById('iOp'+n+'Nome').value=cc.nome||'';
       var cfEl=document.getElementById('iOp'+n+'CF');if(cfEl)cfEl.value=cc.cf||'';
+      var emEl=document.getElementById('iOp'+n+'Email');if(emEl)emEl.value=cc.email||'';
       lista.classList.remove('show');
     });
     lista.appendChild(div);
@@ -1553,6 +1600,7 @@ function cercaOperatoreCormorano(n,val){
       document.getElementById('cmAg'+n+'Cognome').value=cc.cognome||'';
       document.getElementById('cmAg'+n+'Nome').value=cc.nome||'';
       var cfEl=document.getElementById('cmAg'+n+'CF');if(cfEl)cfEl.value=cc.cf||'';
+      var emEl=document.getElementById('cmAg'+n+'Email');if(emEl)emEl.value=cc.email||'';
       lista.classList.remove('show');
     });
     lista.appendChild(div);
@@ -1705,6 +1753,7 @@ function cercaOperatoreScoiattolo(n,val){
       document.getElementById('scInc'+n+'Cognome').value=cc.cognome||'';
       document.getElementById('scInc'+n+'Nome').value=cc.nome||'';
       var cfEl=document.getElementById('scInc'+n+'CF');if(cfEl)cfEl.value=cc.cf||'';
+      var emEl=document.getElementById('scInc'+n+'Email');if(emEl)emEl.value=cc.email||'';
       lista.classList.remove('show');
     });
     lista.appendChild(div);
@@ -1879,6 +1928,7 @@ function cercaCacciatore(val){
       document.getElementById('fCognome').value=cc.cognome||'';
       document.getElementById('fNome').value=cc.nome||'';
       document.getElementById('fCF').value=cc.cf||'';
+      var em=document.getElementById('fEmail');if(em)em.value=cc.email||'';
       lista.classList.remove('show');
       document.getElementById('nuovoCacBox').classList.remove('show');
       nuovoCacciatore=false;
