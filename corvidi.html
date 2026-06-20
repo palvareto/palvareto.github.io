@@ -247,6 +247,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="section-title">Statistiche</div>
   <button class="btn-report" onclick="vai(&#39;screenReport&#39;)">📊 &nbsp;Report mensile / annuale</button>
   <button class="btn-sheet" onclick="apriModalSheet()">📋 &nbsp;Apri Google Sheet</button>
+  <button class="btn-report" onclick="vai(&#39;screenEsenzione&#39;)" style="color:#7dcfaa;border-color:rgba(39,174,96,0.3);background:rgba(39,174,96,0.08);margin-top:8px;">📄 &nbsp;Stampa Esenzione Tassa</button>
 </div>
 
 <!-- FORM -->
@@ -1005,6 +1006,25 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div id="reportContent"><div class="empty-state"><div>📊</div>Caricamento...</div></div>
 </div>
 
+
+<!-- SCREEN ESENZIONE TASSA CORVIDI -->
+<div class="screen" id="screenEsenzione">
+  <div class="form-header">
+    <button class="btn-back" onclick="vai(&#39;screenHome&#39;)">‹</button>
+    <div class="form-header-title"><span>Report</span>Esenzione Tassa Caccia</div>
+  </div>
+  <div class="form-group" style="margin-top:16px;">
+    <label class="form-label">Anno <span class="req">*</span></label>
+    <select class="form-select" id="esenzioneAnnoCorvidi" style="font-size:16px;"></select>
+  </div>
+  <div style="background:rgba(82,183,136,0.08);border:1px solid rgba(82,183,136,0.25);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;color:rgba(224,225,221,0.7);line-height:1.6;">
+    📄 Genera elenco operatori che hanno partecipato ad abbattimenti nell'anno selezionato.<br>
+    🗂️ Crea anche il foglio <strong>Esenzione Tassa ANNO</strong> nel Google Sheet.
+  </div>
+  <button class="btn-submit" onclick="generaStampaEsenzioneCorvidi()">📄 Genera Report Esenzione</button>
+  <div id="anteprimaEsenzioneCorvidi" style="margin-top:16px;"></div>
+</div>
+
 <script>
 var URL_GS = 'https://script.google.com/macros/s/AKfycbxL49RBHln0W11KTM90AeJblxpsu4vigg7H_mnzKBw4tdLEfS1wIWkCR4LU9AOStOpIJQ/exec';
 var SHEET_URL = 'https://docs.google.com/spreadsheets/d/1IWnLG_n0LDiOgZ4YKIlY67vwVSLDax2COs7p3WGcPbM/edit';
@@ -1021,12 +1041,17 @@ var agenti = (function(){
 function salvaAgentiCorvidi() { localStorage.setItem('corvidi_agenti_v1', JSON.stringify(agenti)); }
 
 var DEFAULT_PIN_MAP = {
-  '7342': 'ARISI', '2916': 'BANDERA', '5483': 'BORRINI', '8751': 'CAMBIATI', '3629': 'COLLA', '3688': 'FUSARI', '4817': 'GUARNERI', '9364': 'PREANI', '6193': 'RIZZI', '2748': 'TRENTAROSSI', '2766': 'VIVIANI', '5522': 'CHIODA', '1013': 'TORTINI', '1014': 'MARIOTTI'
+  '1001': 'ARISI', '1002': 'BANDERA', '1003': 'BORRINI', '1004': 'CAMBIATI',
+  '1005': 'COLLA', '1006': 'FUSARI', '1007': 'GUARNERI', '1008': 'PREANI',
+  '1009': 'RIZZI', '1010': 'TRENTAROSSI', '1011': 'VIVIANI', '1012': 'CHIODA'
 };
-// Forza sincronizzazione dal foglio ad ogni apertura
-localStorage.removeItem('corvidi_pinmap_v1');
-localStorage.removeItem('corvidi_operatore_v1');
-var PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP);
+var PIN_MAP = (function(){
+  var saved = localStorage.getItem('corvidi_pinmap_v1');
+  if (saved) {
+    try { var obj = JSON.parse(saved); if (obj && typeof obj === 'object') return obj; } catch(e){}
+  }
+  return Object.assign({}, DEFAULT_PIN_MAP);
+})();
 function salvaPinMapCorvidi() { localStorage.setItem('corvidi_pinmap_v1', JSON.stringify(PIN_MAP)); }
 
 async function syncPinMapDaSheet() {
@@ -1094,6 +1119,7 @@ function vai(id){
   if(id==='screenMinilepre') initFormMinilepre();
   if(id==='screenScoiattolo') initFormScoiattolo();
   if(id==='screenReport') loadReport();
+  if(id==='screenEsenzione') initEsenzioneCorvidi();
 }
 
 
@@ -1753,7 +1779,17 @@ document.getElementById('pwdSheet').addEventListener('keydown',function(e){if(e.
 document.getElementById('pwdAgenti').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAgenti();});
 
 
-var cacciatori=[{cognome:"ALBERTI",nome:"CLAUDIO",cf:"LBRCLD70S27I849S",email:"ericucciola2010@libero.it"},{cognome:"ALQUATI",nome:"LUIGI LORENZO",cf:"LQTLLR89P20D150F",email:"luigialquati@gmail.com"},{cognome:"ALQUATI",nome:"RICCARDO",cf:"LQTRCR58R01D150H",email:"alquatiriccardo@gmail.com"},{cognome:"AMATO",nome:"MARIO",cf:"MTAMRA68P04A841M",email:""},{cognome:"AMICI",nome:"DANIELE",cf:"MCADNL80A25D150V",email:"amicidaniele.ad@gmail.com"},{cognome:"AMICI",nome:"DANTE",cf:"MCADNT52B16D150Z",email:"danteamici1@gmail.com"},{cognome:"ANTONELLI",nome:"ALEX",cf:"NTNLXA74A24B157V",email:""},{cognome:"ANTONIOLI",nome:"MARIANO",cf:"NTNMRN56A25D150G",email:""},{cognome:"ARDIGO'",nome:"ROBERTO",cf:"RDGRRT72R23D150L",email:""},{cognome:"ARISI",nome:"RENATO",cf:"RSARNT62P23D150R",email:"renatoarisi62@gmail.com"},{cognome:"AROLDI",nome:"FABIO",cf:"RLDFBA67C06E560T",email:""},{cognome:"BARBANOTTI",nome:"CRISTIAN",cf:"BRBCST85P01D150I",email:""},{cognome:"BARGIGGIA",nome:"LUCA",cf:"BRGLCU92A21G388E",email:""},{cognome:"BARBISONI",nome:"RENATO",cf:"BRBDNT57D04B157O",email:""},{cognome:"BARONCHELLI",nome:"GIUSEPPE",cf:"BRNGPP75E02A794C",email:""},{cognome:"BARONCHELLI",nome:"ALICE",cf:"BRNLCA05T52A794O",email:""},{cognome:"BARONIO",nome:"FABIO",cf:"BRNFBA64H20I865X",email:""},{cognome:"BARUCHELLI",nome:"MANUELE",cf:"BRCMNL84L16E333Z",email:""},{cognome:"BASSINI",nome:"IVANO GIUSEPPE",cf:"BSSVGS54P30D150N",email:""},{cognome:"BAZZICCHI",nome:"RICCARDO",cf:"BZZRCR64C12L833B",email:""},{cognome:"BECCALLI",nome:"ROBERTO",cf:"BCCRRT73C22D142R",email:""},{cognome:"BEDUSCHI",nome:"RAFFAELE",cf:"BDSRFL95B02D150S",email:""},{cognome:"BEDUSCHI",nome:"LORIS",cf:"BDSLRS64C27D150A",email:""},{cognome:"BELOTTI",nome:"DORIANO",cf:"BLTDRN56T17B157T",email:""},{cognome:"BELOTTI",nome:"MATTEO",cf:"BLTNTT88B07D150T",email:""},{cognome:"BELTRAMI",nome:"DERMILLE",cf:"BLTDML49M25D150N",email:""},{cognome:"BERGAMASCHI",nome:"FRANCO",cf:"BRGFNC64H25D150P",email:""},{cognome:"BERGAMASCHI",nome:"DAVIDE",cf:"BRGDVD64T05B898M",email:""},{cognome:"BERTOLASI",nome:"PIERANGELO",cf:"BRTPNG56P16D142S",email:""},{cognome:"BERTOLETTI",nome:"ROBERTO",cf:"BRTRRT81R09A470L",email:""},{cognome:"BONIZZI",nome:"ANGELO",cf:"BNZNGL64A29D142A",email:""},{cognome:"BORELLI",nome:"ENRICO PIETRO",cf:"BRLNCP73P22D142S",email:""},{cognome:"BORSI",nome:"ARMANDO",cf:"BRSRND61R11H918M",email:""},{cognome:"BRAGA",nome:"MATTEO",cf:"BRGMTT84A07D150X",email:""},{cognome:"BRAMBILLA",nome:"ALESSANDRO",cf:"BRMLSN77R13H509W",email:""},{cognome:"BUSANI",nome:"LUCA",cf:"BSNLCU71D07D150U",email:""},{cognome:"CAMBIE'",nome:"ALEX",cf:"CMBLXA02M20D142L",email:""},{cognome:"CAMPARI",nome:"DIEGO",cf:"CMPDGI62C04G222R",email:""},{cognome:"CANCARINI",nome:"LUCIANO",cf:"CNLCN66B11B157T",email:""},{cognome:"CAPELLETTI",nome:"DANIO",cf:"CPLDNA56B12D150D",email:""},{cognome:"CARAVAGGIO",nome:"MORENO",cf:"CRVMRN75M17D142F",email:""},{cognome:"CATALANO",nome:"ROBERTO",cf:"CTLRRT83D22C618P",email:""},{cognome:"CATALANO",nome:"SALVATORE",cf:"CTLSVT54M25I086B",email:""},{cognome:"CAVALLARI",nome:"SIMONE",cf:"CULSMN80C15D150W",email:""},{cognome:"CAVALLI",nome:"PIETRO",cf:"CVLPTR51D18E507V",email:""},{cognome:"CERIALI",nome:"DAVIDE",cf:"CRLDVD71CD150X",email:""},{cognome:"CERRUTI",nome:"GIANPIERO",cf:"CRRGPR66B08C665C",email:""},{cognome:"CHIARI",nome:"DAMIANO",cf:"CHRDMN98B04D150X",email:""},{cognome:"CHIODELLI",nome:"RICCARDO",cf:"CHDRCR05R17D150U",email:""},{cognome:"COATI",nome:"GIANLUCA",cf:"CTOGLL99B17B898N",email:""},{cognome:"COLLIO",nome:"CARLO",cf:"CLLCRL68L06B157C",email:""},{cognome:"COMPAGNONI",nome:"MATTEO",cf:"CMPMTT89L07E897H",email:""},{cognome:"CORDOLI",nome:"RENATO",cf:"CRDRNT63L20G945Y",email:""},{cognome:"CORTI",nome:"EMANUELE",cf:"CRTMNL74L20D150M",email:""},{cognome:"CROTTI",nome:"ALFIO",cf:"CRTLFA69L11O142X",email:""},{cognome:"CROTTI",nome:"ATTILIO",cf:"CRTTTL86T22D142I",email:""},{cognome:"CROTTI",nome:"MAURO",cf:"CRTMRA72M19D142X",email:""},{cognome:"CURTARELLI",nome:"ALESSANDRO",cf:"CRTLSN82R19C816E",email:""},{cognome:"D'ALFONSO",nome:"ALESSANDRO",cf:"DLFLSN97H30G535V",email:""},{cognome:"D'ALFONSO",nome:"GIANNI",cf:"DLFGNN69H24C632R",email:""},{cognome:"DALL'ACQUA",nome:"GIORDANO",cf:"DLLGND69C20E837Z",email:""},{cognome:"DALLE DONNE",nome:"ALDO",cf:"DLLLDA82B05D150F",email:""},{cognome:"DAMIANI",nome:"MATTIA",cf:"DMNMTT86D26D150M",email:""},{cognome:"DANESI",nome:"GIOVANNI GIUSEPPE",cf:"DNSGNN63L21I827L",email:""},{cognome:"DANESI",nome:"GIUSEPPE",cf:"DNSGPP77G23B157R",email:""},{cognome:"DANESI",nome:"LUIGI LUCA",cf:"DNSLLC98L09D142L",email:""},{cognome:"DE VINCENTI",nome:"LUCIANO",cf:"DVNLCN47M05E261J",email:""},{cognome:"DEGANI",nome:"GIANLUIGI",cf:"DGNGLG89T28D150R",email:""},{cognome:"DENTI",nome:"STEFANO LUCIO",cf:"DNTSFN85C11D142Q",email:""},{cognome:"DI RUSCIO",nome:"ANACLETO",cf:"DRSNLT63A15F989E",email:""},{cognome:"DI RUSCIO",nome:"ALBERTO",cf:"DRSLRT94L27D940U",email:""},{cognome:"DONDONI",nome:"FABIANO",cf:"DNDFBN66S22C816S",email:""},{cognome:"DONEDA",nome:"FAUSTO",cf:"DNDFST82P29D142S",email:""},{cognome:"DUCHI",nome:"ANTONIO",cf:"DCHNTN63A09D150L",email:""},{cognome:"FACCHI",nome:"MARTINO",cf:"FCCMTN68S18D142W",email:""},{cognome:"FALSINA",nome:"ALESSANDRO",cf:"FLSLSN60T11C003I",email:""},{cognome:"FANELLI",nome:"INNOCENZO",cf:"FNLNCN75S24I849C",email:""},{cognome:"FAVA",nome:"ALESSANDRO",cf:"FVALSN74D03D150L",email:""},{cognome:"FERRARI",nome:"ANDREA",cf:"FRRNDR90A19C618A",email:""},{cognome:"FERRARI",nome:"GIAMPIETRO",cf:"FRRGPT58C23E648N",email:""},{cognome:"FERRI",nome:"GIOVANNI",cf:"FRRGNN65D02D150O",email:""},{cognome:"FERRI",nome:"MARCELLO",cf:"FRRMCL93C03D150H",email:""},{cognome:"FONTANA",nome:"LUCA",cf:"FNTLCN90E23D142X",email:""},{cognome:"FORMENTI",nome:"CRISTIAN",cf:"FRMCST83L10L400A",email:""},{cognome:"FRIGOLI",nome:"MICHELANGELO",cf:"FRGMHL66R26D142N",email:""},{cognome:"FUMAGALLI",nome:"GIUSEPPE",cf:"FMGGPP51P01D150M",email:""},{cognome:"FUMAGALLI",nome:"LORENZO",cf:"FMGLNZ75A01D150Y",email:""},{cognome:"GALIMBERTI",nome:"DARIO LUIGI",cf:"GLMDLG58S28F205E",email:""},{cognome:"GALIMBERTI",nome:"LAURA",cf:"GLMLRA90E69D150Z",email:""},{cognome:"GARATTI",nome:"AURO",cf:"GRTRAU62E14D834Y",email:""},{cognome:"GASPARINI",nome:"MAURIZIO",cf:"GSPMRZ55R16L778V",email:""},{cognome:"GENTILE",nome:"COSTANTINO",cf:"GNTCTN85R27H926L",email:""},{cognome:"GEREVINI",nome:"ELIA",cf:"GRVLEI76P20D150E",email:""},{cognome:"GEROLDI",nome:"GIANCARLO",cf:"GRLGCR64P20B157I",email:""},{cognome:"GIACOMELLI",nome:"ANDREA",cf:"GCMNDR57A28G818D",email:""},{cognome:"GIORGETTI",nome:"ANDREA",cf:"GRGNDR71E09L736W",email:""},{cognome:"GIORGETTI",nome:"FILIPPO",cf:"GRGFPP03P22D150P",email:""},{cognome:"GIROLETTI",nome:"ANNALISA",cf:"GRLNLS90T67D142L",email:""},{cognome:"GRASSI",nome:"FERDINANDO",cf:"GRSFND54E03G469O",email:""},{cognome:"GROPPELLI",nome:"DAVIDE",cf:"GRPDVD79D27D142L",email:""},{cognome:"GUERINI",nome:"MATTEO FRANCESCO",cf:"GRNMTF00D21D142B",email:""},{cognome:"INVERARDI",nome:"ANDREA",cf:"NVRNDR68H04B157C",email:""},{cognome:"LAFELLI",nome:"GIORDANO",cf:"LFLGDN84P08E897D",email:""},{cognome:"LAFELLI",nome:"STEFANO",cf:"LFLSFN61C16E897N",email:""},{cognome:"LANZANOVA",nome:"ROBERTO FAUSTO",cf:"LNZRRT60D12D150R",email:""},{cognome:"LANZANOVA",nome:"RICCARDO",cf:"LNZRCC74S17D150J",email:""},{cognome:"LARINI",nome:"GIANCARLO",cf:"LRNGCR58S04B293D",email:""},{cognome:"LISI",nome:"FRANCESCO",cf:"LSIFNC72E23D862I",email:""},{cognome:"LIVRAGHI",nome:"ROLANDO",cf:"LVRRND56M25G306X",email:""},{cognome:"LODA",nome:"DAMIANO",cf:"LDODMN76T09B157D",email:""},{cognome:"LUCINI",nome:"FIORENZO",cf:"LCNFNZ52R07G504O",email:""},{cognome:"LUCINI",nome:"ROBERTO",cf:"LCNRRT58T14G504N",email:""},{cognome:"MAESTRI",nome:"MASSIMO",cf:"MSTMSM60L27D150D",email:""},{cognome:"MAFFEZZOLI",nome:"DANIELE",cf:"MFFDNL95R16B898M",email:""},{cognome:"MAGRI",nome:"ADRIANO",cf:"MGRDRN64M21G628H",email:""},{cognome:"MALIMPENSA",nome:"PASQUALE ROBERTO",cf:"MLMPQL70D04B915S",email:""},{cognome:"MANFREDI",nome:"MANZIO",cf:"MNFMNZ60C31C288C",email:""},{cognome:"MANFREDINI",nome:"ENRICO",cf:"MNFNRV54S14E843K",email:""},{cognome:"MANFREDINI",nome:"MARCO",cf:"MNFMRC87A11D150Z",email:""},{cognome:"MARCHESI",nome:"STEFANO",cf:"MRCSFN53R23D110S",email:""},{cognome:"MARCHESI",nome:"FERRUCCIO",cf:"MRCFRC54P04I827A",email:""},{cognome:"MARCHESI",nome:"RAMON",cf:"MRCRMN94B16D142L",email:""},{cognome:"MARCHETTI",nome:"ANDREA",cf:"MRCNDR91T30D142Z",email:""},{cognome:"MARCHINI",nome:"ALBERTO",cf:"MRCLRT79P24D150X",email:""},{cognome:"MARDEGAN",nome:"LUCIANO",cf:"MRDLCN63L22H918S",email:""},{cognome:"MARIOTTI",nome:"GIULIANO",cf:"MRTGLN50H26D150Y",email:""},{cognome:"MAROLI",nome:"ALESANDRO",cf:"MRLLSN75A24B898B",email:""},{cognome:"MARTELLI",nome:"ENRICO",cf:"MRTNRC53R09C153B",email:""},{cognome:"MARTELLI",nome:"PIER ANGELO",cf:"MRTPNG56M01C153L",email:""},{cognome:"MARTELLI",nome:"ROBERTO",cf:"MRTRRT82C06D142Q",email:""},{cognome:"MARUTTI",nome:"GIORGIO",cf:"MRTGRG60P30H918J",email:""},{cognome:"MARZAROLI",nome:"DARIO",cf:"MRZDRA55D20D710P",email:""},{cognome:"MAURO",nome:"ALFONSO",cf:"MRALNS62M31E158V",email:""},{cognome:"MAURO",nome:"ROBERTO",cf:"MRARRT89D17D150M",email:""},{cognome:"MAURO",nome:"VINCENZO",cf:"MRAVCN66R02E158H",email:""},{cognome:"MAZZOLENI",nome:"GIULIO",cf:"MZZGLI57H24D150L",email:""},{cognome:"MEZZADRA",nome:"MANUEL",cf:"MZZMNL87T15D142T",email:""},{cognome:"MILANI",nome:"OSCAR",cf:"MLNSRC67S15A794Q",email:""},{cognome:"MINUTI",nome:"ANDREA",cf:"MNTNDR83S26D150M",email:""},{cognome:"MORANDI",nome:"ALEX",cf:"MRNLXA71H07L836I",email:""},{cognome:"MORETTI",nome:"BRUNO",cf:"MRTBRN48L29H508Y",email:""},{cognome:"MORETTI",nome:"DARIO",cf:"MRTDRA55R09D142P",email:""},{cognome:"MORSOLINI",nome:"TIZIANO",cf:"MRSTZN63T31D150Q",email:""},{cognome:"NICOLI",nome:"ROBERTO",cf:"NCLRRT54B22F786J",email:""},{cognome:"OLIVARI",nome:"DARIO",cf:"LVRDRA66H04B157K",email:""},{cognome:"OMODEO",nome:"FRANCESCO",cf:"MDOFNC88E16D150Q",email:""},{cognome:"ONETA",nome:"CLAUDIO",cf:"NTOCLD60P08C153G",email:""},{cognome:"ONETA",nome:"STEFANO",cf:"NTOSFN90C25E648V",email:""},{cognome:"ORIANI",nome:"EGIDIO",cf:"RNOGDE59P15D150T",email:""},{cognome:"ORSINI",nome:"ETTORE GIACOMO",cf:"RSNTRG64B02G149E",email:""},{cognome:"OXOLI",nome:"JESSICA",cf:"XLOJSC01L51B898Z",email:""},{cognome:"PAGLIARI",nome:"GIOVANNI",cf:"PGLGNN61B08I790S",email:""},{cognome:"PAGOTTO",nome:"ARTURO",cf:"PGTRTR63P24F761B",email:""},{cognome:"PAGOTTO",nome:"GIORGIO",cf:"PGTGRG85L28D142A",email:""},{cognome:"PAPA",nome:"ANGELO MARINO",cf:"PPANLM66B09I849M",email:""},{cognome:"PARATI",nome:"MAURIZIO",cf:"PRTMRZ74P22D150P",email:""},{cognome:"PASINI",nome:"GIACOMO",cf:"PSNGCM68E08G721K",email:""},{cognome:"PAVESI",nome:"FABRIZIO",cf:"PVSFRZ61A04I627M",email:""},{cognome:"PAVESI",nome:"FRANCESCO",cf:"PVSFNC63H14H815S",email:""},{cognome:"PEDRAZZOLI",nome:"MAURELLA",cf:"PDRMLL69R55E897K",email:""},{cognome:"PEDRINI",nome:"ALBERTO",cf:"PDRLRT68E31B450Z",email:""},{cognome:"PESSINI",nome:"ANDREA",cf:"PSSNDR99E01D142R",email:""},{cognome:"PEZZINI",nome:"FABIO",cf:"PZZFBA87L19F205B",email:""},{cognome:"PINTO",nome:"DANILO",cf:"PNTDNL95H30B898D",email:""},{cognome:"PIZZOCHERO",nome:"OTTAVIO MARIO ERNESTO",cf:"PZZTVM63S30E082O",email:""},{cognome:"POLI",nome:"ANDREA",cf:"PLONDR97M08B898T",email:""},{cognome:"POLI",nome:"GIOVANNI",cf:"PLOGNN64A14B898M",email:""},{cognome:"PREMOLI",nome:"FLAVIO",cf:"PRMFLV82R19L400K",email:""},{cognome:"PRESACCO",nome:"DANIELE",cf:"PRSDNL01L23F205A",email:""},{cognome:"PRESACCO",nome:"MASSIMILIANO",cf:"PRSMSM69R16Z133V",email:""},{cognome:"PULITI",nome:"MANUEL",cf:"PLTMNL92C10D150G",email:""},{cognome:"PULITI",nome:"NICHOLAS",cf:"PLTNHL92C10D150E",email:""},{cognome:"RAGAZZI",nome:"GIANPIETRO",cf:"RGZGPT65C29D150S",email:""},{cognome:"RAIMONDI",nome:"BRUNO",cf:"RMNBRN63E23D150D",email:""},{cognome:"REBOANI",nome:"FABIO ANGELO",cf:"RBNFNG68R07L806X",email:""},{cognome:"RICCARDI",nome:"LUCA",cf:"RCCLCU91E07D150E",email:""},{cognome:"RICETTI",nome:"GIUSEPPE",cf:"RCCGPP56L23O142G",email:""},{cognome:"RIVOLTINI",nome:"PIERLUIGI",cf:"RVLPLG54E24L806K",email:""},{cognome:"RODA",nome:"SERGIO",cf:"RDOSRG62D28H140H",email:""},{cognome:"RODA",nome:"SIMONE",cf:"RDOSMN94E06D150Z",email:""},{cognome:"RODELLA",nome:"GUIDO",cf:"RDLGDU56D26A470E",email:""},{cognome:"ROSA",nome:"GIANMARCO",cf:"RSOGMR87E26D150J",email:""},{cognome:"ROSSI",nome:"MAURIZIO",cf:"RSSMRZ57A05D150W",email:""},{cognome:"ROSSI",nome:"STEFANO",cf:"RSSSFN81E04C309U",email:""},{cognome:"ROVELLI",nome:"CHIARA",cf:"RVLCHR78E71D142S",email:""},{cognome:"RUFFINI",nome:"MATTEO",cf:"RFFMTT94S23D150W",email:""},{cognome:"RUFFINI",nome:"LUCIO",cf:"RFFLCU65T13D150J",email:""},{cognome:"RUSCELLI",nome:"PIETRO",cf:"RSCPTR58C25B320Z",email:""},{cognome:"SALI",nome:"EDOARDO",cf:"SLADRD58C18B869B",email:""},{cognome:"SANGIOVANNI",nome:"ANDREA",cf:"SNGNDR99M27D142A",email:""},{cognome:"SANGIOVANNI",nome:"LUCA",cf:"SNGLCU03S14D142K",email:""},{cognome:"SANGIOVANNI",nome:"SILVIO",cf:"SNGSLV66A22D142U",email:""},{cognome:"SANGIOVANNI",nome:"MARCO",cf:"SNGMRC70E28D142R",email:""},{cognome:"SANZENI",nome:"GIANPIETRO",cf:"SNZGPT65H27G381X",email:""},{cognome:"SAPONARO",nome:"ANTONIO",cf:"SPNNTN61L30B180R",email:""},{cognome:"SCARAVONATI",nome:"MARCO",cf:"SCRMRC61L22D150C",email:""},{cognome:"SCIPIONI",nome:"MIRKO",cf:"SCPMRK84B20B898R",email:""},{cognome:"SEGHIZZI",nome:"ANGELO",cf:"SGHNGL55D30C435A",email:""},{cognome:"SENATORE",nome:"GIUSEPPE",cf:"SNTGPP78L22C361K",email:""},{cognome:"SISTI",nome:"ALBERTO",cf:"SSTLRT60B25L339Y",email:""},{cognome:"SISTI",nome:"ALESSANDRO",cf:"SSTLSN90A03D142R",email:""},{cognome:"SOLDI",nome:"CHRISTIAN",cf:"SLDCRS92S27A470Z",email:""},{cognome:"SOLDI",nome:"LUCA",cf:"SLDLCU95T27B898R",email:""},{cognome:"SONZOGNI",nome:"LORENZO",cf:"SNZLNZ66E31D142T",email:""},{cognome:"SOTTILI",nome:"FILIPPO",cf:"STTFPP93M04D142B",email:""},{cognome:"SPINELLI",nome:"SIMONE ANDREA",cf:"SPNSNN80P06C523D",email:""},{cognome:"STREPAROLA",nome:"MATTEO",cf:"STRMTT95A28L400X",email:""},{cognome:"STREPAROLA",nome:"ANGELO",cf:"STRNGL62C08D142B",email:""},{cognome:"TALLARICO",nome:"FRANCESCO",cf:"TLLFNC95A26M102N",email:""},{cognome:"TENDINI",nome:"PAOLO",cf:"TNDPLA81L27D150B",email:""},{cognome:"TINACI",nome:"GIUSEPPE",cf:"TNCGPP49R07D959T",email:""},{cognome:"TONINELLI",nome:"LORENZO",cf:"TNNLNZ58P17B157M",email:""},{cognome:"TORRESANI",nome:"DAVIDE",cf:"TRRDVD95M07E349W",email:""},{cognome:"TORRESANI",nome:"GIANCARLO",cf:"TRRGCR59C23E897W",email:""},{cognome:"VACCARI",nome:"AGOSTINO",cf:"VCCGTN58M30D999R",email:""},{cognome:"VACCHELLI",nome:"MAURO",cf:"VCCMRA54L13G651O",email:""},{cognome:"VAILATI",nome:"WILLIAM MARIO",cf:"VLTWLM70T27G721S",email:""},{cognome:"VALERANI",nome:"SIMONE",cf:"VLRSMN77R30L400F",email:""},{cognome:"VALERI",nome:"MAURIZIO",cf:"VLRMRZ60A04H357F",email:""},{cognome:"VALSECCHI",nome:"DAVIDE",cf:"VLSDVD98E12O142B",email:""},{cognome:"VALZESI",nome:"IVANO",cf:"VLZVNI65M13D150S",email:""},{cognome:"VANELLI",nome:"ALESSANDRO",cf:"VNLLSN84P09D142S",email:""},{cognome:"VARANI",nome:"LUIGI",cf:"VRNLGU84H15I849R",email:""},{cognome:"VECCHI",nome:"LUIGI",cf:"VCCLGU61L19B393Z",email:""},{cognome:"VINDIGNI",nome:"GIOVANNI",cf:"VNDGNN75L05H163Y",email:""},{cognome:"VIOLA",nome:"GIAN LUIGI",cf:"VLIGLG51A24I790N",email:""},{cognome:"ZANELLI",nome:"GIOVANNI",cf:"ZNLGNN54R08L539P",email:""},{cognome:"ZANETTI",nome:"ILARIO",cf:"ZNTLRI75H26E526L",email:""},{cognome:"ZERBI",nome:"FRANCESCO",cf:"ZRBFNC59C30G558L",email:""},{cognome:"ZERBI",nome:"LUIGI",cf:"ZRBLGU83C09D142Q",email:""},{cognome:"ZUCCHETTI",nome:"ENRICO",cf:"ZCCNRC65P23F205E",email:""}];
+var cacciatori = [];
+
+async function caricaCacciatoriDalFoglio(){
+  try{
+    var res = await fetch(URL_GS + '?action=operatori');
+    var d = await res.json();
+    if(d.operatori && Array.isArray(d.operatori) && d.operatori.length > 0){
+      cacciatori = d.operatori;
+    }
+  }catch(e){}
+}
 var nuovoCacciatore=false;
 
 function cercaCacciatore(val){
@@ -1797,8 +1833,53 @@ function inserisciNuovo(cognome){
 function chiudiLista(){document.getElementById('autocompleteList').classList.remove('show');}
 
 document.getElementById('pinLogin').addEventListener('keydown',function(e){if(e.key==='Enter')verificaPinLogin();});
+
+// ============================================================
+//  ESENZIONE TASSA CACCIA CORVIDI
+// ============================================================
+function initEsenzioneCorvidi(){
+  var sel = document.getElementById('esenzioneAnnoCorvidi');
+  sel.innerHTML = '';
+  var now = new Date().getFullYear();
+  for(var y = now; y >= now-5; y--){
+    sel.innerHTML += '<option value="'+y+'">'+(y===now?y+' (anno corrente)':y)+'</option>';
+  }
+  document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '';
+}
+
+async function generaStampaEsenzioneCorvidi(){
+  var anno = document.getElementById('esenzioneAnnoCorvidi').value;
+  document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#7dcfaa;padding:12px;">⏳ Caricamento...</div>';
+  try{
+    var res = await fetch(URL_GS + '?action=esenzione&anno=' + anno);
+    var d = await res.json();
+    var records = d.records || [];
+    if(!records.length){
+      document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#e63946;padding:16px;">⚠️ Nessun operatore trovato per l'anno '+anno+'</div>';
+      return;
+    }
+    var rows = '';
+    records.forEach(function(r, i){
+      rows += '<tr><td style="text-align:center;">'+(i+1)+'</td><td>'+r.cognome+'</td><td>'+r.nome+'</td><td>'+r.cf+'</td><td>'+r.email+'</td></tr>';
+    });
+    var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Esenzione Tassa '+anno+'</title><style>@page{margin:15mm;size:A4 portrait;}body{font-family:Arial,sans-serif;font-size:10px;color:#000;margin:0;padding:0;}.header{text-align:center;margin-bottom:16px;border-bottom:2px solid #000;padding-bottom:10px;}.titolo{font-size:16px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;}.prov{font-size:10px;margin-top:4px;color:#333;}table{width:100%;border-collapse:collapse;margin-top:10px;}th{background:#0d1b2a;color:#e8c547;font-size:10px;font-weight:bold;padding:6px 4px;border:1px solid #000;text-align:center;}td{font-size:9px;padding:4px 3px;border:1px solid #ccc;}tr:nth-child(even){background:#f9f9f9;}.footer{margin-top:20px;font-size:9px;color:#888;text-align:center;border-top:1px solid #ccc;padding-top:8px;}.no-print{margin-top:20px;text-align:center;}@media print{.no-print{display:none;}}</style></head><body>';
+    html += '<div class="header"><div class="titolo">NOMINATIVI ANNO '+anno+' PER ESENZIONE TASSA REGIONALE CACCIA</div><div class="prov">Polizia Provinciale di Cremona — Controllo Corvidi</div></div>';
+    html += '<table><thead><tr><th>#</th><th>Cognome</th><th>Nome</th><th>Codice Fiscale</th><th>Email</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    html += '<div class="footer">Stampato il '+new Date().toLocaleDateString("it-IT")+' — Totale: '+records.length+' nominativi</div>';
+    html += '<div class="no-print"><button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#0d1b2a;color:#e8c547;border:none;border-radius:8px;">🖨️ Stampa / Salva PDF</button><button onclick="window.close()" style="margin-left:12px;padding:12px 20px;font-size:14px;cursor:pointer;">✕ Chiudi</button></div>';
+    html += '</body></html>';
+    var win = window.open('','_blank');
+    win.document.write(html);
+    win.document.close();
+    document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#7dcfaa;padding:12px;">✅ '+records.length+' nominativi per anno '+anno+'<br><small style="color:rgba(224,225,221,0.4);">📊 Foglio "Esenzione Tassa '+anno+'" aggiornato nel Google Sheet</small></div>';
+  }catch(e){
+    document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#e63946;padding:16px;">⚠️ Errore: '+e.message+'</div>';
+  }
+}
+
 syncPinMapDaSheet().then(checkLogin);
 loadStats();
+caricaCacciatoriDalFoglio();
 </script>
 
 
