@@ -1855,7 +1855,7 @@ async function generaStampaEsenzioneCorvidi(){
     var d = await res.json();
     var records = d.records || [];
     if(!records.length){
-      document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#e63946;padding:16px;">⚠️ Nessun operatore trovato per l'anno '+anno+'</div>';
+      document.getElementById('anteprimaEsenzioneCorvidi').innerHTML = '<div style="text-align:center;color:#e63946;padding:16px;">⚠️ Nessun operatore trovato per l\'anno '+anno+'</div>';
       return;
     }
     var rows = '';
