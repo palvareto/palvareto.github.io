@@ -692,7 +692,7 @@ async function generaStampaEsenzione(){
     var d = await res.json();
     var records = d.records || [];
     if(!records.length){
-      document.getElementById('anteprimaEsenzione').innerHTML = '<div style="text-align:center;color:#e74c3c;padding:16px;">⚠️ Nessun cacciatore trovato per l'anno '+anno+'</div>';
+      document.getElementById('anteprimaEsenzione').innerHTML = '<div style="text-align:center;color:#e74c3c;padding:16px;">⚠️ Nessun cacciatore trovato per l\'anno '+anno+'</div>';
       return;
     }
 
