@@ -507,15 +507,22 @@ function setQualifica(val){
 }
 
 function cercaCacciatore(val){
-  var lista=document.getElementById('autocompleteList'),q=val.trim().toUpperCase();
+  var lista=document.getElementById('autocompleteList');
+  var q=val.trim().toUpperCase();
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
   lista.innerHTML='';
-  trovati.forEach(function(c){
+  // Salva risultati in variabile globale per accesso tramite indice
+  window._trovatiAC = trovati;
+  trovati.forEach(function(c, i){
     var div=document.createElement('div');
     div.className='autocomplete-item';
     div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'—')+' · '+(c.email||'nessuna email')+'</small>';
-    div.onclick=(function(cc){return function(){
+    div.setAttribute('data-idx', i);
+    div.addEventListener('mousedown', function(e){
+      e.preventDefault();
+      var idx=parseInt(this.getAttribute('data-idx'));
+      var cc=window._trovatiAC[idx];
       document.getElementById('fCognome').value=cc.cognome||'';
       document.getElementById('fNome').value=cc.nome||'';
       document.getElementById('fCF').value=cc.cf||'';
@@ -523,13 +530,16 @@ function cercaCacciatore(val){
       lista.classList.remove('show');
       document.getElementById('nuovoCacBox').classList.remove('show');
       nuovoCacciatore=false;
-    };})(c);
+    });
     lista.appendChild(div);
   });
   var btnNuovo=document.createElement('div');
   btnNuovo.className='autocomplete-add';
   btnNuovo.textContent='➕ Aggiungi nuovo cacciatore';
-  btnNuovo.onclick=(function(v){return function(){inserisciNuovo(v);};})(val.trim());
+  btnNuovo.addEventListener('mousedown', function(e){
+    e.preventDefault();
+    inserisciNuovo(val.trim());
+  });
   lista.appendChild(btnNuovo);
   lista.classList.add('show');
 }
