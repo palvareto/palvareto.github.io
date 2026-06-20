@@ -519,6 +519,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="iOp1Nome" placeholder="Nome operatore">
   </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="iOp1CF" placeholder="Codice fiscale">
+  </div>
 
   <div class="form-divider">👤 Operatore 2</div>
   <div class="form-group">
@@ -542,6 +546,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="iOp2Nome" placeholder="Nome operatore">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="iOp2CF" placeholder="Codice fiscale">
   </div>
 
   <div class="form-divider">👤 Operatore 3</div>
@@ -567,6 +575,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="iOp3Nome" placeholder="Nome operatore">
   </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="iOp3CF" placeholder="Codice fiscale">
+  </div>
 
   <div class="form-divider">👤 Operatore 4</div>
   <div class="form-group">
@@ -590,6 +602,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="iOp4Nome" placeholder="Nome operatore">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="iOp4CF" placeholder="Codice fiscale">
   </div>
 
   <button class="btn-submit" onclick="submitIbis()">🦢 Invia Scheda Ibis</button>
@@ -747,6 +763,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="cmAg1Nome" placeholder="Nome agente">
   </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="cmAg1CF" placeholder="Codice fiscale">
+  </div>
 
   <div class="form-divider">👤 Agente 2</div>
   <div class="form-group">
@@ -759,6 +779,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="cmAg2Nome" placeholder="Nome agente">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="cmAg2CF" placeholder="Codice fiscale">
   </div>
 
   <button class="btn-submit" onclick="submitCormorano()">🦅 Invia Scheda Cormorano</button>
@@ -866,6 +890,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <input type="text" class="form-input" id="scInc1Nome" placeholder="Nome incaricato">
   </div>
   <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="scInc1CF" placeholder="Codice fiscale">
+  </div>
+  <div class="form-group">
     <label class="form-label">Qualifica</label>
     <select class="form-select" id="scQual1">
       <option value="">— Seleziona —</option>
@@ -887,6 +915,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <div class="form-group">
     <label class="form-label">Nome</label>
     <input type="text" class="form-input" id="scInc2Nome" placeholder="Nome incaricato">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Codice Fiscale</label>
+    <input type="text" class="form-input" id="scInc2CF" placeholder="Codice fiscale">
   </div>
   <div class="form-group">
     <label class="form-label">Qualifica</label>
@@ -1345,17 +1377,31 @@ function cercaOperatoreIbis(n,val){
   var q=val.trim().toUpperCase();
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
-  var html='';
-  trovati.forEach(function(c){
-    html+='<div class="autocomplete-item" onclick="selezionaOperatoreIbis('+n+',\''+c.cognome.replace(/'/g,"\\'")+'\',\''+c.nome.replace(/'/g,"\\'")+'\')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small></div>';
+  lista.innerHTML='';
+  window['_trovatiIbis'+n]=trovati;
+  trovati.forEach(function(c,i){
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small>';
+    div.setAttribute('data-idx',i);
+    div.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      var idx=parseInt(this.getAttribute('data-idx'));
+      var cc=window['_trovatiIbis'+n][idx];
+      document.getElementById('iOp'+n+'Cognome').value=cc.cognome||'';
+      document.getElementById('iOp'+n+'Nome').value=cc.nome||'';
+      var cfEl=document.getElementById('iOp'+n+'CF');if(cfEl)cfEl.value=cc.cf||'';
+      lista.classList.remove('show');
+    });
+    lista.appendChild(div);
   });
-  lista.innerHTML=html;
   lista.classList.add('show');
 }
 
-function selezionaOperatoreIbis(n,cognome,nome){
+function selezionaOperatoreIbis(n,cognome,nome,cf){
   document.getElementById('iOp'+n+'Cognome').value=cognome;
   document.getElementById('iOp'+n+'Nome').value=nome;
+  var cfEl=document.getElementById('iOp'+n+'CF');if(cfEl)cfEl.value=cf||'';
   chiudiListaIbis(n);
 }
 
@@ -1493,16 +1539,31 @@ function cercaOperatoreCormorano(n,val){
   var q=val.trim().toUpperCase();
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
-  var html='';
-  trovati.forEach(function(c){
-    html+='<div class="autocomplete-item" onclick="selezionaOperatoreCormorano('+n+',\''+c.cognome.replace(/'/g,"\\'")+'\',\''+c.nome.replace(/'/g,"\\'")+'\')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small></div>';
+  lista.innerHTML='';
+  window['_trovatiCorm'+n]=trovati;
+  trovati.forEach(function(c,i){
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small>';
+    div.setAttribute('data-idx',i);
+    div.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      var idx=parseInt(this.getAttribute('data-idx'));
+      var cc=window['_trovatiCorm'+n][idx];
+      document.getElementById('cmAg'+n+'Cognome').value=cc.cognome||'';
+      document.getElementById('cmAg'+n+'Nome').value=cc.nome||'';
+      var cfEl=document.getElementById('cmAg'+n+'CF');if(cfEl)cfEl.value=cc.cf||'';
+      lista.classList.remove('show');
+    });
+    lista.appendChild(div);
   });
-  lista.innerHTML=html;
   lista.classList.add('show');
 }
-function selezionaOperatoreCormorano(n,cognome,nome){
+
+function selezionaOperatoreCormorano(n,cognome,nome,cf){
   document.getElementById('cmAg'+n+'Cognome').value=cognome;
   document.getElementById('cmAg'+n+'Nome').value=nome;
+  var cfEl=document.getElementById('cmAg'+n+'CF');if(cfEl)cfEl.value=cf||'';
   chiudiListaCormorano(n);
 }
 function chiudiListaCormorano(n){
@@ -1630,16 +1691,31 @@ function cercaOperatoreScoiattolo(n,val){
   var q=val.trim().toUpperCase();
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
-  var html='';
-  trovati.forEach(function(c){
-    html+='<div class="autocomplete-item" onclick="selezionaOperatoreScoiattolo('+n+',\''+c.cognome.replace(/'/g,"\\'")+'\',\''+c.nome.replace(/'/g,"\\'")+'\')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small></div>';
+  lista.innerHTML='';
+  window['_trovatiSco'+n]=trovati;
+  trovati.forEach(function(c,i){
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small>';
+    div.setAttribute('data-idx',i);
+    div.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      var idx=parseInt(this.getAttribute('data-idx'));
+      var cc=window['_trovatiSco'+n][idx];
+      document.getElementById('scInc'+n+'Cognome').value=cc.cognome||'';
+      document.getElementById('scInc'+n+'Nome').value=cc.nome||'';
+      var cfEl=document.getElementById('scInc'+n+'CF');if(cfEl)cfEl.value=cc.cf||'';
+      lista.classList.remove('show');
+    });
+    lista.appendChild(div);
   });
-  lista.innerHTML=html;
   lista.classList.add('show');
 }
-function selezionaOperatoreScoiattolo(n,cognome,nome){
+
+function selezionaOperatoreScoiattolo(n,cognome,nome,cf){
   document.getElementById('scInc'+n+'Cognome').value=cognome;
   document.getElementById('scInc'+n+'Nome').value=nome;
+  var cfEl=document.getElementById('scInc'+n+'CF');if(cfEl)cfEl.value=cf||'';
   chiudiListaScoiattolo(n);
 }
 function chiudiListaScoiattolo(n){
