@@ -507,19 +507,31 @@ function setQualifica(val){
 }
 
 function cercaCacciatore(val){
-  const lista=document.getElementById('autocompleteList'),q=val.trim().toUpperCase();
+  var lista=document.getElementById('autocompleteList'),q=val.trim().toUpperCase();
   if(q.length<2){lista.classList.remove('show');return;}
-  const trovati=cacciatori.filter(c=>c.cognome.toUpperCase().startsWith(q)).slice(0,8);
-  let html='';
+  var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
+  lista.innerHTML='';
   trovati.forEach(function(c){
-    var cf=(c.cf||'').replace(/'/g,"\\'");
-    var nome=(c.nome||'').replace(/'/g,"\\'");
-    var email=(c.email||'').replace(/'/g,"\\'");
-    var cognome=(c.cognome||'').replace(/'/g,"\\'");
-    html+='<div class="autocomplete-item" onclick="selezionaCacciatoreDirectly(\''+cognome+'\',\''+nome+'\',\''+cf+'\',\''+email+'\')"><strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'—')+' · '+(c.email||'nessuna email')+'</small></div>';
+    var div=document.createElement('div');
+    div.className='autocomplete-item';
+    div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'—')+' · '+(c.email||'nessuna email')+'</small>';
+    div.onclick=(function(cc){return function(){
+      document.getElementById('fCognome').value=cc.cognome||'';
+      document.getElementById('fNome').value=cc.nome||'';
+      document.getElementById('fCF').value=cc.cf||'';
+      var em=document.getElementById('fEmail');if(em)em.value=cc.email||'';
+      lista.classList.remove('show');
+      document.getElementById('nuovoCacBox').classList.remove('show');
+      nuovoCacciatore=false;
+    };})(c);
+    lista.appendChild(div);
   });
-  html+=`<div class="autocomplete-add" onclick="inserisciNuovo('${val.trim().replace(/'/g,"\\'")}')">➕ Aggiungi nuovo cacciatore</div>`;
-  lista.innerHTML=html;lista.classList.add('show');
+  var btnNuovo=document.createElement('div');
+  btnNuovo.className='autocomplete-add';
+  btnNuovo.textContent='➕ Aggiungi nuovo cacciatore';
+  btnNuovo.onclick=(function(v){return function(){inserisciNuovo(v);};})(val.trim());
+  lista.appendChild(btnNuovo);
+  lista.classList.add('show');
 }
 
 function selezionaCacciatoreDirectly(cognome, nome, cf, email){
