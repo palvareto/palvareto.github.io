@@ -1798,25 +1798,34 @@ function cercaCacciatore(val){
   if(q.length<2){lista.classList.remove('show');return;}
   var trovati=cacciatori.filter(function(c){return c.cognome.toUpperCase().startsWith(q);}).slice(0,8);
   lista.innerHTML='';
-  trovati.forEach(function(c){
+  window._trovatiAC = trovati;
+  trovati.forEach(function(c, i){
     var div=document.createElement('div');
     div.className='autocomplete-item';
     div.innerHTML='<strong>'+c.cognome+'</strong> '+c.nome+'<small>'+(c.cf||'')+'</small>';
-    div.onclick=(function(cc){return function(){
+    div.setAttribute('data-idx', i);
+    div.addEventListener('mousedown', function(e){
+      e.preventDefault();
+      var idx=parseInt(this.getAttribute('data-idx'));
+      var cc=window._trovatiAC[idx];
       document.getElementById('fCognome').value=cc.cognome||'';
       document.getElementById('fNome').value=cc.nome||'';
       document.getElementById('fCF').value=cc.cf||'';
       lista.classList.remove('show');
       document.getElementById('nuovoCacBox').classList.remove('show');
       nuovoCacciatore=false;
-    };})(c);
+    });
     lista.appendChild(div);
   });
   var btnNuovo=document.createElement('div');
   btnNuovo.className='autocomplete-item';
-  btnNuovo.style.color='#7dcfaa';btnNuovo.style.fontStyle='italic';
+  btnNuovo.style.color='#7dcfaa';
+  btnNuovo.style.fontStyle='italic';
   btnNuovo.textContent='➕ Aggiungi nuovo operatore';
-  btnNuovo.onclick=(function(v){return function(){inserisciNuovo(v);};})(val.trim());
+  btnNuovo.addEventListener('mousedown', function(e){
+    e.preventDefault();
+    inserisciNuovo(val.trim());
+  });
   lista.appendChild(btnNuovo);
   lista.classList.add('show');
 }
