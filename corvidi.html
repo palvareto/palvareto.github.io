@@ -131,6 +131,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
 .nuovo-cac-box{display:none;padding:12px;background:rgba(82,183,136,0.06);border:1px solid rgba(82,183,136,0.25);border-radius:8px;margin-top:8px;}
 .nuovo-cac-box.show{display:block;}
 .nuovo-cac-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#7dcfaa;margin-bottom:8px;}
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#0d1b2a;border:1px solid rgba(240,208,96,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#f0d060;margin-bottom:2px;}
+.modal-istr-box h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(240,208,96,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:#52b788;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(82,183,136,0.2);}
+.istr-text{font-size:12px;color:rgba(224,225,221,0.7);line-height:1.7;}
+.istr-text strong{color:#f0d060;}
+.istr-firma{font-size:11px;color:rgba(224,225,221,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f0d060;color:#0d1b2a;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
 <link href="./Controllo Corvidi_files/css2" rel="stylesheet">
 </head>
@@ -207,7 +219,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <div class="stats-row">
+  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(240,208,96,0.08);border:1px solid rgba(240,208,96,0.3);border-radius:10px;color:#f0d060;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+<div class="stats-row">
     <div class="stat-card"><div class="num" id="statMese">0</div><div class="label">Mese</div></div>
     <div class="stat-card"><div class="num" id="statAnno">0</div><div class="label">Anno</div></div>
     <div class="stat-card"><div class="num" id="statInterventi">0</div><div class="label">Interventi</div></div>
@@ -1095,6 +1108,63 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   </div>
   <button class="btn-submit" onclick="generaStampaEsenzioneCorvidi()">📄 Genera Report Esenzione</button>
   <div id="anteprimaEsenzioneCorvidi" style="margin-top:16px;"></div>
+</div>
+
+
+<!-- MODAL ISTRUZIONI CORVIDI -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>🐦‍⬛ Controllo Corvidi</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Controllo Corvidi sostituisce completamente le schede cartacee per la registrazione di tutti gli interventi di controllo faunistico sul territorio provinciale. Gestisce sei tipologie di intervento: <strong>Cornacchia / Gazza / Piccione, Ibis Sacro, Cormorano, Daino, Minilepre / Coniglio / Volpe</strong> e <strong>Scoiattolo di Pallas</strong>.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Come si registra un intervento</div>
+      <div class="istr-text">
+        1. Seleziona la tipologia di intervento dalla home<br>
+        2. Compila i dati: data, operatore, qualifica, comune, ubicazione, GPS, specie, scopo, mezzi e capi abbattuti<br>
+        3. Per operatori già in archivio digita le prime lettere del cognome — il sistema compila automaticamente i dati<br>
+        4. Per un nuovo operatore seleziona "Aggiungi nuovo" — verrà salvato per i prossimi inserimenti<br>
+        5. Tocca <strong>Invia</strong> — dati inviati immediatamente
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Coordinate GPS</div>
+      <div class="istr-text">Tocca <strong>📍 Rileva</strong> per acquisire automaticamente la posizione nel punto esatto dell'intervento.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Report Disponibili</div>
+      <div class="istr-text">
+        📅 <strong>Report Mensile</strong> — interventi del mese con riepilogo capi per specie<br>
+        📆 <strong>Report Annuale</strong> — totali per anno e per specie<br>
+        📄 <strong>Stampa Esenzione Tassa</strong> — elenco ufficiale nominativi per esenzione tassa regionale caccia con creazione automatica foglio Excel
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Il vero vantaggio è nell'eliminazione di tutta la gestione successiva: raccolta fogli cartacei, verifica dati, archiviazione fisica e trascrizione per i report statistici. Tutti i dati sono immediatamente disponibili e consultabili da qualsiasi dispositivo. I documenti ufficiali vengono generati in pochi secondi — operazioni che prima richiedevano ore di lavoro d'ufficio. Il cartaceo rimane sempre disponibile all'occorrenza premendo il tasto stampa.</div>
+    </div>
+
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
 </div>
 
 <script>
