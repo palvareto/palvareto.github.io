@@ -1221,7 +1221,7 @@ function verificaPinLogin() {
   }
 }
 
-var corvidiSel = '';
+var corvidiSel = [];
 var specie = '';
 var qualifica = '';
 var reportTab = 'mensile';
@@ -1270,9 +1270,13 @@ function renderAgenti(){
   grid.innerHTML='';
   agenti.forEach(function(a){
     var btn=document.createElement('button');
-    btn.className='agente-btn'+(corvidiSel===a?' sel':'');
+    btn.className='agente-btn'+(corvidiSel.indexOf(a)>=0?' sel':'');
     btn.textContent=a;
-    btn.onclick=(function(nome){return function(){corvidiSel=nome;renderAgenti();};})(a);
+    btn.onclick=(function(nome){return function(){
+      var idx=corvidiSel.indexOf(nome);
+      if(idx>=0){corvidiSel.splice(idx,1);}else{corvidiSel.push(nome);}
+      renderAgenti();
+    };})(a);
     grid.appendChild(btn);
   });
 }
@@ -1313,7 +1317,7 @@ function renderAgentiManager(){
 
 function rimuoviAgenteCorvidi(nome){
   var idx=agenti.indexOf(nome);if(idx>=0)agenti.splice(idx,1);
-  if(corvidiSel===nome) corvidiSel='';
+  if(corvidiSel===nome) corvidiSel=[];
   var hadPin = false;
   Object.keys(PIN_MAP).forEach(function(pin){ if(PIN_MAP[pin]===nome){ delete PIN_MAP[pin]; hadPin=true; } });
   salvaPinMapCorvidi();
@@ -1438,7 +1442,7 @@ function resetForm(){
   document.getElementById('fCapi').value='';document.getElementById('fScopo').value='';document.getElementById('fMezzi').value='';document.getElementById('fDestinazione').value='';
   document.getElementById('gpsStatus').textContent='Tocca "Rileva" per acquisire la posizione';document.getElementById('codiceGabbiaGroup').style.display='none';
   ['sCorn','sGazz','sPicc','qCacc','qGuar','qProv'].forEach(function(id){document.getElementById(id).classList.remove('active');});
-  specie='';qualifica='';corvidiSel='';renderAgenti();
+  specie='';qualifica='';corvidiSel=[];renderAgenti();
 }
 
 // ============================================================
