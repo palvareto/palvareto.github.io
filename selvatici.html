@@ -136,6 +136,18 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .pin-popup-nome{font-size:14px;color:rgba(245,240,232,0.7);margin-bottom:16px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
 .pin-popup-code{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:12px;color:var(--crema);background:rgba(0,0,0,0.4);border-radius:12px;padding:16px;margin-bottom:16px;}
 .pin-popup-note{font-size:11px;color:rgba(245,240,232,0.4);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;margin-bottom:16px;}
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#1a2e1a;border:1px solid rgba(39,174,96,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#7dcfaa;margin-bottom:2px;}
+.modal-istr-box h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(125,207,170,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:#7dcfaa;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(125,207,170,0.2);}
+.istr-text{font-size:12px;color:rgba(232,234,240,0.7);line-height:1.7;}
+.istr-text strong{color:#7dcfaa;}
+.istr-firma{font-size:11px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#27ae60;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
 </head>
 <body>
@@ -226,7 +238,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 <div class="screen active" id="screenHome">
   <div class="install-banner" id="installBanner">
     <span>📲 Installa l'app sulla schermata home</span>
-    <button onclick="installApp()">INSTALLA</button>
+    <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.3);border-radius:10px;color:#7dcfaa;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+<button onclick="installApp()">INSTALLA</button>
   </div>
   <div class="stats-row">
     <div class="stat-card"><div class="num" id="statZoo">192</div><div class="label">Zooprofilassi</div></div>
@@ -400,6 +413,55 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button class="tab-btn" id="tabCras" onclick="switchTab(&#39;cras&#39;)">🦅 CRAS</button>
   </div>
   <div id="recordsList"><div class="empty-state"><div>📋</div>Caricamento...</div></div>
+</div>
+
+
+<!-- MODAL ISTRUZIONI SELVATICI -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>🦌 Registro Selvatici</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Registro Selvatici è l'applicazione per la registrazione di tutti gli interventi di recupero animali selvatici sul territorio provinciale. Permette di tracciare in tempo reale ogni animale recuperato, gli agenti intervenuti, il centro CRAS di destinazione e tutte le informazioni necessarie per la corretta gestione dell'intervento.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Come si registra un intervento</div>
+      <div class="istr-text">
+        1. Tocca <strong>Nuovo Inserimento</strong><br>
+        2. Seleziona la data e la specie animale recuperata<br>
+        3. Seleziona gli agenti intervenuti dalla griglia<br>
+        4. Indica il centro CRAS di destinazione (Loghino Bosco, Parcobaleno o altro centro)<br>
+        5. Compila le note con le informazioni sull'animale e sull'intervento<br>
+        6. Tocca <strong>Salva</strong> — dati inviati immediatamente
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Storico Interventi</div>
+      <div class="istr-text">Tutti gli interventi registrati sono consultabili nello storico con data, specie, agenti e destinazione. I dati sono sempre disponibili e consultabili da qualsiasi dispositivo in qualsiasi momento.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Con il metodo tradizionale ogni recupero richiedeva la compilazione di moduli cartacei, la raccolta in ufficio e l'archiviazione manuale. Con questa app tutti i dati sono immediatamente disponibili, storicizzati e consultabili in qualsiasi momento, eliminando completamente il lavoro d'ufficio legato alla gestione cartacea.</div>
+    </div>
+
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
 </div>
 
 <script>
