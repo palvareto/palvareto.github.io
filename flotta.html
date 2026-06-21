@@ -119,6 +119,18 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .btn-add-ag2{padding:9px 12px;background:rgba(39,174,96,0.2);border:1px solid rgba(39,174,96,0.5);border-radius:8px;color:#7dcfaa;font-family:'Barlow Condensed',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;}
 .btn-gestisci-f{width:100%;padding:9px;background:rgba(245,166,35,0.06);border:1px dashed rgba(245,166,35,0.25);border-radius:8px;color:rgba(232,234,240,0.4);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:6px;}
 .btn-gestisci-f:hover{background:rgba(245,166,35,0.12);color:var(--oro2);}
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#16213e;border:1px solid rgba(245,166,35,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#f5a623;margin-bottom:2px;}
+.modal-istr-box h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(245,166,35,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:#7dcfaa;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(125,207,170,0.2);}
+.istr-text{font-size:12px;color:rgba(232,234,240,0.7);line-height:1.7;}
+.istr-text strong{color:#f5a623;}
+.istr-firma{font-size:11px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
 </head>
 <body>
@@ -417,6 +429,59 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <button class="btn-submit" onclick="generaStampaTutto()" style="background:linear-gradient(135deg,#16213e,#e74c3c);">🖨️ Genera PDF completo</button>
   <div id="anteprimaTutto" style="margin-top:16px;"></div>
+</div>
+
+
+<!-- MODAL ISTRUZIONI FLOTTA -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>🚗 Registro Flotta</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Registro Flotta sostituisce completamente i registri cartacei per la gestione dei chilometri percorsi e dei rifornimenti di carburante di tutti i veicoli di servizio. Con pochi tocchi dal proprio smartphone, ogni operatore può registrare in tempo reale i dati del veicolo utilizzato.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso l'applicazione richiede il tuo <strong>codice personale a 4 cifre</strong>. Questo codice identifica univocamente chi ha effettuato ogni inserimento e viene registrato automaticamente in ogni operazione. Garantisce la tracciabilità completa di tutte le attività. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Registra Chilometri</div>
+      <div class="istr-text">1. Tocca <strong>Registra KM</strong><br>2. Seleziona data e targa veicolo<br>3. Inserisci i km finali del contachilometri<br>4. Aggiungi eventuali note<br>5. Tocca <strong>Salva</strong> — dati inviati immediatamente</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Registra Rifornimento</div>
+      <div class="istr-text">1. Tocca <strong>Rifornimento</strong><br>2. Seleziona targa e data<br>3. Inserisci importo, costo al litro e km attuali<br>4. Tocca <strong>Salva</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Report Disponibili</div>
+      <div class="istr-text">
+        📊 <strong>Storico registrazioni</strong> — tutti i viaggi per data e veicolo<br>
+        ⛽ <strong>Consumo per veicolo</strong> — media km/litro e costo per km<br>
+        🖨️ <strong>Scheda Viaggio Mensile</strong> — documento ufficiale PDF<br>
+        🖨️ <strong>Foglio Carburante Mensile</strong> — documento ufficiale PDF<br>
+        🖨️ <strong>Stampa Tutto</strong> — PDF completo di tutti i veicoli del mese
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Tempo Risparmiato</div>
+      <div class="istr-text">Con il metodo cartaceo: <strong>30-45 minuti a settimana</strong> tra raccolta fogli e trascrizione in ufficio. Con questa app: <strong>meno di 1 minuto</strong> per ogni registrazione, dati subito disponibili e documenti PDF generati automaticamente.</div>
+    </div>
+
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
 </div>
 
 <script>
