@@ -101,7 +101,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .spinner{width:42px;height:42px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--ocra2);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .loading-text{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;font-size:12px;color:rgba(255,255,255,0.6);text-transform:uppercase;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;}
+
 .modal-overlay.show{display:flex;}
 .modal-box{background:#1a3a15;border:1px solid var(--ocra);border-radius:16px;padding:24px;max-width:340px;width:100%;}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:12px;}
@@ -149,6 +149,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
 .btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#27ae60;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:#1a3a15;border:1px solid var(--ocra2);border-radius:16px;padding:24px;max-width:300px;width:100%;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:12px;}
+.modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
 </style>
 <link rel="manifest" href="blob:https://palvareto.github.io/ad2ee047-f8b5-40f4-bbb3-23df5505fe26"><link rel="manifest" href="blob:https://palvareto.github.io/5b36a31d-f08c-4720-bcb8-e5045427e616"></head>
 <body>
@@ -251,7 +256,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     </div>
   </div>
 </div>
-
 
 
 
@@ -464,7 +468,8 @@ var PWD = '12345611';
 // AGENTI
 // Agenti: usa localStorage se esiste, altrimenti usa default
 var AGENTI_DEFAULT = ['ARISI','BANDERA','BORRINI','CAMBIATI','CHIODA','COLLA','FUSARI','GUARNERI','PERSONALE VOLONTARIO','PREANI','RIZZI','TRENTAROSSI','VIVIANI'];
-var agenti = AGENTI_DEFAULT.slice(); // verrà sovrascritto da syncPinMapDaSheet
+var _agentiSaved = localStorage.getItem('selvatici_agenti');
+var agenti = _agentiSaved ? JSON.parse(_agentiSaved) : AGENTI_DEFAULT.slice();
 var zooSel = [];
 var crasSel = [];
 var storicoTab = 'zoo';
@@ -503,14 +508,10 @@ function vai(id){
 var PIN_MAP_DEFAULT = {
   '7342': 'ARISI', '2916': 'BANDERA', '5483': 'BORRINI', '8751': 'CAMBIATI', '3629': 'COLLA', '3688': 'FUSARI', '4817': 'GUARNERI', '9364': 'PREANI', '6193': 'RIZZI', '2748': 'TRENTAROSSI', '2766': 'VIVIANI', '5522': 'CHIODA', '1013': 'TORTINI', '1014': 'MARIOTTI'
 };
-// Forza sincronizzazione PIN dal foglio ad ogni apertura (ma mantieni l'utente loggato)
 var PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT);
 var utenteLoggato = localStorage.getItem('selvatici_utente') || '';
-// Aggiorna header immediatamente se utente già loggato (prima della fetch)
-if (utenteLoggato) {
-  var _hu = document.getElementById('headerUtente');
-  if (_hu) _hu.textContent = '👮 ' + utenteLoggato;
-}
+// Aggiorna header subito se già loggato
+if (utenteLoggato) { var _hu = document.getElementById('headerUtente'); if(_hu) _hu.textContent = '👮 ' + utenteLoggato; }
 
 
 function checkLogin() {
@@ -546,36 +547,33 @@ async function syncPinMapDaSheet() {
     var d = await res.json();
     if (d.pinMap && typeof d.pinMap === 'object' && Object.keys(d.pinMap).length > 0) {
       PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT, d.pinMap);
-      // Ricava lista agenti dalla pinmap del foglio (nomi unici, ordinati)
-      var nomiDaFoglio = Object.values(PIN_MAP).filter(function(n){ return n && n.trim(); });
-      nomiDaFoglio = nomiDaFoglio.filter(function(n, i){ return nomiDaFoglio.indexOf(n) === i; });
-      nomiDaFoglio.sort();
-      agenti = nomiDaFoglio;
-      // Se l'utente loggato non corrisponde più a nessun PIN valido, richiedi nuovo login
+      // Ricava agenti dalla pinmap del foglio
+      var nomi = Object.values(PIN_MAP).filter(function(n){ return n && n.trim(); });
+      nomi = nomi.filter(function(n,i){ return nomi.indexOf(n)===i; });
+      nomi.sort();
+      agenti = nomi;
       if (utenteLoggato) {
         var pinValido = Object.keys(PIN_MAP).some(function(p){ return PIN_MAP[p] === utenteLoggato; });
-        if (!pinValido) {
-          localStorage.removeItem('selvatici_utente');
-          utenteLoggato = '';
-        }
+        if (!pinValido) { localStorage.removeItem('selvatici_utente'); utenteLoggato = ''; }
       }
     }
   } catch(e) {}
 }
 
 
-
-
-
+function mostraPinPopup(nome, pin) {
+  alert('✅ Agente "' + nome + '" aggiunto!\n\nIl suo PIN è: ' + pin + '\n\nComunicaglielo: lo inserirà al prossimo accesso.\n\n📋 PIN salvato sul foglio Google "PIN Agenti".');
+}
 
 function cambiUtente() {
   localStorage.removeItem('selvatici_utente');
   utenteLoggato = '';
+  pinCurrent = '';
   aggiornaDisplay();
   document.getElementById('modalLogin').classList.add('show');
 }
 
-function aggiornaDisplay(){}
+
 
 function setNow(id){
   var now=new Date();
@@ -635,7 +633,7 @@ function renderAgentiManager(){
       try {
         var res = await fetch(URL_GS, {method:'POST', body: JSON.stringify({tipo:'PIN_REMOVE', nome:nome})});
         var d = await res.json();
-        if(d.status !== 'ok'){ toast('Errore rimozione dal foglio', true); return; }
+        if(d.status !== 'ok'){ toast('Errore rimozione', true); return; }
       } catch(e){ toast('Errore di connessione', true); return; }
       finally{ loading(false); }
       var idx=agenti.indexOf(nome);if(idx>=0)agenti.splice(idx,1);
@@ -659,7 +657,7 @@ async function aggiungiAgente(){
   try {
     var res = await fetch(URL_GS, {method:'POST', body: JSON.stringify({tipo:'PIN', pin:pin, nome:nome})});
     var d = await res.json();
-    if(d.status !== 'ok'){ toast('Errore salvataggio sul foglio: '+(d.message||''), true); return; }
+    if(d.status !== 'ok'){ toast('Errore salvataggio: '+(d.message||''), true); return; }
   } catch(e){ toast('Errore di connessione', true); return; }
   finally{ loading(false); }
   agenti.push(nome);agenti.sort();
@@ -667,7 +665,7 @@ async function aggiungiAgente(){
   input.value='';pinInput.value='';
   chiudiModal('modalAgenti');
   renderAgenti('zoo');renderAgenti('cras');
-  alert('✅ Agente "'+nome+'" aggiunto!\n\nIl suo PIN è: '+pin+'\n\nComunicaglielo: lo inserirà al prossimo accesso.\n\n📋 PIN salvato sul foglio Google "PIN Agenti".');
+  mostraPinPopup(nome, pin);
 }
 
 // FORM SELECTORS
@@ -711,6 +709,7 @@ function cambiaMolt(tipo,delta){
   else{crasMolt=Math.min(10,Math.max(1,crasMolt+delta));document.getElementById('crasMoltVal').textContent=crasMolt;}
 }
 
+function fmtDT(val){if(!val)return'';var d=new Date(val);return d.toLocaleDateString('it-IT');}
 function fmtDTOra(val){if(!val)return'';var d=new Date(val);return d.toLocaleDateString('it-IT')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 
 // SUBMIT ZOO
@@ -1053,6 +1052,7 @@ function stampaTuttiRitiri(records, dataLabel) {
 
   var body = '';
   records.forEach(function(r, i) {
+    var isLast = i === records.length - 1;
     body += '<div class="pagina">' + ricevuta(r, false) + ricevuta(r, true) + '</div>';
   });
 
