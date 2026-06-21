@@ -158,6 +158,48 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 </head>
 <body>
 
+<!-- MODAL ISTRUZIONI SELVATICI -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>🦌 Registro Selvatici</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Registro Selvatici gestisce tutti gli interventi di recupero animali selvatici sul territorio provinciale. Permette di registrare consegne all'Istituto Zooprofilassi, interventi CRAS e di generare automaticamente il <strong>Verbale Ufficiale di Recupero e Consegna Fauna Selvatica</strong> pronto per la firma.</div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Come si registra un intervento</div>
+      <div class="istr-text">
+        1. Scegli il tipo: <strong>Zooprofilassi</strong> o <strong>CRAS</strong><br>
+        2. Seleziona data/ora e agenti intervenuti<br>
+        3. Inserisci specie animale e località di recupero<br>
+        4. Indica chi ha consegnato il selvatico (nome, indirizzo, tel.)<br>
+        5. Seleziona esito: <strong>Consegnato al CRAS</strong> o <strong>Liberato</strong><br>
+        6. Tocca <strong>Registra intervento</strong> — dati inviati immediatamente
+      </div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Stampa Verbale Ufficiale</div>
+      <div class="istr-text">Dalla sezione <strong>Storico</strong> puoi selezionare qualsiasi intervento registrato e generare il <strong>Verbale di Recupero e Consegna Fauna Selvatica</strong> in PDF — doppia copia automatica, pronta per la firma dell'agente e del CRAS.</div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Elimina la compilazione manuale del verbale cartaceo. Tutti i dati già inseriti nell'app vengono riportati automaticamente nel documento ufficiale — basta selezionare l'intervento e stampare.</div>
+    </div>
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
+</div>
+
+
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
 <div class="toast" id="toast">Benvenuto BORRINI! 🦌</div>
 
@@ -412,46 +454,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 </div>
 
 
-<!-- MODAL ISTRUZIONI SELVATICI -->
-<div class="modal-istruzioni" id="modalIstruzioni">
-  <div class="modal-istr-box">
-    <h2>🦌 Registro Selvatici</h2>
-    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
-    <div class="istr-section">
-      <div class="istr-title">Cos'è e a cosa serve</div>
-      <div class="istr-text">Il Registro Selvatici gestisce tutti gli interventi di recupero animali selvatici sul territorio provinciale. Permette di registrare consegne all'Istituto Zooprofilassi, interventi CRAS e di generare automaticamente il <strong>Verbale Ufficiale di Recupero e Consegna Fauna Selvatica</strong> pronto per la firma.</div>
-    </div>
-    <div class="istr-section">
-      <div class="istr-title">Codice Operatore</div>
-      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
-    </div>
-    <div class="istr-section">
-      <div class="istr-title">Come si registra un intervento</div>
-      <div class="istr-text">
-        1. Scegli il tipo: <strong>Zooprofilassi</strong> o <strong>CRAS</strong><br>
-        2. Seleziona data/ora e agenti intervenuti<br>
-        3. Inserisci specie animale e località di recupero<br>
-        4. Indica chi ha consegnato il selvatico (nome, indirizzo, tel.)<br>
-        5. Seleziona esito: <strong>Consegnato al CRAS</strong> o <strong>Liberato</strong><br>
-        6. Tocca <strong>Registra intervento</strong> — dati inviati immediatamente
-      </div>
-    </div>
-    <div class="istr-section">
-      <div class="istr-title">Stampa Verbale Ufficiale</div>
-      <div class="istr-text">Dalla sezione <strong>Storico</strong> puoi selezionare qualsiasi intervento registrato e generare il <strong>Verbale di Recupero e Consegna Fauna Selvatica</strong> in PDF — doppia copia automatica, pronta per la firma dell'agente e del CRAS.</div>
-    </div>
-    <div class="istr-section">
-      <div class="istr-title">Quanto lavoro si risparmia</div>
-      <div class="istr-text">Elimina la compilazione manuale del verbale cartaceo. Tutti i dati già inseriti nell'app vengono riportati automaticamente nel documento ufficiale — basta selezionare l'intervento e stampare.</div>
-    </div>
-    <div class="istr-firma">
-      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
-      Polizia Provinciale di Cremona<br>
-      📧 riccardo.borrini@provincia.cremona.it
-    </div>
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
-  </div>
-</div>
 
     <div class="istr-section">
       <div class="istr-title">Codice Operatore</div>
