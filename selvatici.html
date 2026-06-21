@@ -117,25 +117,25 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .agenti-add-row{display:flex;gap:8px;margin-top:10px;}
 .btn-add{padding:9px 12px;background:rgba(74,140,63,0.2);border:1px solid rgba(74,140,63,0.5);border-radius:8px;color:#7dcf70;font-family:'Barlow Condensed',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;}
 
-.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;}
-.pin-box{background:#1a3a15;border:2px solid var(--ocra);border-radius:20px;padding:32px 24px;max-width:320px;width:100%;text-align:center;}
-.pin-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--ocra2);margin-bottom:8px;}
-.pin-subtitle{font-size:13px;color:rgba(245,240,232,0.5);margin-bottom:24px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
-.pin-display{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:12px;color:var(--crema);background:rgba(0,0,0,0.3);border-radius:10px;padding:12px;margin-bottom:20px;min-height:72px;letter-spacing:16px;}
-.pin-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;max-width:240px;margin:0 auto;}
-.pin-btn{padding:16px;border-radius:10px;border:1px solid var(--bordo);background:rgba(255,255,255,0.08);color:var(--crema);font-family:'Bebas Neue',sans-serif;font-size:24px;cursor:pointer;transition:background 0.15s;}
-.pin-btn:hover{background:rgba(200,146,42,0.2);}
-.pin-btn.del{background:rgba(192,57,43,0.2);border-color:rgba(192,57,43,0.4);color:#e07060;}
-.pin-btn.zero{grid-column:2;}
-.pin-error{font-size:12px;color:#e07060;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;margin-top:10px;min-height:18px;}
 
-.pin-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:20px;}
-.pin-popup-overlay.show{display:flex;}
-.pin-popup-box{background:#1a3a15;border:2px solid var(--ocra);border-radius:16px;padding:28px 24px;max-width:300px;width:100%;text-align:center;}
-.pin-popup-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:8px;}
-.pin-popup-nome{font-size:14px;color:rgba(245,240,232,0.7);margin-bottom:16px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
-.pin-popup-code{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:12px;color:var(--crema);background:rgba(0,0,0,0.4);border-radius:12px;padding:16px;margin-bottom:16px;}
-.pin-popup-note{font-size:11px;color:rgba(245,240,232,0.4);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;margin-bottom:16px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
 .modal-istruzioni.show{display:flex;}
@@ -155,7 +155,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--oro);margin-bottom:12px;}
 .modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
 </style>
-</head>
+<link rel="manifest" href="blob:https://palvareto.github.io/ad2ee047-f8b5-40f4-bbb3-23df5505fe26"></head>
 <body>
 
 <!-- MODAL ISTRUZIONI SELVATICI -->
@@ -195,7 +195,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
       Polizia Provinciale di Cremona<br>
       📧 riccardo.borrini@provincia.cremona.it
     </div>
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').style.display='none';">Chiudi</button>
+    <button class="btn-istr-close" onclick="document.getElementById(&#39;modalIstruzioni&#39;).style.display=&#39;none&#39;;">Chiudi</button>
   </div>
 </div>
 
@@ -207,14 +207,14 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <input type="date" id="dataStampaTutti" class="form-input" style="margin-bottom:12px;font-size:16px;">
     <div style="font-size:11px;color:rgba(245,240,232,0.4);margin-bottom:12px;">Verranno stampati tutti gli interventi CRAS del giorno selezionato</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <button class="modal-btn cancel" onclick="document.getElementById('modalStampaTutti').style.display='none';">Annulla</button>
+      <button class="modal-btn cancel" onclick="document.getElementById(&#39;modalStampaTutti&#39;).style.display=&#39;none&#39;;">Annulla</button>
       <button class="modal-btn confirm" style="background:#e07060;" onclick="eseguiStampaTutti()">Stampa</button>
     </div>
   </div>
 </div>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
-<div class="toast" id="toast">Benvenuto BORRINI! 🦌</div>
+<div class="toast" id="toast">👤 Benvenuto, BORRINI!</div>
 
 <!-- MODAL GOOGLE SHEET -->
 <div class="modal-overlay" id="modalSheet">
@@ -272,10 +272,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   <div class="modal-box">
     <div class="modal-title">👤 Identificazione</div>
     <div class="modal-text">Inserisci il tuo codice operatore (4 cifre).</div>
-    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:'Bebas Neue',sans-serif;">
+    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:&#39;Bebas Neue&#39;,sans-serif;">
     <div id="errLogin" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
     <div style="margin-top:10px;">
-      <button class="modal-btn confirm" onclick="verificaPinLogin()" style="width:100%;padding:12px;border:none;border-radius:8px;background:var(--oro);color:#0d2010;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Conferma</button>
+      <button class="modal-btn confirm" onclick="verificaPinLogin()" style="width:100%;padding:12px;border:none;border-radius:8px;background:var(--oro);color:#0d2010;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Conferma</button>
     </div>
   </div>
 </div>
@@ -291,11 +291,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <button onclick="var mi=document.getElementById('modalIstruzioni');mi.style.display='flex';mi.style.alignItems='flex-start';" style="width:100%;padding:11px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.3);border-radius:10px;color:#7dcfaa;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+  <button onclick="var mi=document.getElementById(&#39;modalIstruzioni&#39;);mi.style.display=&#39;flex&#39;;mi.style.alignItems=&#39;flex-start&#39;;" style="width:100%;padding:11px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.3);border-radius:10px;color:#7dcfaa;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
   <div class="stats-row">
     <div class="stat-card"><div class="num" id="statZoo">192</div><div class="label">Zooprofilassi</div></div>
-    <div class="stat-card"><div class="num" id="statCras">184</div><div class="label">CRAS</div></div>
-    <div class="stat-card total"><div class="num" id="statTot">376</div><div class="label">Totale</div></div>
+    <div class="stat-card"><div class="num" id="statCras">200</div><div class="label">CRAS</div></div>
+    <div class="stat-card total"><div class="num" id="statTot">392</div><div class="label">Totale</div></div>
   </div>
   <div class="section-title">Nuova registrazione</div>
   <div class="main-buttons">
@@ -468,43 +468,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 </div>
 
 
-
-    <div class="istr-section">
-      <div class="istr-title">Codice Operatore</div>
-      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
-    </div>
-
-    <div class="istr-section">
-      <div class="istr-title">Come si registra un intervento</div>
-      <div class="istr-text">
-        1. Tocca <strong>Nuovo Inserimento</strong><br>
-        2. Seleziona la data e la specie animale recuperata<br>
-        3. Seleziona gli agenti intervenuti dalla griglia<br>
-        4. Indica il centro CRAS di destinazione (Loghino Bosco, Parcobaleno o altro centro)<br>
-        5. Compila le note con le informazioni sull'animale e sull'intervento<br>
-        6. Tocca <strong>Salva</strong> — dati inviati immediatamente
-      </div>
-    </div>
-
-    <div class="istr-section">
-      <div class="istr-title">Storico Interventi</div>
-      <div class="istr-text">Tutti gli interventi registrati sono consultabili nello storico con data, specie, agenti e destinazione. I dati sono sempre disponibili e consultabili da qualsiasi dispositivo in qualsiasi momento.</div>
-    </div>
-
-    <div class="istr-section">
-      <div class="istr-title">Quanto lavoro si risparmia</div>
-      <div class="istr-text">Con il metodo tradizionale ogni recupero richiedeva la compilazione di moduli cartacei, la raccolta in ufficio e l'archiviazione manuale. Con questa app tutti i dati sono immediatamente disponibili, storicizzati e consultabili in qualsiasi momento, eliminando completamente il lavoro d'ufficio legato alla gestione cartacea.</div>
-    </div>
-
-    <div class="istr-firma">
-      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
-      Polizia Provinciale di Cremona<br>
-      📧 riccardo.borrini@provincia.cremona.it
-    </div>
-
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').style.display='none';">Chiudi</button>
-  </div>
-</div>
 
 <script>
 var URL_GS = 'https://script.google.com/macros/s/AKfycbw4fsyb_piMrM8QfPGF3x9QSMEugzDyIZHPextk3rYziSJLMjXMUEyrMlN5IKcKCGWz6w/exec';
@@ -947,22 +910,22 @@ function stampaVerbale(r) {
 
   var CSS = '@page{margin:10mm;size:A4 portrait;}' +
     'body{font-family:Arial,sans-serif;font-size:13px;color:#000;margin:0;padding:0;}' +
-    '.pagina{min-height:130mm;border-bottom:2px dashed #aaa;padding:6mm 0 4mm;page-break-inside:avoid;}' +
+    '.pagina{min-height:120mm;max-height:138mm;border-bottom:2px dashed #aaa;padding:4mm 0 3mm;page-break-inside:avoid;}' +
     '.pagina:last-child{border-bottom:none;}' +
     '.intestazione{text-align:center;margin-bottom:8px;}' +
     '.ente{font-size:11px;color:#444;margin:2px 0;}' +
     '.titolo-ente{font-size:15px;font-weight:bold;letter-spacing:1px;margin:4px 0;}' +
     '.titolo-doc{font-size:14px;font-weight:bold;text-decoration:underline;text-align:center;margin:8px 0 10px;}' +
-    '.testo{font-size:13px;line-height:1.9;margin-bottom:8px;}' +
+    '.testo{font-size:12px;line-height:1.7;margin-bottom:5px;}' +
     '.testo strong{font-weight:bold;}' +
-    '.check-row{display:flex;align-items:flex-start;gap:8px;margin:5px 0;font-size:13px;line-height:1.6;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:12px;line-height:1.5;}' +
     '.box{width:13px;height:13px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:12px;font-size:11px;flex-shrink:0;margin-top:2px;}' +
     '.linea{border-bottom:1px solid #000;display:inline-block;min-width:80px;vertical-align:bottom;}' +
-    '.specie-num{margin:10px 0;font-size:13px;line-height:1.8;}' +
-    '.consegna{font-size:13px;margin:8px 0;}' +
-    '.firme{display:flex;justify-content:space-between;margin-top:14px;}' +
+    '.specie-num{margin:5px 0;font-size:12px;line-height:1.7;}' +
+    '.consegna{font-size:12px;margin:4px 0;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:8px;}' +
     '.firma-box{text-align:center;font-size:12px;}' +
-    '.firma-line{border-bottom:1px solid #000;width:150px;height:35px;margin-bottom:4px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:140px;height:28px;margin-bottom:3px;}' +
     '.copia-label{font-size:9px;color:#999;writing-mode:vertical-rl;position:absolute;left:0;top:40%;}' +
     '@media print{.no-print{display:none;}}';
 
@@ -1055,21 +1018,21 @@ async function eseguiStampaTutti() {
 function stampaTuttiRitiri(records, dataLabel) {
   var CSS = '@page{margin:10mm;size:A4 portrait;}' +
     'body{font-family:Arial,sans-serif;font-size:13px;color:#000;margin:0;padding:0;}' +
-    '.pagina{min-height:125mm;border-bottom:2px dashed #aaa;padding:5mm 0 4mm;page-break-inside:avoid;}' +
+    '.pagina{min-height:115mm;max-height:136mm;border-bottom:2px dashed #aaa;padding:4mm 0 3mm;page-break-inside:avoid;}' +
     '.pagina:last-child{border-bottom:none;}' +
     '.intestazione{text-align:center;margin-bottom:6px;}' +
     '.ente{font-size:11px;color:#444;margin:2px 0;}' +
     '.titolo-ente{font-size:15px;font-weight:bold;letter-spacing:1px;margin:3px 0;}' +
     '.titolo-doc{font-size:14px;font-weight:bold;text-decoration:underline;text-align:center;margin:6px 0 8px;}' +
-    '.testo{font-size:13px;line-height:1.9;margin-bottom:6px;}' +
-    '.check-row{display:flex;align-items:flex-start;gap:8px;margin:4px 0;font-size:13px;line-height:1.6;}' +
+    '.testo{font-size:12px;line-height:1.7;margin-bottom:4px;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:12px;line-height:1.5;}' +
     '.box{width:13px;height:13px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:12px;font-size:11px;flex-shrink:0;margin-top:2px;}' +
     '.linea{border-bottom:1px solid #000;display:inline-block;min-width:80px;vertical-align:bottom;}' +
-    '.specie-num{margin:8px 0;font-size:13px;line-height:1.8;}' +
-    '.consegna{font-size:13px;margin:6px 0;}' +
-    '.firme{display:flex;justify-content:space-between;margin-top:12px;}' +
+    '.specie-num{margin:4px 0;font-size:12px;line-height:1.7;}' +
+    '.consegna{font-size:12px;margin:3px 0;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:7px;}' +
     '.firma-box{text-align:center;font-size:12px;}' +
-    '.firma-line{border-bottom:1px solid #000;width:150px;height:35px;margin-bottom:4px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:140px;height:28px;margin-bottom:3px;}' +
     '@media print{.no-print{display:none;}}';
 
   var chk = function(ok) { return '<span class="box">'+(ok?'&#10003;':'&nbsp;')+'</span>'; };
