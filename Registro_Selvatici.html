@@ -261,7 +261,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 
 
 
-<div class="pin-popup-overlay" id="pinPopupOverlay">
+<div class="pin-popup-overlay" id="pinPopupOverlay" style="display:none;">
   <div class="pin-popup-box">
     <div class="pin-popup-title">🔑 PIN Creato!</div>
     <div class="pin-popup-nome" id="pinPopupNome"></div>
@@ -582,7 +582,7 @@ async function syncPinMapDaSheet() {
 function mostraPinPopup(nome, pin) {
   document.getElementById('pinPopupNome').textContent = 'Agente: ' + nome;
   document.getElementById('pinPopupCode').textContent = pin;
-  document.getElementById('pinPopupOverlay').classList.add('show');
+  document.getElementById('pinPopupOverlay').style.display='flex';
 }
 
 function copiaPinEChiudi() {
@@ -592,7 +592,7 @@ function copiaPinEChiudi() {
   } else {
     toast('PIN: ' + pin);
   }
-  document.getElementById('pinPopupOverlay').classList.remove('show');
+  document.getElementById('pinPopupOverlay').style.display='none';
 }
 
 function cambiUtente() {
