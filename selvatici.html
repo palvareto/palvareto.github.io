@@ -888,52 +888,48 @@ function stampaVerbale(r) {
   }
   if (!procedi) return;
 
-  // Parsing data e ora
-  var dataOra = r.dataOra || '';
-  var dataStr = '', oraStr = '';
-  if (dataOra.indexOf('T') >= 0) {
-    var p = dataOra.split('T');
-    dataStr = p[0].split('-').reverse().join('/');
-    oraStr = (p[1] || '').substring(0, 5);
-  } else if (dataOra.indexOf(' ') >= 0) {
-    var p2 = dataOra.split(' ');
-    dataStr = p2[0] || '';
-    oraStr = p2[1] ? p2[1].substring(0,5) : '';
-  } else {
-    dataStr = dataOra;
-  }
-
-  var agente = (r.agente || '').split(',')[0].trim();
-  var consegnante = r.consegnante || '';
-  var isLibero = r.esito === 'Liberato' || !!r.luogoLiberazione;
-  var luogoEsito = r.luogoLiberazione || r.localita || '';
-  var centro = r.centroCras || '';
-
-  var CSS = '@page{margin:10mm;size:A4 portrait;}' +
-    'body{font-family:Arial,sans-serif;font-size:13px;color:#000;margin:0;padding:0;}' +
-    '.pagina{min-height:120mm;max-height:138mm;border-bottom:2px dashed #aaa;padding:4mm 0 3mm;page-break-inside:avoid;}' +
-    '.pagina:last-child{border-bottom:none;}' +
-    '.intestazione{text-align:center;margin-bottom:8px;}' +
-    '.ente{font-size:11px;color:#444;margin:2px 0;}' +
-    '.titolo-ente{font-size:15px;font-weight:bold;letter-spacing:1px;margin:4px 0;}' +
-    '.titolo-doc{font-size:14px;font-weight:bold;text-decoration:underline;text-align:center;margin:8px 0 10px;}' +
-    '.testo{font-size:12px;line-height:1.7;margin-bottom:5px;}' +
-    '.testo strong{font-weight:bold;}' +
-    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:12px;line-height:1.5;}' +
-    '.box{width:13px;height:13px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:12px;font-size:11px;flex-shrink:0;margin-top:2px;}' +
-    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:80px;vertical-align:bottom;}' +
-    '.specie-num{margin:5px 0;font-size:12px;line-height:1.7;}' +
-    '.consegna{font-size:12px;margin:4px 0;}' +
-    '.firme{display:flex;justify-content:space-between;margin-top:8px;}' +
-    '.firma-box{text-align:center;font-size:12px;}' +
-    '.firma-line{border-bottom:1px solid #000;width:140px;height:28px;margin-bottom:3px;}' +
-    '.copia-label{font-size:9px;color:#999;writing-mode:vertical-rl;position:absolute;left:0;top:40%;}' +
+  var CSS = '@page{margin:8mm;size:A4 portrait;}' +
+    'body{font-family:Arial,sans-serif;font-size:11px;color:#000;margin:0;padding:0;}' +
+    '.ricevuta{height:132mm;border-bottom:2px dashed #999;padding:4mm 2mm 3mm;box-sizing:border-box;overflow:hidden;}' +
+    '.ricevuta:last-child{border-bottom:none;}' +
+    '.intestazione{text-align:center;margin-bottom:4px;}' +
+    '.ente{font-size:9px;color:#444;margin:1px 0;}' +
+    '.titolo-ente{font-size:13px;font-weight:bold;letter-spacing:1px;margin:2px 0;}' +
+    '.titolo-doc{font-size:12px;font-weight:bold;text-decoration:underline;text-align:center;margin:4px 0 6px;}' +
+    '.testo{font-size:11px;line-height:1.7;margin-bottom:4px;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:11px;line-height:1.6;}' +
+    '.box{width:12px;height:12px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:11px;font-size:10px;flex-shrink:0;margin-top:1px;}' +
+    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:70px;vertical-align:bottom;}' +
+    '.specie-num{margin:5px 0;font-size:11px;line-height:1.7;}' +
+    '.consegna{font-size:11px;margin:4px 0;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:10px;}' +
+    '.firma-box{text-align:center;font-size:10px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:130px;height:28px;margin-bottom:3px;}' +
+    '.copia-label{font-size:8px;color:#999;float:right;margin-bottom:2px;}' +
     '@media print{.no-print{display:none;}}';
 
-  function pagina(copiaCras) {
-    var chk = function(ok) { return '<span class="box">'+(ok?'&#10003;':'&nbsp;')+'</span>'; };
-    var html = '<div class="pagina" style="position:relative;">';
-    if (copiaCras) html += '<span class="copia-label">Copia CRAS</span>';
+  var chk = function(ok) { return '<span class="box">'+(ok?'&#10003;':'&nbsp;')+'</span>'; };
+
+  function ricevuta(isCopia) {
+    var dataOra = r.dataOra || '';
+    var dataStr = '', oraStr = '';
+    if (dataOra.indexOf('T') >= 0) {
+      var p = dataOra.split('T');
+      dataStr = p[0].split('-').reverse().join('/');
+      oraStr = (p[1]||'').substring(0,5);
+    } else {
+      var p2 = dataOra.split(' ');
+      dataStr = p2[0] || '';
+      oraStr = p2[1] ? p2[1].substring(0,5) : '';
+    }
+    var agente = (r.agente||'').split(',')[0].trim();
+    var consegnante = r.consegnante || '';
+    var isLibero = r.esito === 'Liberato' || !!r.luogoLiberazione;
+    var luogoEsito = r.luogoLiberazione || r.localita || '';
+    var centro = r.centroCras || '';
+
+    var html = '<div class="ricevuta">';
+    if (isCopia) html += '<div class="copia-label">Copia CRAS</div>';
     html += '<div class="intestazione">';
     html += '<div class="ente">Provincia di Cremona</div>';
     html += '<div class="titolo-ente">POLIZIA LOCALE</div>';
@@ -941,10 +937,10 @@ function stampaVerbale(r) {
     html += '</div>';
     html += '<div class="titolo-doc">VERBALE DI RECUPERO E DI CONSEGNA FAUNA SELVATICA</div>';
     html += '<div class="testo">Il/I sottoscritto/i <strong>'+agente+'</strong> in servizio presso il Comando di Polizia Locale della Provincia di Cremona, in data <strong>'+dataStr+'</strong> alle ore <strong>'+(oraStr||'__:__')+'</strong> ha/hanno</div>';
-    html += '<div class="check-row">'+chk(false)+' rinvenuto in localit&agrave; <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
-    html += '<div class="check-row">'+chk(!!consegnante)+' ricevuto dal sig./dalla sig.ra <strong>'+(consegnante||'_________________________________')+'</strong> a seguito di rinvenimento in <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
-    html += '<div class="check-row">'+chk(isLibero)+' reimmesso in libert&agrave; in localit&agrave; <strong>'+(luogoEsito||'_________________________________')+'</strong> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
-    html += '<div class="specie-num">n&deg; <strong>1</strong> esemplari di animali '+chk(true)+' vivi / '+chk(false)+' morti appartenenti alla fauna selvatica della specie: <strong>'+(r.animale||'_________________________________')+'</strong></div>';
+    html += '<div class="check-row">'+chk(false)+' rinvenuto in localit&agrave; <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="check-row">'+chk(!!consegnante)+' ricevuto dal sig./dalla sig.ra <strong>'+(consegnante||'_________________________________')+'</strong> a seguito di rinvenimento in <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="check-row">'+chk(isLibero)+' reimmesso in libert&agrave; in localit&agrave; <strong>'+(luogoEsito||'_________________________________')+'</strong> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="specie-num">n&deg; <strong>1</strong> esemplari di animali '+chk(true)+' vivi / '+chk(false)+' morti appartenenti alla fauna selvatica della specie: <strong>'+(r.animale||'_________________________')+'</strong></div>';
     if (!isLibero || centro) {
       html += '<div class="consegna">Gli esemplari di cui sopra vengono consegnati al personale del C.R.A.S.'+(centro?' <strong>'+centro+'</strong>':'')+'</div>';
     }
@@ -955,10 +951,15 @@ function stampaVerbale(r) {
     return html;
   }
 
-  var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale '+(r.animale||'')+'</title><style>'+CSS+'</style></head><body>'+pagina(false)+pagina(true)+'<div class="no-print" style="margin:16px;text-align:center;"><button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a3a15;color:#f5f0e8;border:none;border-radius:8px;">&#128424; Stampa / Salva PDF</button> <button onclick="window.close()" style="padding:12px 20px;font-size:14px;cursor:pointer;">&#x2715; Chiudi</button></div></body></html>';
+  var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale - '+(r.animale||'')+'</title><style>'+CSS+'</style></head><body>'+ricevuta(false)+ricevuta(true)+
+    '<div class="no-print" style="margin:16px;text-align:center;">'+
+    '<button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a3a15;color:#f5f0e8;border:none;border-radius:8px;">&#128424; Stampa / Salva PDF</button> '+
+    '<button onclick="window.close()" style="padding:12px 20px;font-size:14px;cursor:pointer;">&#x2715; Chiudi</button></div></body></html>';
+
   var blob = new Blob([html],{type:'text/html'});
   window.open(URL.createObjectURL(blob),'_blank');
 }
+
 
 
 
@@ -1017,28 +1018,31 @@ async function eseguiStampaTutti() {
 }
 
 function stampaTuttiRitiri(records, dataLabel) {
-  var CSS = '@page{margin:10mm;size:A4 portrait;}' +
-    'body{font-family:Arial,sans-serif;font-size:13px;color:#000;margin:0;padding:0;}' +
-    '.pagina{min-height:115mm;max-height:136mm;border-bottom:2px dashed #aaa;padding:4mm 0 3mm;page-break-inside:avoid;}' +
-    '.pagina:last-child{border-bottom:none;}' +
-    '.intestazione{text-align:center;margin-bottom:6px;}' +
-    '.ente{font-size:11px;color:#444;margin:2px 0;}' +
-    '.titolo-ente{font-size:15px;font-weight:bold;letter-spacing:1px;margin:3px 0;}' +
-    '.titolo-doc{font-size:14px;font-weight:bold;text-decoration:underline;text-align:center;margin:6px 0 8px;}' +
-    '.testo{font-size:12px;line-height:1.7;margin-bottom:4px;}' +
-    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:12px;line-height:1.5;}' +
-    '.box{width:13px;height:13px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:12px;font-size:11px;flex-shrink:0;margin-top:2px;}' +
-    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:80px;vertical-align:bottom;}' +
-    '.specie-num{margin:4px 0;font-size:12px;line-height:1.7;}' +
-    '.consegna{font-size:12px;margin:3px 0;}' +
-    '.firme{display:flex;justify-content:space-between;margin-top:7px;}' +
-    '.firma-box{text-align:center;font-size:12px;}' +
-    '.firma-line{border-bottom:1px solid #000;width:140px;height:28px;margin-bottom:3px;}' +
+  var CSS = '@page{margin:8mm;size:A4 portrait;}' +
+    'body{font-family:Arial,sans-serif;font-size:11px;color:#000;margin:0;padding:0;}' +
+    '.pagina{width:100%;page-break-after:always;}' +
+    '.pagina:last-child{page-break-after:avoid;}' +
+    '.ricevuta{height:132mm;border-bottom:2px dashed #999;padding:4mm 2mm 3mm;box-sizing:border-box;overflow:hidden;}' +
+    '.ricevuta:last-child{border-bottom:none;}' +
+    '.intestazione{text-align:center;margin-bottom:4px;}' +
+    '.ente{font-size:9px;color:#444;margin:1px 0;}' +
+    '.titolo-ente{font-size:13px;font-weight:bold;letter-spacing:1px;margin:2px 0;}' +
+    '.titolo-doc{font-size:12px;font-weight:bold;text-decoration:underline;text-align:center;margin:4px 0 6px;}' +
+    '.testo{font-size:11px;line-height:1.7;margin-bottom:4px;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:11px;line-height:1.6;}' +
+    '.box{width:12px;height:12px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:11px;font-size:10px;flex-shrink:0;margin-top:1px;}' +
+    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:70px;vertical-align:bottom;}' +
+    '.specie-num{margin:5px 0;font-size:11px;line-height:1.7;}' +
+    '.consegna{font-size:11px;margin:4px 0;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:10px;}' +
+    '.firma-box{text-align:center;font-size:10px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:130px;height:28px;margin-bottom:3px;}' +
+    '.copia-label{font-size:8px;color:#999;float:right;margin-bottom:2px;}' +
     '@media print{.no-print{display:none;}}';
 
   var chk = function(ok) { return '<span class="box">'+(ok?'&#10003;':'&nbsp;')+'</span>'; };
 
-  function paginaVerbale(r) {
+  function ricevuta(r, isCopia) {
     var dataOra = r.dataOra || '';
     var dataStr = '', oraStr = '';
     if (dataOra.indexOf('T') >= 0) {
@@ -1056,7 +1060,8 @@ function stampaTuttiRitiri(records, dataLabel) {
     var luogoEsito = r.luogoLiberazione || r.localita || '';
     var centro = r.centroCras || '';
 
-    var html = '<div class="pagina">';
+    var html = '<div class="ricevuta">';
+    if (isCopia) html += '<div class="copia-label">Copia CRAS</div>';
     html += '<div class="intestazione">';
     html += '<div class="ente">Provincia di Cremona</div>';
     html += '<div class="titolo-ente">POLIZIA LOCALE</div>';
@@ -1079,18 +1084,20 @@ function stampaTuttiRitiri(records, dataLabel) {
   }
 
   var body = '';
-  records.forEach(function(r) {
-    body += paginaVerbale(r);
+  records.forEach(function(r, i) {
+    var isLast = i === records.length - 1;
+    body += '<div class="pagina">' + ricevuta(r, false) + ricevuta(r, true) + '</div>';
   });
 
   var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Ritiri CRAS - '+dataLabel+'</title><style>'+CSS+'</style></head><body>'+body+
-    '<div class="no-print" style="margin:16px;text-align:center;"><p style="font-size:14px;margin-bottom:12px;">'+records.length+' verbali per il '+dataLabel+'</p>'+
+    '<div class="no-print" style="margin:16px;text-align:center;"><p style="font-size:14px;margin-bottom:12px;"><strong>'+records.length+'</strong> verbali per il '+dataLabel+'</p>'+
     '<button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a3a15;color:#f5f0e8;border:none;border-radius:8px;">&#128424; Stampa / Salva PDF</button> '+
     '<button onclick="window.close()" style="padding:12px 20px;font-size:14px;cursor:pointer;">&#x2715; Chiudi</button></div></body></html>';
 
   var blob = new Blob([html],{type:'text/html'});
   window.open(URL.createObjectURL(blob),'_blank');
 }
+
 
 syncPinMapDaSheet().then(checkLogin);
 </script>
