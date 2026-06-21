@@ -752,6 +752,7 @@ function cambiaMolt(tipo,delta){
 }
 
 function fmtDT(val){if(!val)return'';var d=new Date(val);return d.toLocaleDateString('it-IT');}
+function fmtDTOra(val){if(!val)return'';var d=new Date(val);return d.toLocaleDateString('it-IT')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 
 // SUBMIT ZOO
 async function submitZoo(){
@@ -763,7 +764,7 @@ async function submitZoo(){
   var ore=document.getElementById('zooOre').value;
   if(!dataOra||!agente.length||!animale||!causa||!localita||!ore){toast('Seleziona almeno un agente e compila tutti i campi',true);return;}
   if(!tipoIzp){toast('Seleziona tipo consegna: Carcassa o Campioni',true);return;}
-  await invia({tipo:'ZOO',dataOra:fmtDT(dataOra),agente,animale,causa,localita,
+  await invia({tipo:'ZOO',dataOra:fmtDTOra(dataOra),agente,animale,causa,localita,
     consegnante:document.getElementById('zooConsegnante').value.trim(),
     ore:parseFloat(ore),tipoIzp:tipoIzp,
     note:document.getElementById('zooNote').value.trim(),moltiplicatore:zooMolt,inseritoDa:utenteLoggato});
@@ -794,7 +795,7 @@ async function submitCras(){
     if(!tipo){toast('Specifica il luogo di liberazione',true);return;}
     luogo=tipo==='Altro luogo'?'Altro: '+document.getElementById('liberazioneAltro').value.trim():tipo;
   }
-  await invia({tipo:'CRAS',dataOra:fmtDT(dataOra),agente,animale,localita,
+  await invia({tipo:'CRAS',dataOra:fmtDTOra(dataOra),agente,animale,localita,
     consegnante:document.getElementById('crasConsegnante').value.trim(),
     ore:parseFloat(ore),esito:esitoCras==='consegnato'?'Consegnato al CRAS':'Liberato',
     luogoLiberazione:luogo,centroCras:centroCras,
