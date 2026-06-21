@@ -515,6 +515,34 @@ var PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT);
 var pinCurrent = '';
 var utenteLoggato = localStorage.getItem('selvatici_utente') || '';
 
+
+function checkLogin() {
+  if (!utenteLoggato) {
+    document.getElementById('pinLogin').value = '';
+    document.getElementById('errLogin').textContent = '';
+    document.getElementById('modalLogin').classList.add('show');
+  } else {
+    var hu = document.getElementById('headerUtente');
+    if(hu) hu.textContent = '👮 ' + utenteLoggato;
+  }
+}
+
+function verificaPinLogin() {
+  var pin = document.getElementById('pinLogin').value.trim();
+  var nome = PIN_MAP[pin];
+  if (nome) {
+    utenteLoggato = nome;
+    localStorage.setItem('selvatici_utente', nome);
+    document.getElementById('modalLogin').classList.remove('show');
+    var hu = document.getElementById('headerUtente');
+    if(hu) hu.textContent = '👮 ' + nome;
+    toast('👤 Benvenuto, ' + nome + '!');
+  } else {
+    document.getElementById('errLogin').textContent = '❌ Codice non valido';
+    document.getElementById('pinLogin').value = '';
+  }
+}
+
 async function syncPinMapDaSheet() {
   try {
     var res = await fetch(URL_GS + '?action=pinmap');
@@ -828,10 +856,7 @@ document.getElementById('pwdAgenti').addEventListener('keydown',function(e){if(e
 
 
 loadStats();
-syncPinMapDaSheet().then(function(){
-  initPin();
-  if(utenteLoggato) document.getElementById('headerUtente').textContent = '👮 ' + utenteLoggato;
-});
+syncPinMapDaSheet().then(checkLogin);
 </script>
 
 
