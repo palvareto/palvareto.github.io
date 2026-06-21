@@ -108,6 +108,18 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
 .smalt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .smalt-btn{padding:10px 6px;border-radius:8px;border:1px solid var(--bordo);background:transparent;color:rgba(240,240,240,0.45);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center;}
 .smalt-btn.active{background:rgba(245,166,35,0.2);border-color:var(--oro2);color:var(--oro2);}
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#1a1a2e;border:1px solid rgba(245,166,35,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#ffc84a;margin-bottom:2px;}
+.modal-istr-box h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(255,200,74,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:#7dcfaa;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(125,207,170,0.2);}
+.istr-text{font-size:12px;color:rgba(240,240,240,0.7);line-height:1.7;}
+.istr-text strong{color:#ffc84a;}
+.istr-firma{font-size:11px;color:rgba(240,240,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
 </head>
 <body>
@@ -198,7 +210,8 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <div class="stats-row">
+  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#ffc84a;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+<div class="stats-row">
     <div class="stat-card"><div class="num" id="statMese">39505</div><div class="label">Questo mese</div></div>
     <div class="stat-card"><div class="num" id="statAnno">40371</div><div class="label">Anno</div></div>
     <div class="stat-card total"><div class="num" id="statTot">40371</div><div class="label">Totale</div></div>
@@ -330,6 +343,61 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
   </div>
   <button class="btn-submit" onclick="generaStampaEsenzione()" style="background:linear-gradient(135deg,#0f3460,#27ae60);">📄 Genera Report Esenzione</button>
   <div id="anteprimaEsenzione" style="margin-top:16px;"></div>
+</div>
+
+
+<!-- MODAL ISTRUZIONI PICCIONI -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>🐦 Controllo Piccioni</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Controllo Piccioni è l'applicazione per la registrazione di tutti gli interventi di abbattimento piccioni sul territorio provinciale. Permette di censire i piccioni presenti, registrare gli abbattimenti, tracciare il responsabile dello smaltimento e il tipo di smaltimento effettuato, in tempo reale dal luogo dell'intervento.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Come si registra un intervento</div>
+      <div class="istr-text">
+        1. Tocca <strong>Nuova Registrazione</strong><br>
+        2. Inserisci data e comune/azienda<br>
+        3. Digita le prime lettere del cognome — il sistema propone automaticamente i dati dall'archivio<br>
+        4. Per un nuovo cacciatore seleziona "Aggiungi nuovo" — verrà salvato per i prossimi inserimenti<br>
+        5. Seleziona la qualifica (Cacciatore, Guardia Venatoria, Agente Provinciale)<br>
+        6. Inserisci piccioni censiti e abbattuti<br>
+        7. Indica responsabile e tipo di smaltimento<br>
+        8. Tocca <strong>Invia Registrazione</strong>
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Report Disponibili</div>
+      <div class="istr-text">
+        📅 <strong>Report Mensile</strong> — tutti gli interventi del mese con totale piccioni abbattuti<br>
+        📆 <strong>Report Annuale</strong> — riepilogo per anno<br>
+        📄 <strong>Stampa Esenzione Tassa</strong> — elenco ufficiale nominativi per esenzione tassa regionale caccia con creazione automatica foglio Excel
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Il vero risparmio è nell'eliminazione completa della gestione cartacea: raccolta moduli, verifica, archiviazione e produzione manuale dei report annuali per l'esenzione tassa. Con questa app il report ufficiale viene generato in pochi secondi, pronto per la stampa, con dati sempre aggiornati e consultabili da qualsiasi dispositivo.</div>
+    </div>
+
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
 </div>
 
 <script>
