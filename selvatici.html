@@ -148,6 +148,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .istr-text strong{color:#7dcfaa;}
 .istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
 .btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#27ae60;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:#1a3a15;border:1px solid var(--oro);border-radius:16px;padding:24px;max-width:300px;width:100%;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--oro);margin-bottom:12px;}
+.modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
 </style>
 </head>
 <body>
@@ -207,25 +213,15 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button class="btn-add" style="width:100%;padding:12px;" onclick="copiaPinEChiudi()">📋 Copia PIN e chiudi</button>
   </div>
 </div>
-<div class="pin-overlay" id="pinOverlay" style="display: none;">
-  <div class="pin-box">
-    <div class="pin-title">🦌 Registro Selvatici</div>
-    <div class="pin-subtitle">Inserisci il tuo PIN a 4 cifre</div>
-    <div class="pin-display" id="pinDisplay">● ● ● ●</div>
-    <div class="pin-grid">
-      <button class="pin-btn" onclick="pinDigit(&#39;1&#39;)">1</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;2&#39;)">2</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;3&#39;)">3</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;4&#39;)">4</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;5&#39;)">5</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;6&#39;)">6</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;7&#39;)">7</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;8&#39;)">8</button>
-      <button class="pin-btn" onclick="pinDigit(&#39;9&#39;)">9</button>
-      <button class="pin-btn del" onclick="pinDel()">⌫</button>
-      <button class="pin-btn zero" onclick="pinDigit(&#39;0&#39;)">0</button>
+<div class="modal-overlay show" id="modalLogin" style="z-index:10000;">
+  <div class="modal-box">
+    <div class="modal-title">👤 Identificazione</div>
+    <div class="modal-text">Inserisci il tuo codice operatore (4 cifre).</div>
+    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:'Bebas Neue',sans-serif;">
+    <div id="errLogin" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
+    <div style="margin-top:10px;">
+      <button class="modal-btn confirm" onclick="verificaPinLogin()" style="width:100%;padding:12px;border:none;border-radius:8px;background:var(--oro);color:#0d2010;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Conferma</button>
     </div>
-    <div class="pin-error" id="pinError"></div>
   </div>
 </div>
 <div class="header">
@@ -569,14 +565,7 @@ function initPin() {
   }
 }
 
-function pinDigit(d) {
-  if (pinCurrent.length >= 4) return;
-  pinCurrent += d;
-  aggiornaDisplay();
-  if (pinCurrent.length === 4) {
-    setTimeout(verificaPin, 200);
-  }
-}
+
 
 function pinDel() {
   pinCurrent = pinCurrent.slice(0, -1);
