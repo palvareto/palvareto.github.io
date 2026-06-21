@@ -417,11 +417,41 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   <div class="modal-istr-box">
     <h2>🦌 Registro Selvatici</h2>
     <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
-
     <div class="istr-section">
       <div class="istr-title">Cos'è e a cosa serve</div>
-      <div class="istr-text">Il Registro Selvatici è l'applicazione per la registrazione di tutti gli interventi di recupero animali selvatici sul territorio provinciale. Permette di tracciare in tempo reale ogni animale recuperato, gli agenti intervenuti, il centro CRAS di destinazione e tutte le informazioni necessarie per la corretta gestione dell'intervento.</div>
+      <div class="istr-text">Il Registro Selvatici gestisce tutti gli interventi di recupero animali selvatici sul territorio provinciale. Permette di registrare consegne all'Istituto Zooprofilassi, interventi CRAS e di generare automaticamente il <strong>Verbale Ufficiale di Recupero e Consegna Fauna Selvatica</strong> pronto per la firma.</div>
     </div>
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Come si registra un intervento</div>
+      <div class="istr-text">
+        1. Scegli il tipo: <strong>Zooprofilassi</strong> o <strong>CRAS</strong><br>
+        2. Seleziona data/ora e agenti intervenuti<br>
+        3. Inserisci specie animale e località di recupero<br>
+        4. Indica chi ha consegnato il selvatico (nome, indirizzo, tel.)<br>
+        5. Seleziona esito: <strong>Consegnato al CRAS</strong> o <strong>Liberato</strong><br>
+        6. Tocca <strong>Registra intervento</strong> — dati inviati immediatamente
+      </div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Stampa Verbale Ufficiale</div>
+      <div class="istr-text">Dalla sezione <strong>Storico</strong> puoi selezionare qualsiasi intervento registrato e generare il <strong>Verbale di Recupero e Consegna Fauna Selvatica</strong> in PDF — doppia copia automatica, pronta per la firma dell'agente e del CRAS.</div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Elimina la compilazione manuale del verbale cartaceo. Tutti i dati già inseriti nell'app vengono riportati automaticamente nel documento ufficiale — basta selezionare l'intervento e stampare.</div>
+    </div>
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
+</div>
 
     <div class="istr-section">
       <div class="istr-title">Codice Operatore</div>
@@ -837,15 +867,18 @@ function switchTab(tab){
 function renderRecords(tab){
   var list=allRecords[tab];var el=document.getElementById('recordsList');
   if(!list||!list.length){el.innerHTML='<div class="empty-state"><div>📂</div>Nessuna registrazione</div>';return;}
-  el.innerHTML=list.slice().reverse().map(function(r){
+  var html='';
+  list.slice().reverse().forEach(function(r,i){
+    var idx=list.length-1-i;
     if(tab==='zoo'){
       var bc=r.causa==='Investito'?'badge-investito':r.causa==='Abbattuto'?'badge-abbattuto':'badge-naturale';
-      return '<div class="record-card"><div class="record-card-top"><div class="record-animale">🦌 '+r.animale+'</div><div class="record-data">'+r.dataOra+'<br><small>'+r.ore+'h</small></div></div><div class="record-detail">👮 '+r.agente+'<br>📍 '+r.localita+(r.consegnante?'<br>👤 '+r.consegnante:'')+(r.tipoIzp?'<br>📦 '+r.tipoIzp:'')+(r.note?'<br>📝 '+r.note:'')+'</div><span class="badge '+bc+'">'+r.causa+'</span></div>';
+      html+='<div class="record-card"><div class="record-card-top"><div class="record-animale">🦌 '+r.animale+'</div><div class="record-data">'+r.dataOra+'<br><small>'+r.ore+'h</small></div></div><div class="record-detail">👮 '+r.agente+'<br>📍 '+r.localita+(r.consegnante?'<br>👤 '+r.consegnante:'')+(r.tipoIzp?'<br>📦 '+r.tipoIzp:'')+(r.note?'<br>📝 '+r.note:'')+'</div><span class="badge '+bc+'">'+r.causa+'</span><button onclick="stampaVerbale(allRecords.zoo['+idx+'])" style="width:100%;margin-top:8px;padding:9px;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.2);border-radius:8px;color:#f5f0e8;font-size:12px;letter-spacing:1px;cursor:pointer;">🖨️ Stampa Verbale</button></div>';
     } else {
       var bc2=r.esito==='Liberato'?'badge-liberato':'badge-consegnato';
-      return '<div class="record-card"><div class="record-card-top"><div class="record-animale">🦅 '+r.animale+'</div><div class="record-data">'+r.dataOra+'<br><small>'+r.ore+'h</small></div></div><div class="record-detail">👮 '+r.agente+'<br>📍 '+r.localita+(r.centroCras?'<br>🏥 '+r.centroCras:'')+(r.consegnante?'<br>👤 '+r.consegnante:'')+(r.luogoLiberazione?'<br>🌿 '+r.luogoLiberazione:'')+(r.note?'<br>📝 '+r.note:'')+'</div><span class="badge '+bc2+'">'+r.esito+'</span></div>';
+      html+='<div class="record-card"><div class="record-card-top"><div class="record-animale">🦅 '+r.animale+'</div><div class="record-data">'+r.dataOra+'<br><small>'+r.ore+'h</small></div></div><div class="record-detail">👮 '+r.agente+'<br>📍 '+r.localita+(r.centroCras?'<br>🏥 '+r.centroCras:'')+(r.consegnante?'<br>👤 '+r.consegnante:'')+(r.luogoLiberazione?'<br>🌿 '+r.luogoLiberazione:'')+(r.note?'<br>📝 '+r.note:'')+'</div><span class="badge '+bc2+'">'+r.esito+'</span><button onclick="stampaVerbale(allRecords.cras['+idx+'])" style="width:100%;margin-top:8px;padding:9px;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.2);border-radius:8px;color:#f5f0e8;font-size:12px;letter-spacing:1px;cursor:pointer;">🖨️ Stampa Verbale</button></div>';
     }
-  }).join('');
+  });
+  el.innerHTML=html;
 }
 
 // SHEET
@@ -856,6 +889,128 @@ document.getElementById('pwdAgenti').addEventListener('keydown',function(e){if(e
 
 
 loadStats();
+
+// ============================================================
+//  STAMPA VERBALE UFFICIALE
+// ============================================================
+function stampaVerbale(r) {
+  if (!r) { toast('Dati non disponibili', true); return; }
+
+  var avvisi = [];
+  if (!r.agente)      avvisi.push('Agente');
+  if (!r.localita)    avvisi.push('Località recupero');
+  if (!r.animale)     avvisi.push('Specie animale');
+  if (!r.consegnante) avvisi.push('Chi ha consegnato');
+
+  var procedi = true;
+  if (avvisi.length > 0) {
+    procedi = confirm('⚠️ Alcuni campi non sono compilati:\n• ' + avvisi.join('\n• ') + '\n\nProcedere comunque con la stampa?');
+  }
+  if (!procedi) return;
+
+  // Parsing data
+  var dataOra = r.dataOra || '';
+  var dataParts = dataOra.split(' ');
+  var dataStr = dataParts[0] || '';
+  var oraStr = dataParts[1] || '';
+  if (dataOra.indexOf('T') >= 0) {
+    dataParts = dataOra.split('T');
+    dataStr = dataParts[0].split('-').reverse().join('/');
+    oraStr = (dataParts[1] || '').substring(0, 5);
+  }
+
+  // Parsing consegnante (nome, indirizzo, tel)
+  var consegnante = r.consegnante || '';
+  
+  // Esito
+  var isLibero = (r.esito === 'Liberato') || (r.luogoLiberazione);
+  var isCras = !isLibero || r.centroCras;
+  var luogoEsito = isLibero ? (r.luogoLiberazione || r.localita || '') : '';
+  var centro = r.centroCras || '';
+
+  // CSS del verbale
+  var CSS = '@page{margin:8mm;size:A4 portrait;}' +
+    'body{font-family:Arial,sans-serif;font-size:10px;color:#000;margin:0;padding:0;}' +
+    '.pagina{border-bottom:2px dashed #999;padding:8mm 0;page-break-inside:avoid;}' +
+    '.pagina:last-child{border-bottom:none;}' +
+    '.intestazione{text-align:center;margin-bottom:6px;}' +
+    '.ente{font-size:9px;color:#333;}' +
+    '.titolo-doc{font-size:13px;font-weight:bold;text-decoration:underline;margin:6px 0;}' +
+    '.testo{font-size:10px;line-height:1.8;margin-bottom:6px;}' +
+    '.testo strong{font-weight:bold;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:4px 0;font-size:10px;line-height:1.5;}' +
+    '.box{width:12px;height:12px;border:1px solid #000;display:inline-block;text-align:center;line-height:11px;font-size:10px;flex-shrink:0;margin-top:1px;}' +
+    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:60px;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:10px;}' +
+    '.firma-box{text-align:center;font-size:9px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:140px;height:30px;margin-bottom:3px;}' +
+    '.copia-label{font-size:8px;color:#999;writing-mode:vertical-lr;position:absolute;left:2mm;top:50%;}' +
+    '.specie-num{margin:6px 0;font-size:10px;}' +
+    '@media print{.no-print{display:none;}}';
+
+  function paginaVerbale(copiaCras) {
+    var agente = (r.agente || '').split(',')[0].trim();
+    var checkbox = function(checked) {
+      return '<span class="box">' + (checked ? '✓' : '&nbsp;') + '</span>';
+    };
+
+    var html = '<div class="pagina" style="position:relative;">';
+    if (copiaCras) html += '<span class="copia-label">Copia CRAS</span>';
+
+    // Intestazione
+    html += '<div class="intestazione">';
+    html += '<div class="ente">Provincia di Cremona</div>';
+    html += '<div style="font-size:14px;font-weight:bold;">POLIZIA LOCALE</div>';
+    html += '<div class="ente">Corso Vittorio Emanuele II, 17 - 26100 CREMONA</div>';
+    html += '</div>';
+
+    html += '<div class="titolo-doc" style="text-align:center;">VERBALE DI RECUPERO E DI CONSEGNA FAUNA SELVATICA</div>';
+
+    // Testo principale
+    html += '<div class="testo">Il/I sottoscritto/i <strong>' + agente + '</strong> in servizio presso il Comando di Polizia Locale della Provincia di Cremona, in data <strong>' + dataStr + '</strong> alle ore <strong>' + oraStr + '</strong> ha/hanno</div>';
+
+    // Checkbox rinvenuto
+    html += '<div class="check-row">' + checkbox(false) + ' rinvenuto in località <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>;</div>';
+
+    // Checkbox ricevuto
+    html += '<div class="check-row">' + checkbox(!!consegnante) + ' ricevuto dal sig./dalla sig.ra <strong>' + (consegnante || '_______________________') + '</strong> a seguito di rinvenimento in <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>;</div>';
+
+    // Checkbox liberato
+    html += '<div class="check-row">' + checkbox(isLibero) + ' reimmesso in libertà in località <strong>' + (luogoEsito || '_______________________') + '</strong> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>;</div>';
+
+    // Specie e numero
+    html += '<div class="specie-num">n° <strong>1</strong> esemplari di animali ' +
+      '<span class="box">✓</span> vivi / <span class="box">&nbsp;</span> morti appartenenti alla fauna selvatica della specie: <strong>' + (r.animale || '_______________________') + '</strong></div>';
+
+    // Consegna CRAS
+    if (!isLibero || centro) {
+      html += '<div class="testo">Gli esemplari di cui sopra vengono consegnati al personale del C.R.A.S.' + (centro ? ' <strong>' + centro + '</strong>' : '') + '</div>';
+    }
+
+    // Firme
+    html += '<div class="firme">';
+    html += '<div class="firma-box"><div class="firma-line"></div><div>Firma per ricevuta C.R.A.S.</div></div>';
+    html += '<div class="firma-box"><div class="firma-line"></div><div>La Polizia Locale<br><strong>' + agente + '</strong></div></div>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+  }
+
+  var bodyHtml = paginaVerbale(false) + paginaVerbale(true);
+
+  var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale - ' + (r.animale||'') + ' - ' + dataStr + '</title>' +
+    '<style>' + CSS + '</style></head><body>' + bodyHtml +
+    '<div class="no-print" style="margin:16px;text-align:center;">' +
+    '<button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a3a15;color:#f5f0e8;border:none;border-radius:8px;">🖨️ Stampa / Salva PDF</button>' +
+    '<button onclick="window.close()" style="margin-left:12px;padding:12px 20px;font-size:14px;cursor:pointer;">✕ Chiudi</button>' +
+    '</div></body></html>';
+
+  var blob = new Blob([html], {type:'text/html'});
+  var url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
+
 syncPinMapDaSheet().then(checkLogin);
 </script>
 
