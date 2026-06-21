@@ -137,6 +137,18 @@ footer{border-top:1px solid var(--border);padding:12px 16px;text-align:center;fo
 .btn-cancel{background:#f1f5f9;color:var(--muted);border:1px solid var(--border)}
 .modal-err{display:none;color:var(--danger);font-family:var(--mono);font-size:11px;margin-top:8px}
 select.modal-input{-webkit-appearance:none;appearance:none}
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#1a1a2e;border:1px solid rgba(26,115,232,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:sans-serif;font-size:20px;letter-spacing:2px;color:#1a73e8;font-weight:700;margin-bottom:2px;}
+.modal-istr-box h3{font-family:sans-serif;font-size:11px;letter-spacing:2px;color:rgba(26,115,232,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#4ade80;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(74,222,128,0.2);text-transform:uppercase;}
+.istr-text{font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;}
+.istr-text strong{color:#1a73e8;}
+.istr-firma{font-size:11px;color:rgba(255,255,255,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#1a73e8;color:#fff;font-family:sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;cursor:pointer;margin-top:12px;}
 </style>
 <link rel="manifest" href="/manifest-turni.json">
 <meta name="theme-color" content="#1a73e8">
@@ -150,7 +162,8 @@ select.modal-input{-webkit-appearance:none;appearance:none}
     <div class="badge">🛡️</div>
     <div><div class="logo-text">TURNI</div><div class="logo-sub">PP CREMONA</div></div>
   </div>
-  <div class="hright" style="cursor:pointer" onclick="showPinScreen()" title="Cambia operatore">
+  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="background:transparent;border:1px solid rgba(26,115,232,0.4);border-radius:8px;color:#1a73e8;font-size:11px;padding:4px 8px;cursor:pointer;margin-right:8px;">ℹ️</button>
+<div class="hright" style="cursor:pointer" onclick="showPinScreen()" title="Cambia operatore">
     <span id="operatoreBadge" style="font-size:11px">👤 BORRINI</span>
     <div class="sync-dot ok" id="syncDot"></div><span id="syncTxt">SINCRONIZZATO</span>
   </div>
@@ -613,4 +626,52 @@ window.addEventListener('load',function(){
 </script>
 
 
+
+<!-- MODAL ISTRUZIONI TURNI -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>📅 Turni PP Cremona</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">L'applicazione Turni PP Cremona permette a tutti gli operatori di consultare in tempo reale il calendario dei turni mensili direttamente dal proprio smartphone o computer, ovunque si trovino. Elimina la necessità di stampare e distribuire fisicamente i fogli turni.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente l'operatore collegato e garantisce che solo il personale autorizzato possa accedere al calendario. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Legenda Colori</div>
+      <div class="istr-text">
+        🟢 <strong>Verde</strong> — Mattina e C/O<br>
+        🟡 <strong>Giallo</strong> — Pomeriggio<br>
+        🟠 <strong>Arancione</strong> — Riposo e Recuperi<br>
+        🟣 <strong>Viola</strong> — Altro<br>
+        🔴 <strong>Rosso</strong> — Ferie<br><br>
+        Il turno di rientro viene calcolato automaticamente.
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Aggiornamento Turni</div>
+      <div class="istr-text">I turni vengono aggiornati periodicamente dal responsabile. Ogni aggiornamento è immediatamente disponibile per tutti gli operatori senza necessità di ridistribuire alcun documento.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Con il metodo tradizionale la gestione turni richiedeva stampa e distribuzione fisica del foglio, con il rischio di versioni non aggiornate in circolazione. Con questa app tutti gli operatori hanno sempre accesso all'ultima versione aggiornata in tempo reale, da qualsiasi dispositivo, eliminando completamente la gestione cartacea.</div>
+    </div>
+
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
+</div>
 </body></html>
