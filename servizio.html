@@ -171,8 +171,20 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   #printArea { display: block !important; }
 }
 .print-area { display: none; }
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#16213e;border:1px solid rgba(245,166,35,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#f5a623;margin-bottom:2px;}
+.modal-istr-box h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(245,166,35,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#7dcfaa;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(125,207,170,0.2);}
+.istr-text{font-size:16px;color:rgba(232,234,240,0.7);line-height:1.7;}
+.istr-text strong{color:#f5a623;}
+.istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
-</head>
+<link rel="manifest" href="blob:https://stalwart-kringle-58fcb1.netlify.app/ab143bc7-ffa3-4347-8f96-8de19206955f"><link rel="manifest" href="blob:https://palvareto.github.io/fc46e7b2-b97e-4525-b784-47dcd38c5ad9"></head>
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
@@ -243,7 +255,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <div class="stats-grid">
+  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#f5a623;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+<div class="stats-grid">
     <div class="stat-card highlight"><div class="num" id="statMese">15</div><div class="label">Servizi mese</div></div>
     <div class="stat-card highlight"><div class="num" id="statAnno">22</div><div class="label">Servizi anno</div></div>
     <div class="stat-card"><div class="num" id="statVerbali">1</div><div class="label">Verbali totali</div></div>
@@ -410,6 +423,62 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
 <!-- AREA DI STAMPA (visibile solo in stampa) -->
 <div id="printArea" class="print-area"></div>
 
+
+<!-- MODAL ISTRUZIONI SERVIZIO -->
+<div class="modal-istruzioni" id="modalIstruzioni">
+  <div class="modal-istr-box">
+    <h2>📋 Report Servizio</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Report Servizio è l'applicazione per la registrazione giornaliera di tutti i servizi svolti dagli operatori sul territorio. Permette di tracciare tipologia di servizio, turno, agenti impiegati, zona, attività svolte e tutti i dati quantitativi direttamente dal campo, senza dover attendere il rientro in ufficio.</div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha inserito ogni report e garantisce la piena tracciabilità. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Come si inserisce un report</div>
+      <div class="istr-text">
+        1. Tocca <strong>Nuovo Servizio</strong><br>
+        2. Seleziona data e tipologia (Ambientale, Stradale, Centrale Operativa, Ufficio)<br>
+        3. Seleziona il turno (Mattino, Pomeriggio, Sera, Straordinario)<br>
+        4. Seleziona gli agenti presenti in servizio<br>
+        5. Indica la zona di intervento<br>
+        6. Descrivi le attività svolte<br>
+        7. Inserisci i dati quantitativi: sopralluoghi, verbali, animali recuperati, denunce P.G.<br>
+        8. Tocca <strong>Salva Report Servizio</strong>
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Report e Stampa</div>
+      <div class="istr-text">
+        📊 <strong>Riepilogo</strong> — totali generali verbali, sopralluoghi, animali e denunce<br>
+        📅 <strong>Mensile</strong> — dettaglio mese per mese<br>
+        📋 <strong>Storico</strong> — tutti i report con dettaglio per giornata<br>
+        🖨️ <strong>Stampa Report Giornaliero</strong> — PDF ufficiale con una pagina per ogni servizio della giornata e riepilogo totali, pronto per la firma e l'archiviazione
+      </div>
+    </div>
+
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Il report cartaceo richiedeva compilazione manuale a fine turno, consegna in ufficio e trascrizione per i report statistici. Con questa app ogni operatore inserisce i dati dal campo in pochi minuti. Le statistiche sono sempre aggiornate in tempo reale e il report ufficiale viene generato automaticamente in PDF — eliminando completamente la trascrizione manuale e riducendo drasticamente i tempi di gestione amministrativa.</div>
+    </div>
+
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+  </div>
+</div>
+
 <script>
 const URL_GS = 'https://script.google.com/macros/s/AKfycbygrmN4IYr7MDr8gEZrNxjVRrSPpGjq5lpgtG8Hka5WaWT9sHq5vd1vFXYav9iVIl0vdg/exec';
 
@@ -425,26 +494,20 @@ let agenti = (function(){
 function salvaAgentiServizio() { localStorage.setItem('servizio_agenti_v1', JSON.stringify(agenti)); }
 
 var DEFAULT_PIN_MAP = {
-  '1001': 'ARISI', '1002': 'BANDERA', '1003': 'BORRINI', '1004': 'CAMBIATI',
-  '1005': 'COLLA', '1006': 'FUSARI', '1007': 'GUARNERI', '1008': 'PREANI',
-  '1009': 'RIZZI', '1010': 'TRENTAROSSI', '1011': 'VIVIANI', '1012': 'CHIODA'
+  '7342': 'ARISI', '2916': 'BANDERA', '5483': 'BORRINI', '8751': 'CAMBIATI', '3629': 'COLLA', '3688': 'FUSARI', '4817': 'GUARNERI', '9364': 'PREANI', '6193': 'RIZZI', '2748': 'TRENTAROSSI', '2766': 'VIVIANI', '5522': 'CHIODA', '1013': 'TORTINI', '1014': 'MARIOTTI'
 };
-var PIN_MAP = (function(){
-  var saved = localStorage.getItem('servizio_pinmap_v1');
-  if (saved) {
-    try { var obj = JSON.parse(saved); if (obj && typeof obj === 'object') return obj; } catch(e){}
-  }
-  return Object.assign({}, DEFAULT_PIN_MAP);
-})();
+// Cancella sempre il PIN salvato localmente — usa sempre il foglio
+localStorage.removeItem('servizio_pinmap_v1');
+localStorage.removeItem('servizio_operatore_v1');
+var PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP);
 function salvaPinMapServizio() { localStorage.setItem('servizio_pinmap_v1', JSON.stringify(PIN_MAP)); }
 
 async function syncPinMapDaSheet() {
   try {
     var res = await fetch(URL_GS + '?action=pinmap');
     var d = await res.json();
-    if (d.pinMap && typeof d.pinMap === 'object' && Object.keys(d.pinMap).length > 0) {
-      // Usa SOLO i PIN del foglio (sovrascrive completamente il default)
-      PIN_MAP = d.pinMap;
+    if (d.pinMap && typeof d.pinMap === 'object') {
+      PIN_MAP = Object.assign({}, DEFAULT_PIN_MAP, d.pinMap);
       salvaPinMapServizio();
     }
   } catch(e) {}
