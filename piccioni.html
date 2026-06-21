@@ -121,7 +121,7 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
 .istr-firma{font-size:13px;color:rgba(240,240,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
 .btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
-</head>
+<link rel="manifest" href="blob:https://palvareto.github.io/f3057fea-397c-4b9e-9344-f1c0b15876b3"></head>
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
@@ -210,11 +210,11 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#ffc84a;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+  <button onclick="var mi=document.getElementById('modalIstruzioni');mi.style.display='flex';mi.style.alignItems='flex-start';" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#ffc84a;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
 <div class="stats-row">
-    <div class="stat-card"><div class="num" id="statMese">39505</div><div class="label">Questo mese</div></div>
-    <div class="stat-card"><div class="num" id="statAnno">40371</div><div class="label">Anno</div></div>
-    <div class="stat-card total"><div class="num" id="statTot">40371</div><div class="label">Totale</div></div>
+    <div class="stat-card"><div class="num" id="statMese">—</div><div class="label">Questo mese</div></div>
+    <div class="stat-card"><div class="num" id="statAnno">—</div><div class="label">Anno</div></div>
+    <div class="stat-card total"><div class="num" id="statTot">—</div><div class="label">Totale</div></div>
   </div>
   <div class="section-title">Nuova registrazione</div>
   <button class="btn-main" onclick="vai(&#39;screenForm&#39;)">
@@ -347,8 +347,8 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
 
 
 <!-- MODAL ISTRUZIONI PICCIONI -->
-<div class="modal-istruzioni" id="modalIstruzioni">
-  <div class="modal-istr-box">
+<div class="modal-overlay" id="modalIstruzioni" style="display:none;z-index:8888;align-items:flex-start;overflow-y:auto;">
+  <div class="modal-box" style="max-width:480px;margin:auto;background:#1a1a2e;border-color:rgba(245,166,35,0.4);max-height:90vh;overflow-y:auto;">
     <h2>🐦 Controllo Piccioni</h2>
     <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
 
@@ -396,7 +396,7 @@ body{font-family:'Barlow',sans-serif;background:var(--blu);color:var(--crema);ma
       📧 riccardo.borrini@provincia.cremona.it
     </div>
 
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').style.display='none';">Chiudi</button>
   </div>
 </div>
 
