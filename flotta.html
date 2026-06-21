@@ -132,7 +132,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
 .btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
-</head>
+<link rel="manifest" href="blob:https://palvareto.github.io/a461359a-9b9e-4827-bb10-24a15bb46515"></head>
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
@@ -230,12 +230,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#f5a623;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+  <button onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.add(&#39;show&#39;)" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#f5a623;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
   <div class="stats-row">
-    <div class="stat-card"><div class="num" id="statKmOggi">110</div><div class="label">KM oggi</div></div>
-    <div class="stat-card"><div class="num" id="statKmMese">1802</div><div class="label">KM mese</div></div>
-    <div class="stat-card"><div class="num" id="statRifMese">5</div><div class="label">Rif. mese</div></div>
-    <div class="stat-card highlight"><div class="num" id="statKmAnno">3615</div><div class="label">KM anno</div></div>
+    <div class="stat-card"><div class="num" id="statKmOggi">0</div><div class="label">KM oggi</div></div>
+    <div class="stat-card"><div class="num" id="statKmMese">2191</div><div class="label">KM mese</div></div>
+    <div class="stat-card"><div class="num" id="statRifMese">6</div><div class="label">Rif. mese</div></div>
+    <div class="stat-card highlight"><div class="num" id="statKmAnno">4004</div><div class="label">KM anno</div></div>
   </div>
   <div class="section-title">Nuova registrazione</div>
   <div class="main-buttons">
@@ -276,7 +276,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa <span class="req">*</span></label>
-    <select class="form-select" id="kmTarga"><option value="">— Seleziona —</option></select>
+    <select class="form-select" id="kmTarga"><option value="">— Seleziona —</option><option>YA632AS</option><option>YA358AV</option><option>YA772AL</option><option>YA773AL</option><option>YA743AB</option><option>YA256AX</option><option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option></select>
   </div>
   <div class="form-group">
     <label class="form-label">Conducente <span class="req">*</span></label>
@@ -309,7 +309,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa <span class="req">*</span></label>
-    <select class="form-select" id="rifTarga"><option value="">— Seleziona —</option></select>
+    <select class="form-select" id="rifTarga"><option value="">— Seleziona —</option><option>YA632AS</option><option>YA358AV</option><option>YA772AL</option><option>YA773AL</option><option>YA743AB</option><option>YA256AX</option><option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option></select>
   </div>
   <div class="form-group">
     <label class="form-label">Conducente <span class="req">*</span></label>
@@ -355,7 +355,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <button class="tab-btn" id="tabRif" onclick="switchTab(&#39;rif&#39;)">⛽ Rifornimenti</button>
   </div>
   <div class="filter-row">
-    <select class="form-select" id="filtraTarga" onchange="renderStorico()"><option value="">Tutte le targhe</option></select>
+    <select class="form-select" id="filtraTarga" onchange="renderStorico()"><option value="">Tutte le targhe</option><option>YA632AS</option><option>YA358AV</option><option>YA772AL</option><option>YA773AL</option><option>YA743AB</option><option>YA256AX</option><option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option></select>
     <select class="form-select" id="filtraConducente" onchange="renderStorico()">
       <option value="">Tutti</option>
       <option>ARISI</option><option>BANDERA</option><option>BORRINI</option>
@@ -388,7 +388,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa veicolo <span style="color:#f5a623;">*</span></label>
-    <select class="form-select" id="kmStampaTarga"><option value="">— Caricamento targhe... —</option></select>
+    <select class="form-select" id="kmStampaTarga"><option value="">— Seleziona —</option><option>YA632AS</option><option>YA358AV</option><option>YA772AL</option><option>YA773AL</option><option>YA743AB</option><option>YA256AX</option><option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option></select>
   </div>
   <button class="btn-submit" onclick="generaStampaKm()">🖨️ Genera Scheda Viaggio</button>
   <div id="anteprimaKm" style="margin-top:16px;"></div>
@@ -406,7 +406,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Targa veicolo <span style="color:#f5a623;">*</span></label>
-    <select class="form-select" id="rifStampaTarga"><option value="">— Caricamento targhe... —</option></select>
+    <select class="form-select" id="rifStampaTarga"><option value="">— Seleziona —</option><option>YA632AS</option><option>YA358AV</option><option>YA772AL</option><option>YA773AL</option><option>YA743AB</option><option>YA256AX</option><option>YA295AP</option><option>YA365AM</option><option>YA754AP</option><option>YA438AR</option></select>
   </div>
   <button class="btn-submit" onclick="generaStampaRif()" style="background:linear-gradient(135deg,#16213e,#27ae60);">🖨️ Genera Foglio Carburante</button>
   <div id="anteprimaRif" style="margin-top:16px;"></div>
@@ -481,7 +481,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
       📧 riccardo.borrini@provincia.cremona.it
     </div>
 
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+    <button class="btn-istr-close" onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.remove(&#39;show&#39;)">Chiudi</button>
   </div>
 </div>
 
@@ -571,7 +571,7 @@ function salvaAgentiFlotta() {
   localStorage.setItem('flotta_agenti_v1', JSON.stringify(agentiFlotta));
 }
 
-var kmSel = '';
+var kmSel = [];
 var rifSel = '';
 
 // LOGIN OPERATORE (PIN)
@@ -606,7 +606,8 @@ function renderAgenti(gridId, listId, selVal, onClickFn) {
   grid.innerHTML = '';
   agentiFlotta.forEach(function(a) {
     var btn = document.createElement('button');
-    btn.className = 'agente-btn' + (selVal === a ? ' sel' : '');
+    var isSelected = Array.isArray(selVal) ? selVal.indexOf(a) >= 0 : selVal === a;
+    btn.className = 'agente-btn' + (isSelected ? ' sel' : '');
     btn.textContent = a;
     btn.onclick = function() { onClickFn(a); };
     grid.appendChild(btn);
@@ -630,13 +631,13 @@ function renderAgenti(gridId, listId, selVal, onClickFn) {
   });
 }
 
-function renderKm() { renderAgenti('kmAgentiGrid', 'kmAgentiList', kmSel, function(a) { kmSel = a; renderKm(); renderRif(); }); }
+function renderKm() { renderAgenti('kmAgentiGrid', 'kmAgentiList', kmSel, function(a) { var idx=kmSel.indexOf(a); if(idx>=0){kmSel.splice(idx,1);}else{kmSel.push(a);} renderKm(); renderRif(); }); }
 function renderRif() { renderAgenti('rifAgentiGrid', null, rifSel, function(a) { rifSel = a; renderRif(); }); }
 
 function rimuoviAgenteFlotta(nome) {
   var idx = agentiFlotta.indexOf(nome);
   if (idx >= 0) agentiFlotta.splice(idx, 1);
-  if (kmSel === nome) kmSel = '';
+  if (kmSel === nome) kmSel = [];
   if (rifSel === nome) rifSel = '';
   // Rimuovi anche il PIN associato (locale + foglio)
   var hadPin = false;
@@ -703,16 +704,16 @@ function calcolaLitri() {
 async function submitKm() {
   var dataOra = document.getElementById('kmDataOra').value;
   var targa = document.getElementById('kmTarga').value;
-  var conducente = kmSel;
+  var conducente = kmSel.join(', ');
   var km = document.getElementById('kmFinali').value;
   var note = document.getElementById('kmNote').value.trim();
-  if (!dataOra || !targa || !conducente || !km) { toast('Seleziona conducente e compila tutti i campi', true); return; }
+  if (!dataOra || !targa || !conducente || !km) { toast('Seleziona almeno un conducente e compila tutti i campi', true); return; }
   await invia({tipo:'KM', dataOra:fmtDT(dataOra), targa, conducente, kmFinali:parseInt(km), note, inseritoDa:operatoreCorrente});
   document.getElementById('kmTarga').value = '';
   document.getElementById('kmFinali').value = '';
   document.getElementById('kmNote').value = '';
   document.getElementById('kmDataOra').value = '';
-  kmSel = '';
+  kmSel = [];
   vai('screenHome');
 }
 
