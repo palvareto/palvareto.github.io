@@ -556,12 +556,14 @@ function cambiUtente() {
   utenteLoggato = '';
   pinCurrent = '';
   aggiornaDisplay();
-  document.getElementById('pinOverlay').style.display = 'flex';
+  document.getElementById('modalLogin').classList.add('show');
 }
 
 function initPin() {
   if (!utenteLoggato) {
-    document.getElementById('pinOverlay').style.display = 'flex';
+    document.getElementById('pinLogin').value='';
+    document.getElementById('errLogin').textContent='';
+    document.getElementById('modalLogin').classList.add('show');
   }
 }
 
@@ -572,21 +574,14 @@ function pinDel() {
   aggiornaDisplay();
 }
 
-function aggiornaDisplay() {
-  var display = '';
-  for (var i = 0; i < 4; i++) {
-    display += i < pinCurrent.length ? '●' : '_';
-    if (i < 3) display += ' ';
-  }
-  document.getElementById('pinDisplay').textContent = display;
-}
+function aggiornaDisplay(){}
 
 function verificaPin() {
   var agente = PIN_MAP[pinCurrent];
   if (agente) {
     utenteLoggato = agente;
     localStorage.setItem('selvatici_utente', agente);
-    document.getElementById('pinOverlay').style.display = 'none';
+    document.getElementById('modalLogin').classList.remove('show');
     document.getElementById('pinError').textContent = '';
     toast('Benvenuto ' + agente + '! 🦌');
     document.getElementById('headerUtente').textContent = '👮 ' + agente;
