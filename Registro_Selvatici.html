@@ -103,13 +103,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .loading-text{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;font-size:12px;color:rgba(255,255,255,0.6);text-transform:uppercase;}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.show{display:flex;}
-.pin-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10001;align-items:center;justify-content:center;padding:20px;}
-.pin-popup-overlay.show{display:flex;}
-.pin-popup-box{background:#1a3a15;border:2px solid var(--ocra);border-radius:14px;padding:24px 20px;max-width:340px;width:100%;text-align:center;}
-.pin-popup-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:8px;}
-.pin-popup-nome{font-size:14px;color:var(--crema);margin-bottom:6px;}
-.pin-popup-code{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--ocra2);letter-spacing:10px;margin:10px 0;}
-.pin-popup-note{font-size:12px;color:rgba(245,240,232,0.7);margin-bottom:16px;line-height:1.4;}
 .modal-box{background:#1a3a15;border:1px solid var(--ocra);border-radius:16px;padding:24px;max-width:340px;width:100%;}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:12px;}
 .modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
@@ -571,37 +564,9 @@ async function syncPinMapDaSheet() {
 }
 
 
-function mostraPinPopup(nome, pin) {
-  // Rimuovi eventuale popup precedente
-  var old = document.getElementById('pinPopupOverlay');
-  if (old) old.remove();
-  // Crea il popup dinamicamente
-  var overlay = document.createElement('div');
-  overlay.id = 'pinPopupOverlay';
-  overlay.className = 'pin-popup-overlay';
-  overlay.style.display = 'flex';
-  overlay.innerHTML =
-    '<div class="pin-popup-box">' +
-    '<div class="pin-popup-title">🔑 PIN Creato!</div>' +
-    '<div class="pin-popup-nome">Agente: ' + nome + '</div>' +
-    '<div class="pin-popup-code" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--ocra2);letter-spacing:10px;margin:10px 0;">' + pin + '</div>' +
-    '<div class="pin-popup-note">📋 Copia questo PIN e invialo all'agente — non verrà mostrato di nuovo!</div>' +
-    '<button class="btn-add" style="width:100%;padding:12px;" onclick="copiaPinEChiudi()">📋 Copia PIN e chiudi</button>' +
-    '</div>';
-  document.body.appendChild(overlay);
-}
 
-function copiaPinEChiudi() {
-  var overlay = document.getElementById('pinPopupOverlay');
-  var pinEl = overlay ? overlay.querySelector('.pin-popup-code') : null;
-  var pin = pinEl ? pinEl.textContent : '';
-  if (navigator.clipboard && pin) {
-    navigator.clipboard.writeText(pin).then(function() { toast('PIN copiato!'); });
-  } else if (pin) {
-    toast('PIN: ' + pin);
-  }
-  if (overlay) overlay.remove();
-}
+
+
 
 function cambiUtente() {
   localStorage.removeItem('selvatici_utente');
@@ -702,7 +667,7 @@ async function aggiungiAgente(){
   input.value='';pinInput.value='';
   chiudiModal('modalAgenti');
   renderAgenti('zoo');renderAgenti('cras');
-  mostraPinPopup(nome, pin);
+  alert('✅ Agente "'+nome+'" aggiunto!\n\nIl suo PIN è: '+pin+'\n\nComunicaglielo: lo inserirà al prossimo accesso.\n\n📋 PIN salvato sul foglio Google "PIN Agenti".');
 }
 
 // FORM SELECTORS
