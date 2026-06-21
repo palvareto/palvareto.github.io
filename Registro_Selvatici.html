@@ -261,15 +261,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 
 
 
-<div class="pin-popup-overlay" id="pinPopupOverlay" style="display:none;">
-  <div class="pin-popup-box">
-    <div class="pin-popup-title">🔑 PIN Creato!</div>
-    <div class="pin-popup-nome" id="pinPopupNome"></div>
-    <div class="pin-popup-code" id="pinPopupCode"></div>
-    <div class="pin-popup-note">📋 Copia questo PIN e invialo all'agente — non verrà mostrato di nuovo!</div>
-    <button class="btn-add" style="width:100%;padding:12px;" onclick="copiaPinEChiudi()">📋 Copia PIN e chiudi</button>
-  </div>
-</div>
+
 <div class="modal-overlay" id="modalLogin" style="z-index:10000;">
   <div class="modal-box">
     <div class="modal-title">👤 Identificazione</div>
@@ -580,19 +572,35 @@ async function syncPinMapDaSheet() {
 
 
 function mostraPinPopup(nome, pin) {
-  document.getElementById('pinPopupNome').textContent = 'Agente: ' + nome;
-  document.getElementById('pinPopupCode').textContent = pin;
-  document.getElementById('pinPopupOverlay').style.display='flex';
+  // Rimuovi eventuale popup precedente
+  var old = document.getElementById('pinPopupOverlay');
+  if (old) old.remove();
+  // Crea il popup dinamicamente
+  var overlay = document.createElement('div');
+  overlay.id = 'pinPopupOverlay';
+  overlay.className = 'pin-popup-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML =
+    '<div class="pin-popup-box">' +
+    '<div class="pin-popup-title">🔑 PIN Creato!</div>' +
+    '<div class="pin-popup-nome">Agente: ' + nome + '</div>' +
+    '<div class="pin-popup-code" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--ocra2);letter-spacing:10px;margin:10px 0;">' + pin + '</div>' +
+    '<div class="pin-popup-note">📋 Copia questo PIN e invialo all'agente — non verrà mostrato di nuovo!</div>' +
+    '<button class="btn-add" style="width:100%;padding:12px;" onclick="copiaPinEChiudi()">📋 Copia PIN e chiudi</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
 }
 
 function copiaPinEChiudi() {
-  var pin = document.getElementById('pinPopupCode').textContent;
-  if (navigator.clipboard) {
+  var overlay = document.getElementById('pinPopupOverlay');
+  var pinEl = overlay ? overlay.querySelector('.pin-popup-code') : null;
+  var pin = pinEl ? pinEl.textContent : '';
+  if (navigator.clipboard && pin) {
     navigator.clipboard.writeText(pin).then(function() { toast('PIN copiato!'); });
-  } else {
+  } else if (pin) {
     toast('PIN: ' + pin);
   }
-  document.getElementById('pinPopupOverlay').style.display='none';
+  if (overlay) overlay.remove();
 }
 
 function cambiUtente() {
