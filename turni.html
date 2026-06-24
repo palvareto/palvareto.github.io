@@ -374,6 +374,13 @@ function loadData(anno, mese){
       PIN_MAP = data.pinMap || {};
       setSync('ok','SINCRONIZZATO');
       aggiornaNavMese();
+      // Resetta currentDay se appartiene a un mese diverso da quello che stiamo visualizzando
+      if(currentDay) {
+        var cdParts = currentDay.split('-');
+        if(parseInt(cdParts[0]) !== anno || parseInt(cdParts[1]) !== mese) {
+          currentDay = null;
+        }
+      }
       buildCal();
       // Se stiamo guardando il mese corrente, vai al giorno di oggi
       if(anno === currentYear && mese === currentMonth){
