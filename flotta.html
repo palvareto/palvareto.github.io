@@ -132,7 +132,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
 .btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
-<link rel="manifest" href="blob:https://palvareto.github.io/a461359a-9b9e-4827-bb10-24a15bb46515"></head>
+<link rel="manifest" href="blob:https://palvareto.github.io/a461359a-9b9e-4827-bb10-24a15bb46515"><link rel="manifest" href="blob:https://palvareto.github.io/d86bb357-1d53-4bfc-b656-243a0b607498"></head>
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
@@ -152,6 +152,25 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 </div>
 
 
+
+<!-- MODAL CAMBIA PIN -->
+<div class="modal-overlay" id="modalCambiaPin" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-title">🔑 Cambia PIN</div>
+    <div class="modal-text">Scegli un PIN personale salvato solo su questo dispositivo.</div>
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">PIN attuale</div>
+    <input type="text" class="form-input" id="cp-attuale" placeholder="PIN attuale" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:10px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">Nuovo PIN</div>
+    <input type="text" class="form-input" id="cp-nuovo" placeholder="Nuovo PIN (4 cifre)" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:10px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">Conferma nuovo PIN</div>
+    <input type="text" class="form-input" id="cp-conferma" placeholder="Ripeti nuovo PIN" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:8px;">
+    <div id="cp-err" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="document.getElementById(&#39;modalCambiaPin&#39;).style.display=&#39;none&#39;">Annulla</button>
+      <button class="modal-btn confirm" onclick="salvaNuovoPin()">Salva PIN</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-overlay" id="modalLogin" style="z-index:10000;">
   <div class="modal-box">
@@ -260,6 +279,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   <div style="height:20px;"></div>
   <button class="btn-sheet" onclick="apriModalSheet()">📊 &nbsp;Apri Google Sheet</button>
 </div>
+  <button class="btn-sheet" style="margin-top:8px;background:rgba(245,166,35,0.08);border-color:rgba(245,166,35,0.3);color:#f5a623;" onclick="mostraCambiaPin()">🔑 &nbsp;Cambia PIN personale</button>
 
 <!-- KM -->
 <div class="screen" id="screenKm">
@@ -450,7 +470,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     </div>
 
     <div class="istr-section">
-      <div class="istr-title">Registra Chilometri</div>
+      <div class="istr-title">Registra Chilometri</div>    </div>
+    <div class="istr-section">
+      <div class="istr-title">Cambia PIN Personale 🔑</div>
+      <div class="istr-text">Dalla home tocca <strong>🔑 Cambia PIN personale</strong> per impostare un PIN noto solo a te. Inserisci il PIN attuale, poi il tuo nuovo PIN a 4 cifre. Viene salvato <strong>solo su questo dispositivo</strong> — se cambi telefono usa il PIN originale assegnato dall'amministratore.</div>
       <div class="istr-text">1. Tocca <strong>Registra KM</strong><br>2. Seleziona data e targa veicolo<br>3. Inserisci i km finali del contachilometri<br>4. Aggiungi eventuali note<br>5. Tocca <strong>Salva</strong> — dati inviati immediatamente</div>
     </div>
 
@@ -585,9 +608,47 @@ function checkLogin() {
   }
 }
 
+function mostraCambiaPin() {
+  if (!operatoreCorrente) { toast('Devi prima accedere', true); return; }
+  document.getElementById('cp-attuale').value = '';
+  document.getElementById('cp-nuovo').value = '';
+  document.getElementById('cp-conferma').value = '';
+  document.getElementById('cp-err').textContent = '';
+  document.getElementById('modalCambiaPin').style.display = 'flex';
+}
+
+function salvaNuovoPin() {
+  var attuale = document.getElementById('cp-attuale').value.trim();
+  var nuovo = document.getElementById('cp-nuovo').value.trim();
+  var conferma = document.getElementById('cp-conferma').value.trim();
+  var err = document.getElementById('cp-err');
+  var pinLocale = null;
+  try { pinLocale = localStorage.getItem('flotta_pin_personale_' + operatoreCorrente); } catch(e) {}
+  var valido = (pinLocale && attuale === pinLocale) || PIN_MAP[attuale] === operatoreCorrente;
+  if (!valido) { err.textContent = '❌ PIN attuale non corretto'; return; }
+  if (nuovo.length !== 4 || isNaN(nuovo)) { err.textContent = '❌ Il nuovo PIN deve essere 4 cifre'; return; }
+  if (nuovo !== conferma) { err.textContent = '❌ I PIN non coincidono'; return; }
+  try { localStorage.setItem('flotta_pin_personale_' + operatoreCorrente, nuovo); } catch(e) {}
+  document.getElementById('modalCambiaPin').style.display = 'none';
+  toast('✅ PIN cambiato! Nuovo PIN: ' + nuovo);
+}
+
 function verificaPinLogin() {
   var pin = document.getElementById('pinLogin').value.trim();
   var nome = PIN_MAP[pin];
+  if (!nome) {
+    try {
+      var keys = Object.keys(localStorage);
+      for (var ki = 0; ki < keys.length; ki++) {
+        if (keys[ki].indexOf('flotta_pin_personale_') === 0) {
+          if (localStorage.getItem(keys[ki]) === pin) {
+            nome = keys[ki].replace('flotta_pin_personale_', '');
+            break;
+          }
+        }
+      }
+    } catch(e) {}
+  }
   if (nome) {
     operatoreCorrente = nome;
     localStorage.setItem('flotta_operatore_v1', nome);
