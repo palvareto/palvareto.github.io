@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Servizio">
 <title>Report Servizio</title>
-<link href="./index_files/css2" rel="stylesheet">
+<link href="./Report Servizio_files/css2" rel="stylesheet">
 <style>
 :root{--blu:#1a1a2e;--blu2:#16213e;--oro:#f5a623;--oro2:#ffc84a;--crema:#e8eaf0;--verde:#27ae60;--rosso:#e74c3c;--viola:#6c3483;--grigio:rgba(255,255,255,0.07);--bordo:rgba(255,255,255,0.12);}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -184,7 +184,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
 .istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
 .btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#f5a623;color:#1a1a2e;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
 </style>
-<link rel="manifest" href="blob:https://stalwart-kringle-58fcb1.netlify.app/ab143bc7-ffa3-4347-8f96-8de19206955f"><link rel="manifest" href="blob:https://palvareto.github.io/fc46e7b2-b97e-4525-b784-47dcd38c5ad9"></head>
+<link rel="manifest" href="blob:https://stalwart-kringle-58fcb1.netlify.app/ab143bc7-ffa3-4347-8f96-8de19206955f"><link rel="manifest" href="blob:https://palvareto.github.io/fc46e7b2-b97e-4525-b784-47dcd38c5ad9"><link rel="manifest" href="blob:https://palvareto.github.io/5c62b63e-bcaa-4102-8d68-ed85fa601b18"></head>
 <body>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
@@ -204,6 +204,25 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
 </div>
 
 
+
+<!-- MODAL CAMBIA PIN -->
+<div class="modal-overlay" id="modalCambiaPin" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-title">🔑 Cambia PIN</div>
+    <div class="modal-text">Scegli un PIN personale salvato solo su questo dispositivo.</div>
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">PIN attuale</div>
+    <input type="text" class="form-input" id="cp-attuale" placeholder="PIN attuale" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:10px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">Nuovo PIN</div>
+    <input type="text" class="form-input" id="cp-nuovo" placeholder="Nuovo PIN (4 cifre)" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:10px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">Conferma nuovo PIN</div>
+    <input type="text" class="form-input" id="cp-conferma" placeholder="Ripeti nuovo PIN" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:8px;">
+    <div id="cp-err" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="document.getElementById(&#39;modalCambiaPin&#39;).style.display=&#39;none&#39;">Annulla</button>
+      <button class="modal-btn confirm" onclick="salvaNuovoPin()">Salva PIN</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-overlay" id="modalLogin" style="z-index:10000;">
   <div class="modal-box">
@@ -255,12 +274,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
     <span>📲 Installa l'app sulla schermata home</span>
     <button onclick="installApp()">INSTALLA</button>
   </div>
-  <button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#f5a623;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+  <button onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.add(&#39;show&#39;)" style="width:100%;padding:11px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;color:#f5a623;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
 <div class="stats-grid">
-    <div class="stat-card highlight"><div class="num" id="statMese">15</div><div class="label">Servizi mese</div></div>
-    <div class="stat-card highlight"><div class="num" id="statAnno">22</div><div class="label">Servizi anno</div></div>
+    <div class="stat-card highlight"><div class="num" id="statMese">22</div><div class="label">Servizi mese</div></div>
+    <div class="stat-card highlight"><div class="num" id="statAnno">29</div><div class="label">Servizi anno</div></div>
     <div class="stat-card"><div class="num" id="statVerbali">1</div><div class="label">Verbali totali</div></div>
-    <div class="stat-card"><div class="num" id="statAnimali">25</div><div class="label">Animali recuperati</div></div>
+    <div class="stat-card"><div class="num" id="statAnimali">28</div><div class="label">Animali recuperati</div></div>
   </div>
   <div class="section-title">Nuovo inserimento</div>
   <button class="btn-main" onclick="vai(&#39;screenForm&#39;)">
@@ -272,6 +291,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
   <button class="btn-report-home" onclick="vai(&#39;screenReport&#39;)">📊 &nbsp;Visualizza Report</button>
   <button class="btn-report-home" onclick="vai(&#39;screenStampa&#39;)" style="margin-top:8px;border-color:rgba(125,207,170,0.5);color:#7dcfaa;">🖨️ &nbsp;Stampa Report Giornaliero</button>
   <button class="btn-sheet" onclick="apriModalSheet()">📋 &nbsp;Apri Google Sheet</button>
+  <button class="btn-sheet" style="margin-top:8px;background:rgba(245,166,35,0.08);border-color:rgba(245,166,35,0.3);color:#f5a623;" onclick="mostraCambiaPin()">🔑 &nbsp;Cambia PIN personale</button>
 </div>
 
 <!-- FORM -->
@@ -439,6 +459,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
       <div class="istr-title">Codice Operatore</div>
       <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha inserito ogni report e garantisce la piena tracciabilità. <strong>Non condividerlo con altri.</strong></div>
     </div>
+    <div class="istr-section">
+      <div class="istr-title">Cambia PIN Personale 🔑</div>
+      <div class="istr-text">Dalla home tocca <strong>🔑 Cambia PIN personale</strong> per impostare un PIN noto solo a te. Inserisci il PIN attuale, poi il tuo nuovo PIN a 4 cifre. Viene salvato <strong>solo su questo dispositivo</strong> — se cambi telefono usa il PIN originale assegnato dall'amministratore.</div>
+    </div>
 
     <div class="istr-section">
       <div class="istr-title">Come si inserisce un report</div>
@@ -475,7 +499,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
       📧 riccardo.borrini@provincia.cremona.it
     </div>
 
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+    <button class="btn-istr-close" onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.remove(&#39;show&#39;)">Chiudi</button>
   </div>
 </div>
 
@@ -521,9 +545,47 @@ function checkLogin() {
     document.getElementById('modalLogin').classList.add('show');
   }
 }
+function mostraCambiaPin() {
+  if (!operatoreCorrente) { toast('Devi prima accedere', true); return; }
+  document.getElementById('cp-attuale').value = '';
+  document.getElementById('cp-nuovo').value = '';
+  document.getElementById('cp-conferma').value = '';
+  document.getElementById('cp-err').textContent = '';
+  document.getElementById('modalCambiaPin').style.display = 'flex';
+}
+
+function salvaNuovoPin() {
+  var attuale = document.getElementById('cp-attuale').value.trim();
+  var nuovo = document.getElementById('cp-nuovo').value.trim();
+  var conferma = document.getElementById('cp-conferma').value.trim();
+  var err = document.getElementById('cp-err');
+  var pinLocale = null;
+  try { pinLocale = localStorage.getItem('servizio_pin_personale_' + operatoreCorrente); } catch(e) {}
+  var valido = (pinLocale && attuale === pinLocale) || PIN_MAP[attuale] === operatoreCorrente;
+  if (!valido) { err.textContent = '❌ PIN attuale non corretto'; return; }
+  if (nuovo.length !== 4 || isNaN(nuovo)) { err.textContent = '❌ Il nuovo PIN deve essere 4 cifre'; return; }
+  if (nuovo !== conferma) { err.textContent = '❌ I PIN non coincidono'; return; }
+  try { localStorage.setItem('servizio_pin_personale_' + operatoreCorrente, nuovo); } catch(e) {}
+  document.getElementById('modalCambiaPin').style.display = 'none';
+  toast('✅ PIN cambiato! Nuovo PIN: ' + nuovo);
+}
+
 function verificaPinLogin() {
   var pin = document.getElementById('pinLogin').value.trim();
   var nome = PIN_MAP[pin];
+  if (!nome) {
+    try {
+      var keys = Object.keys(localStorage);
+      for (var ki = 0; ki < keys.length; ki++) {
+        if (keys[ki].indexOf('servizio_pin_personale_') === 0) {
+          if (localStorage.getItem(keys[ki]) === pin) {
+            nome = keys[ki].replace('servizio_pin_personale_', '');
+            break;
+          }
+        }
+      }
+    } catch(e) {}
+  }
   if (nome) {
     operatoreCorrente = nome;
     localStorage.setItem('servizio_operatore_v1', nome);
