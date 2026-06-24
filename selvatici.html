@@ -276,7 +276,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
     <input type="text" class="form-input" id="cp-conferma" placeholder="Ripeti nuovo PIN" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:8px;">
     <div id="cp-err" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;"></div>
     <div class="modal-btns">
-      <button class="modal-btn cancel" onclick="chiudiModal(&#39;modalCambiaPin&#39;)">Annulla</button>
+      <button class="modal-btn cancel" onclick="document.getElementById(&#39;modalCambiaPin&#39;).style.display=&#39;none&#39;">Annulla</button>
       <button class="modal-btn confirm" onclick="salvaNuovoPin()">Salva PIN</button>
     </div>
   </div>
@@ -609,7 +609,7 @@ function mostraCambiaPin() {
   document.getElementById('cp-nuovo').value = '';
   document.getElementById('cp-conferma').value = '';
   document.getElementById('cp-err').textContent = '';
-  document.getElementById('modalCambiaPin').classList.add('show');
+  document.getElementById('modalCambiaPin').style.display='flex';
 }
 
 function salvaNuovoPin() {
@@ -630,7 +630,7 @@ function salvaNuovoPin() {
   try {
     localStorage.setItem('selvatici_pin_personale_' + utenteLoggato, nuovo);
   } catch(e) {}
-  chiudiModal('modalCambiaPin');
+  document.getElementById('modalCambiaPin').style.display='none';
   alert('✅ PIN cambiato!\nNuovo PIN: ' + nuovo + '\nSalvato solo su questo dispositivo.');
 }
 
