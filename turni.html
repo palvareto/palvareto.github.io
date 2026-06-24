@@ -455,8 +455,11 @@ function showDay(dv){
   document.getElementById('day-subtitle').textContent=MESI_IT[viewingMonth-1]+' '+viewingYear;
   var fb=document.getElementById('festa-banner');
   if(FESTE[dv]){fb.textContent='★ '+FESTE[dv];fb.style.display='block';}else{fb.style.display='none';}
-  document.getElementById('btn-prev').disabled=(dv==='2026-06-01');
-  document.getElementById('btn-next').disabled=(dv==='2026-06-30');
+  var mv2=viewingMonth<10?'0'+viewingMonth:String(viewingMonth);
+  var primoM=viewingYear+'-'+mv2+'-01';
+  var ultimoM=viewingYear+'-'+mv2+'-'+pad(new Date(viewingYear,viewingMonth,0).getDate());
+  document.getElementById('btn-prev').disabled=(dv===primoM);
+  document.getElementById('btn-next').disabled=(dv===ultimoM);
 
   var list=[];
   for(var i=0;i<SCHED.agents.length;i++){
