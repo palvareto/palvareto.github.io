@@ -181,7 +181,9 @@ select.modal-input{-webkit-appearance:none;appearance:none}
     <div><div class="logo-text">TURNI</div><div class="logo-sub">PP CREMONA</div></div>
   </div>
   <button onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.add(&#39;show&#39;)" style="background:transparent;border:1px solid rgba(26,115,232,0.4);border-radius:8px;color:#1a73e8;font-size:11px;padding:4px 8px;cursor:pointer;margin-right:8px;">ℹ️</button>
-<div class="hright" style="cursor:pointer" onclick="showPinScreen()" title="Cambia operatore">
+<div class="hright" style="display:flex;align-items:center;gap:8px;">
+  <span style="font-size:10px;color:var(--muted);cursor:pointer;letter-spacing:1px;text-decoration:underline;" onclick="mostraCambiaPin()" title="Cambia il tuo PIN personale">🔑</span>
+  <div style="cursor:pointer" onclick="showPinScreen()" title="Cambia operatore">
     <span id="operatoreBadge" style="font-size:11px">👤 BORRINI</span>
     <div class="sync-dot err" id="syncDot"></div><span id="syncTxt">ERRORE CARICAMENTO</span>
   </div>
@@ -280,6 +282,25 @@ select.modal-input{-webkit-appearance:none;appearance:none}
     <div class="modal-err" id="pin-err" style="display: none;">PIN non valido</div>
     <div class="modal-actions">
       <button class="btn btn-primary" id="pin-confirm" onclick="confirmPin()">Conferma</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIA PIN -->
+<div class="modal-overlay" id="cambiaPinOverlay" style="display:none;">
+  <div class="modal" style="border-radius:16px;max-width:340px">
+    <div class="modal-title">CAMBIA PIN</div>
+    <div style="font-family:var(--sans);font-size:12px;color:var(--muted);margin-bottom:14px">Scegli un PIN personale a 4 cifre. Verrà salvato solo su questo dispositivo.</div>
+    <div style="font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:6px">PIN attuale</div>
+    <input class="modal-input" id="cp-attuale" type="tel" inputmode="numeric" placeholder="PIN attuale" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:4px;color:var(--text);margin-bottom:10px;">
+    <div style="font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:6px">Nuovo PIN</div>
+    <input class="modal-input" id="cp-nuovo" type="tel" inputmode="numeric" placeholder="Nuovo PIN (4 cifre)" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:4px;color:var(--text);margin-bottom:10px;">
+    <div style="font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:6px">Conferma nuovo PIN</div>
+    <input class="modal-input" id="cp-conferma" type="tel" inputmode="numeric" placeholder="Ripeti nuovo PIN" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:4px;color:var(--text);margin-bottom:6px;">
+    <div class="modal-err" id="cp-err" style="display:none;"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById(&#39;cambiaPinOverlay&#39;).style.display=&#39;none&#39;">Annulla</button>
+      <button class="btn btn-primary" onclick="salvaNuovoPin()">Salva PIN</button>
     </div>
   </div>
 </div>
@@ -665,6 +686,55 @@ function saveTurno(){
   });
 }
 
+// ── CAMBIA PIN ───────────────────────────────────────────
+function mostraCambiaPin(){
+  if(!operatoreCorrente){ alert('Devi prima accedere con il tuo PIN.'); return; }
+  document.getElementById('cp-attuale').value='';
+  document.getElementById('cp-nuovo').value='';
+  document.getElementById('cp-conferma').value='';
+  document.getElementById('cp-err').style.display='none';
+  document.getElementById('cambiaPinOverlay').style.display='flex';
+}
+
+function salvaNuovoPin(){
+  var attuale = document.getElementById('cp-attuale').value.trim();
+  var nuovo = document.getElementById('cp-nuovo').value.trim();
+  var conferma = document.getElementById('cp-conferma').value.trim();
+  var err = document.getElementById('cp-err');
+
+  // Verifica PIN attuale
+  // Controlla sia il PIN del server che eventuale PIN locale personalizzato
+  var pinLocale = null;
+  try { pinLocale = localStorage.getItem('turni_pin_personale_'+operatoreCorrente); } catch(e){}
+
+  var pinAttualeValido = false;
+  if(pinLocale && attuale === pinLocale) {
+    pinAttualeValido = true;
+  } else if(PIN_MAP[attuale] === operatoreCorrente) {
+    pinAttualeValido = true;
+  }
+
+  if(!pinAttualeValido){
+    err.textContent = '❌ PIN attuale non corretto';
+    err.style.display='block'; return;
+  }
+  if(nuovo.length !== 4 || isNaN(nuovo)){
+    err.textContent = '❌ Il nuovo PIN deve essere di 4 cifre numeriche';
+    err.style.display='block'; return;
+  }
+  if(nuovo !== conferma){
+    err.textContent = '❌ I due PIN non coincidono';
+    err.style.display='block'; return;
+  }
+  // Salva il PIN personale in localStorage
+  try {
+    localStorage.setItem('turni_pin_personale_'+operatoreCorrente, nuovo);
+    localStorage.setItem('turni_pin', nuovo);
+  } catch(e){}
+  document.getElementById('cambiaPinOverlay').style.display='none';
+  alert('✅ PIN cambiato con successo!\nRicordalo: ' + nuovo + '\nÈ salvato solo su questo dispositivo.');
+}
+
 // ── LOGIN PIN ─────────────────────────────────────────────
 function showPinScreen(){
   document.getElementById('pinOverlay').style.display='flex';
@@ -675,12 +745,31 @@ function showPinScreen(){
 
 function confirmPin(){
   var pin = document.getElementById('pin-input').value.trim();
-  if(!PIN_MAP[pin]){
+  var nomeAgente = PIN_MAP[pin] || null;
+
+  // Se non trovato nel PIN_MAP del server, cerca nei PIN personali locali
+  if(!nomeAgente){
+    // Controlla se è un PIN personale salvato localmente
+    try {
+      var keys = Object.keys(localStorage);
+      for(var ki=0;ki<keys.length;ki++){
+        if(keys[ki].indexOf('turni_pin_personale_')===0){
+          var savedPin = localStorage.getItem(keys[ki]);
+          if(savedPin === pin){
+            nomeAgente = keys[ki].replace('turni_pin_personale_','');
+            break;
+          }
+        }
+      }
+    } catch(e){}
+  }
+
+  if(!nomeAgente){
     document.getElementById('pin-err').textContent='PIN non valido';
     document.getElementById('pin-err').style.display='block';
     return;
   }
-  operatoreCorrente = PIN_MAP[pin];
+  operatoreCorrente = nomeAgente;
   try{
     localStorage.setItem('turni_pin', pin);
     localStorage.setItem('turni_operatore', operatoreCorrente);
@@ -784,6 +873,10 @@ window.addEventListener('load',function(){
     <div class="istr-section">
       <div class="istr-title">Codice Operatore</div>
       <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente l'operatore collegato e garantisce che solo il personale autorizzato possa accedere al calendario. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Cambia PIN Personale 🔑</div>
+      <div class="istr-text">Tocca l'icona 🔑 in alto a destra per impostare un PIN personale noto solo a te. Inserisci il PIN attuale, poi scegli il tuo PIN personale a 4 cifre. Il nuovo PIN viene salvato <strong>solo su questo dispositivo</strong> — se cambi telefono usa il PIN originale assegnato dall'amministratore.</div>
     </div>
 
     <div class="istr-section">
