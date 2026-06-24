@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0040)https://palvareto.github.io/portale.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PP Cremona — App</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link href="./PP Cremona — App_files/css2" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height:100vh;padding:24px 16px;}
@@ -40,21 +40,21 @@ body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height
 <body>
 
 <!-- LOGIN OVERLAY -->
-<div id="loginOverlay" style="position:fixed;inset:0;background:#0f1115;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;">
+<div id="loginOverlay" style="position: fixed; inset: 0px; background: rgb(15, 17, 21); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px;">
   <div style="text-align:center;margin-bottom:24px;">
-    <div style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:#f5a623;">PP CREMONA</div>
+    <div style="font-family:&#39;Bebas Neue&#39;,cursive;font-size:28px;letter-spacing:3px;color:#f5a623;">PP CREMONA</div>
     <div style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-top:4px;text-transform:uppercase;">Accesso riservato</div>
   </div>
   <div id="stepPwd" style="width:100%;max-width:320px;">
     <input type="password" id="pwdAccesso" placeholder="Password..." style="width:100%;padding:14px 16px;border-radius:10px;border:1px solid rgba(245,166,35,0.4);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;margin-bottom:8px;outline:none;">
     <div id="errAccesso" style="font-size:11px;min-height:16px;margin-bottom:8px;"></div>
-    <button onclick="verificaAccesso()" style="width:100%;padding:14px;border-radius:10px;border:none;background:#f5a623;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Continua →</button>
+    <button onclick="verificaAccesso()" style="width:100%;padding:14px;border-radius:10px;border:none;background:#f5a623;color:#0f1115;font-family:&#39;Bebas Neue&#39;,cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Continua →</button>
   </div>
   <div id="stepOtp" style="width:100%;max-width:320px;display:none;">
     <div id="otpInfo" style="font-size:11px;color:#7dcfaa;margin-bottom:12px;text-align:center;"></div>
     <input type="number" id="otpCode" placeholder="Codice a 6 cifre..." style="width:100%;padding:14px 16px;border-radius:10px;border:1px solid rgba(125,207,170,0.5);background:rgba(255,255,255,0.05);color:#fff;font-size:22px;margin-bottom:8px;outline:none;text-align:center;letter-spacing:6px;">
     <div id="errOtp" style="font-size:11px;min-height:16px;margin-bottom:8px;"></div>
-    <button onclick="verificaOTP()" style="width:100%;padding:14px;border-radius:10px;border:none;background:#7dcfaa;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Accedi ✓</button>
+    <button onclick="verificaOTP()" style="width:100%;padding:14px;border-radius:10px;border:none;background:#7dcfaa;color:#0f1115;font-family:&#39;Bebas Neue&#39;,cursive;font-size:18px;letter-spacing:2px;cursor:pointer;">Accedi ✓</button>
   </div>
 </div>
 
@@ -78,6 +78,10 @@ body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height
       <div class="modal-section-title">Sicurezza dei dati</div>
       <p>Tutti i dati inseriti vengono salvati in modo sicuro su Google Sheets, accessibili solo al personale autorizzato tramite codice operatore personale e sistema di autenticazione a doppio fattore per l'accesso al portale. Nessun dato viene condiviso con terzi.</p>
     </div>
+    <div class="modal-section">
+      <div class="modal-section-title">PIN Personale</div>
+      <p>Ogni operatore può impostare un <strong style="color:#f5a623;">PIN personale</strong> all'interno di ogni app tramite l'icona 🔑. Il PIN personale viene salvato solo sul proprio dispositivo e non è visibile a nessun altro, nemmeno all'amministratore. In caso di cambio dispositivo, utilizzare il PIN originale assegnato dall'amministratore.</p>
+    </div>
 
     <div class="modal-section">
       <div class="modal-section-title">Un lavoro lungo e impegnativo</div>
@@ -95,11 +99,11 @@ body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height
       📧 <a href="mailto:riccardo.borrini@provincia.cremona.it">riccardo.borrini@provincia.cremona.it</a></p>
     </div>
 
-    <button class="modal-close" onclick="document.getElementById('modalPresentazione').classList.remove('show')">Chiudi</button>
+    <button class="modal-close" onclick="document.getElementById(&#39;modalPresentazione&#39;).classList.remove(&#39;show&#39;)">Chiudi</button>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="./PP Cremona — App_files/email.min.js.download"></script>
 <script>
 emailjs.init('j7o63OAmMZx3cuMUO');
 const EMAILJS_SERVICE='service_ir5rrso';
@@ -153,46 +157,46 @@ document.addEventListener('DOMContentLoaded',function(){
 
   <div class="app-list">
 
-    <button class="btn-presentazione" onclick="document.getElementById('modalPresentazione').classList.add('show')">
+    <button class="btn-presentazione" onclick="document.getElementById(&#39;modalPresentazione&#39;).classList.add(&#39;show&#39;)">
       ℹ️ &nbsp;Presentazione applicazioni
     </button>
 
-    <a class="app-btn" href="flotta.html">
+    <a class="app-btn" href="https://palvareto.github.io/flotta.html">
       <span class="app-icon">🚗</span>
       <div class="app-info"><strong>Registro Flotta</strong><span>Chilometri e rifornimenti</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="corvidi.html" style="border-color:rgba(240,208,96,0.3);">
+    <a class="app-btn" href="https://palvareto.github.io/corvidi.html" style="border-color:rgba(240,208,96,0.3);">
       <span class="app-icon">🐦‍⬛</span>
       <div class="app-info"><strong>Controllo Corvidi</strong><span>Cornacchia · Gazza · Piccione · Ibis · Daino...</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="piccioni.html" style="border-color:rgba(245,166,35,0.3);">
+    <a class="app-btn" href="https://palvareto.github.io/piccioni.html" style="border-color:rgba(245,166,35,0.3);">
       <span class="app-icon">🐦</span>
       <div class="app-info"><strong>Controllo Piccioni</strong><span>Registro abbattimenti piccioni</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="selvatici.html" style="border-color:rgba(45,90,39,0.6);">
+    <a class="app-btn" href="https://palvareto.github.io/selvatici.html" style="border-color:rgba(45,90,39,0.6);">
       <span class="app-icon">🦌</span>
       <div class="app-info"><strong>Registro Selvatici</strong><span>Zooprofilassi e CRAS</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="servizio.html" style="border-color:rgba(26,26,46,0.8);">
+    <a class="app-btn" href="https://palvareto.github.io/servizio.html" style="border-color:rgba(26,26,46,0.8);">
       <span class="app-icon">📋</span>
       <div class="app-info"><strong>Report Servizio</strong><span>Report giornaliero di servizio</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="turni.html" style="border-color:rgba(39,174,96,0.4);">
+    <a class="app-btn" href="https://palvareto.github.io/turni.html" style="border-color:rgba(39,174,96,0.4);">
       <span class="app-icon">📅</span>
       <div class="app-info"><strong>Turni PP Cremona</strong><span>Calendario turni mensile</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="stampa-flotta.html" style="border-color:rgba(245,166,35,0.3);">
+    <a class="app-btn" href="https://palvareto.github.io/stampa-flotta.html" style="border-color:rgba(245,166,35,0.3);">
       <span class="app-icon">🖨️</span>
       <div class="app-info"><strong>Stampa Flotta</strong><span>Schede viaggio e carburante</span></div>
       <span class="arrow">›</span>
     </a>
-    <a class="app-btn" href="reset.html" style="border-color:rgba(231,76,60,0.3);">
+    <a class="app-btn" href="https://palvareto.github.io/reset.html" style="border-color:rgba(231,76,60,0.3);">
       <span class="app-icon">🧹</span>
       <div class="app-info"><strong>Reset Dati</strong><span>Cancella dati locali e PIN salvati</span></div>
       <span class="arrow">›</span>
@@ -200,5 +204,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
   </div>
   <div class="footer">POLIZIA PROVINCIALE DI CREMONA</div>
-</body>
-</html>
+
+
+</body></html>
