@@ -183,7 +183,7 @@ select.modal-input{-webkit-appearance:none;appearance:none}
   <button onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.add(&#39;show&#39;)" style="background:transparent;border:1px solid rgba(26,115,232,0.4);border-radius:8px;color:#1a73e8;font-size:11px;padding:4px 8px;cursor:pointer;margin-right:8px;">ℹ️</button>
 <div class="hright" style="cursor:pointer" onclick="showPinScreen()" title="Cambia operatore">
     <span id="operatoreBadge" style="font-size:11px">👤 BORRINI</span>
-    <div class="sync-dot ok" id="syncDot"></div><span id="syncTxt">SINCRONIZZATO</span>
+    <div class="sync-dot err" id="syncDot"></div><span id="syncTxt">ERRORE CARICAMENTO</span>
   </div>
 </header>
 <div style="padding:12px 16px 6px;display:flex;gap:8px;">
@@ -196,9 +196,9 @@ select.modal-input{-webkit-appearance:none;appearance:none}
 </div>
 <div id="view-cal" style="display: none;">
   <div class="nav-mese">
-    <button class="nav-mese-btn" onclick="cambioMese(-1)">&#8249; Prec</button>
+    <button class="nav-mese-btn" onclick="cambioMese(-1)">‹ Prec</button>
     <span class="nav-mese-label" id="navMeseLabel">GIUGNO 2026</span>
-    <button class="nav-mese-btn" onclick="cambioMese(1)">Succ &#8250;</button>
+    <button class="nav-mese-btn" onclick="cambioMese(1)">Succ ›</button>
   </div>
   <div class="cal-wrap">
     <div class="cal-header">
@@ -297,7 +297,7 @@ select.modal-input{-webkit-appearance:none;appearance:none}
 // ============================================================
 // CONFIGURAZIONE - sostituisci con il tuo URL Apps Script
 // ============================================================
-var API_URL = 'https://script.google.com/macros/s/AKfycbw5-5DY787CUxbYPnFxPwLvxmy7dem_MY5pduANyT4MH1gGfdt3MH0zUqpxJxFLF-DE/exec';
+var API_URL = 'https://script.google.com/macros/s/AKfycbyVBPIGRRJigXuoQsHialZiFugbN-jKRM-rB6jUnKHw7w52AE_H9rVr20TYxE-sazMs/exec';
 
 var SCHED = null;
 var PIN_MAP = {};
