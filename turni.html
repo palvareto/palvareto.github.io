@@ -381,13 +381,13 @@ function loadData(anno, mese){
           currentDay = null;
         }
       }
-      // Mostra sempre il calendario quando i dati sono pronti
+      buildCal();
+      // Mostra il calendario (non il giorno) dopo caricamento dati
       document.getElementById('view-cal').style.display = 'block';
       document.getElementById('view-day').style.display = 'none';
       document.getElementById('view-archivio').style.display = 'none';
       document.getElementById('tab-cal').className = 'nav-tab active';
       document.getElementById('tab-archivio').className = 'nav-tab';
-      buildCal();
       // Se stiamo guardando il mese corrente, vai al giorno di oggi
       if(anno === currentYear && mese === currentMonth){
         var primoGiorno = anno+'-'+(mese<10?'0'+mese:mese)+'-01';
@@ -564,8 +564,16 @@ function moveDay(dir){
   var ultimoGiorno=viewingYear+'-'+mv+'-'+pad(new Date(viewingYear,viewingMonth,0).getDate());
   if(nv<primoGiorno||nv>ultimoGiorno) return;
   currentDay=nv;
-  buildCal();
   showDay(currentDay);
+  // Aggiorna solo la cella selezionata nel calendario senza riscrivere tutto
+  var cells = document.querySelectorAll('.cal-day.selected');
+  for(var ci=0;ci<cells.length;ci++) cells[ci].classList.remove('selected');
+  var allCells = document.querySelectorAll('.cal-day');
+  for(var ci=0;ci<allCells.length;ci++){
+    if(allCells[ci].querySelector && allCells[ci].getAttribute('data-date')===nv){
+      allCells[ci].classList.add('selected');
+    }
+  }
 }
 
 // ── MODAL EDIT ────────────────────────────────────────────
