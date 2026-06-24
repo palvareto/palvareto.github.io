@@ -202,7 +202,7 @@ select.modal-input{-webkit-appearance:none;appearance:none}
   </div>
   <div class="cal-wrap">
     <div class="cal-header">
-      <div class="cal-title">GIUGNO 2026</div>
+      <div class="cal-title" id="cal-title">GIUGNO 2026</div>
       <div class="cal-sub">Tocca un giorno per vedere i turni</div>
     </div>
     <div class="legend">
@@ -237,7 +237,7 @@ select.modal-input{-webkit-appearance:none;appearance:none}
     <div class="sections" id="day-grid"><div class="section sec-M"><div class="section-header"><span>☀️ MATTINA</span><span class="section-count">4</span></div><div class="section-grid"><div class="card cK" style="animation-delay: 0s;"><div class="aname">Cambiati<span class="edit-icon">✏️</span></div><span class="sbadge sK">C/O</span><div class="sdetail"><span class="rep-tag">🔔 REPERIBILE</span></div></div><div class="card cM" style="animation-delay: 0.025s;"><div class="aname">Trentarossi<span class="edit-icon">✏️</span></div><span class="sbadge sM">7/13</span><div class="sdetail">⏱ 07:00–13:00<br>📋 A/U</div></div><div class="card cM" style="animation-delay: 0.05s;"><div class="aname">Viviani<span class="edit-icon">✏️</span></div><span class="sbadge sM">7/13</span><div class="sdetail">⏱ 07:00–13:00<br>📋 A</div></div><div class="card cM" style="animation-delay: 0.075s;"><div class="aname">Colla<span class="edit-icon">✏️</span></div><span class="sbadge sM">7/13</span><div class="sdetail">⏱ 07:00–13:00<br>📋 U<br><span class="rep-tag">🔔 REPERIBILE</span></div></div></div></div><div class="section sec-P"><div class="section-header"><span>🌇 POMERIGGIO</span><span class="section-count">4</span></div><div class="section-grid"><div class="card cP" style="animation-delay: 0.1s;"><div class="aname">Preani<span class="edit-icon">✏️</span></div><span class="sbadge sP">13/19</span><div class="sdetail">⏱ 13:00–19:00<br>📋 U</div></div><div class="card cP" style="animation-delay: 0.125s;"><div class="aname">Rizzi<span class="edit-icon">✏️</span></div><span class="sbadge sP">13/19</span><div class="sdetail">⏱ 13:00–19:00<br>📋 U</div></div><div class="card cP" style="animation-delay: 0.15s;"><div class="aname">Borrini<span class="edit-icon">✏️</span></div><span class="sbadge sP">13/19</span><div class="sdetail">⏱ 13:00–19:00<br>📋 A</div></div><div class="card cP" style="animation-delay: 0.175s;"><div class="aname">Arisi<span class="edit-icon">✏️</span></div><span class="sbadge sP">13/19</span><div class="sdetail">⏱ 13:00–19:00<br>📋 A</div></div></div></div><div class="section sec-F"><div class="section-header"><span>🏖️ FERIE</span><span class="section-count">2</span></div><div class="section-grid"><div class="card cF" style="animation-delay: 0.2s;"><div class="aname">Bandera<span class="edit-icon">✏️</span></div><span class="sbadge sF">FERIE</span><div class="sdetail">↩ Rientro Lun 29/06 — C/O</div></div><div class="card cF" style="animation-delay: 0.225s;"><div class="aname">Guarneri<span class="edit-icon">✏️</span></div><span class="sbadge sF">FERIE</span><div class="sdetail">↩ Rientro Lun 29/06 — Mattina (07:00–13:00)</div></div></div></div></div>
   </div>
 </div>
-<footer>TURNI PP CREMONA · GIUGNO 2026 · TOCCA UNA CARD PER MODIFICARE</footer>
+<footer id="footer-txt">TURNI PP CREMONA · TOCCA UNA CARD PER MODIFICARE</footer>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
@@ -374,13 +374,19 @@ function loadData(anno, mese){
       PIN_MAP = data.pinMap || {};
       setSync('ok','SINCRONIZZATO');
       aggiornaNavMese();
-      // Resetta currentDay se appartiene a un mese diverso da quello che stiamo visualizzando
+      // Resetta currentDay se appartiene a un mese diverso
       if(currentDay) {
         var cdParts = currentDay.split('-');
         if(parseInt(cdParts[0]) !== anno || parseInt(cdParts[1]) !== mese) {
           currentDay = null;
         }
       }
+      // Mostra sempre il calendario quando i dati sono pronti
+      document.getElementById('view-cal').style.display = 'block';
+      document.getElementById('view-day').style.display = 'none';
+      document.getElementById('view-archivio').style.display = 'none';
+      document.getElementById('tab-cal').className = 'nav-tab active';
+      document.getElementById('tab-archivio').className = 'nav-tab';
       buildCal();
       // Se stiamo guardando il mese corrente, vai al giorno di oggi
       if(anno === currentYear && mese === currentMonth){
@@ -389,8 +395,6 @@ function loadData(anno, mese){
         if(todayStr >= primoGiorno && todayStr <= ultimoGiorno){
           currentDay = todayStr; buildCal(); showDay(todayStr);
         }
-      } else if(currentDay) {
-        showDay(currentDay);
       }
       // Login PIN
       var savedPin = null;
@@ -425,7 +429,7 @@ function buildCal(){
   for(var d=1;d<=daysInMonth;d++){
     var mv = viewingMonth<10?'0'+viewingMonth:String(viewingMonth);
     var dv=viewingYear+'-'+mv+'-'+pad(d);
-    var dow=new Date(2026,5,d).getDay();
+    var dow=new Date(viewingYear,viewingMonth-1,d).getDay();
     var wd=GG_IT[dow].substring(0,3).toUpperCase();
     var cell=document.createElement('div');
     cell.className='cal-day'+(dv===todayStr?' today':'')+(dv===currentDay?' selected':'')+(FESTE[dv]?' festa':'');
@@ -685,6 +689,8 @@ document.getElementById('pin-input').addEventListener('keydown',function(e){
 function aggiornaNavMese(){
   var label = MESI_IT[viewingMonth-1].toUpperCase() + ' ' + viewingYear;
   document.getElementById('navMeseLabel').textContent = label;
+  var ct = document.getElementById('cal-title');
+  if(ct) ct.textContent = label;
 }
 
 function cambioMese(dir){
@@ -732,8 +738,7 @@ function buildArchivio(){
     (function(y,m){
       card.onclick = function(){
         viewingYear = y; viewingMonth = m;
-        switchTab('cal');
-        loadData(y, m);
+        loadData(y, m); // switchTab('cal') viene chiamato dentro loadData nel .then()
       };
     })(item.y, item.m);
     grid.appendChild(card);
