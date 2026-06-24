@@ -552,7 +552,10 @@ function moveDay(dir){
   var p=currentDay.split('-');
   var d=new Date(+p[0],+p[1]-1,+p[2]+dir);
   var nv=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-  if(nv<'2026-06-01'||nv>'2026-06-30') return;
+  var mv=viewingMonth<10?'0'+viewingMonth:String(viewingMonth);
+  var primoGiorno=viewingYear+'-'+mv+'-01';
+  var ultimoGiorno=viewingYear+'-'+mv+'-'+pad(new Date(viewingYear,viewingMonth,0).getDate());
+  if(nv<primoGiorno||nv>ultimoGiorno) return;
   currentDay=nv;
   buildCal();
   showDay(currentDay);
