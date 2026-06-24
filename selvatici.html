@@ -631,7 +631,7 @@ function salvaNuovoPin() {
     localStorage.setItem('selvatici_pin_personale_' + utenteLoggato, nuovo);
   } catch(e) {}
   document.getElementById('modalCambiaPin').style.display='none';
-  alert('✅ PIN cambiato!\nNuovo PIN: ' + nuovo + '\nSalvato solo su questo dispositivo.');
+  toast('✅ PIN cambiato! Nuovo PIN: ' + nuovo);
 }
 
 function cambiUtente() {
