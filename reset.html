@@ -66,7 +66,7 @@ h1{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;color:#f5a
 </div>
 
 <button class="btn btn-reset" onclick="resetTutto()">🧹 Cancella tutti i dati</button>
-<div class="result" id="result">✅ Dati cancellati! Verrai reindirizzato al portale tra 3 secondi per effettuare un nuovo accesso...</div>
+<div class="result" id="result">✅ Dati cancellati! Ora torna al portale e accedi di nuovo con password e OTP.</div>
 <button class="btn btn-back" onclick="window.location.href=&#39;index.html&#39;">← Torna al portale</button>
 
 <script>
@@ -126,10 +126,6 @@ async function resetTutto(){
   setBadge('s2','✅ Cancellato','badge-ok');
 
   document.getElementById('result').classList.add('show');
-  // Reindirizza al portale dopo 3 secondi per forzare nuovo login
-  setTimeout(function(){
-    window.location.href = 'portale.html';
-  }, 3000);
 }
 
 function setBadge(id, text, cls){
