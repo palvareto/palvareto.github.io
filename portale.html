@@ -153,6 +153,11 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('otpCode').addEventListener('keydown',function(e){if(e.key==='Enter')verificaOTP();});
   // Controlla accesso al caricamento
   function controllaAccesso(){
+    // Se arrivi dal reset, cancella il token e rimuovi il parametro dall'URL
+    if(window.location.search.indexOf('reset=1') !== -1){
+      try { localStorage.removeItem('pp_accesso_v1'); } catch(e){}
+      window.history.replaceState({}, '', window.location.pathname);
+    }
     var ok = false;
     try { ok = localStorage.getItem('pp_accesso_v1') === 'ok'; } catch(e){}
     var overlay = document.getElementById('loginOverlay');
