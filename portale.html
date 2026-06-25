@@ -148,7 +148,26 @@ function verificaOTP(){
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('pwdAccesso').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAccesso();});
   document.getElementById('otpCode').addEventListener('keydown',function(e){if(e.key==='Enter')verificaOTP();});
-  if(localStorage.getItem('pp_accesso_v1')==='ok'){document.getElementById('loginOverlay').style.display='none';}
+  // Controlla accesso al caricamento
+  if(localStorage.getItem('pp_accesso_v1')==='ok'){
+    document.getElementById('loginOverlay').style.display='none';
+  } else {
+    document.getElementById('loginOverlay').style.display='flex';
+  }
+  // Ricontrolla ogni volta che la pagina torna in primo piano
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'visible'){
+      if(localStorage.getItem('pp_accesso_v1') !== 'ok'){
+        document.getElementById('loginOverlay').style.display='flex';
+      }
+    }
+  });
+  // Ricontrolla ogni volta che la finestra torna in focus
+  window.addEventListener('focus', function(){
+    if(localStorage.getItem('pp_accesso_v1') !== 'ok'){
+      document.getElementById('loginOverlay').style.display='flex';
+    }
+  });
 });
 </script>
 
