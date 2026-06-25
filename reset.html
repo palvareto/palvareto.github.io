@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0038)https://palvareto.github.io/reset.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reset — PP Cremona</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link href="./Reset — PP Cremona_files/css2" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
@@ -49,7 +49,7 @@ h1{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;color:#f5a
 <div class="header">
   <div class="icon">🧹</div>
   <h1>Reset Dati App</h1>
-<button onclick="document.getElementById('modalIstruzioni').classList.add('show')" style="display:block;width:100%;padding:11px;background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3);border-radius:10px;color:#e74c3c;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:20px;">ℹ️ &nbsp;Istruzioni</button>
+<button onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.add(&#39;show&#39;)" style="display:block;width:100%;padding:11px;background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3);border-radius:10px;color:#e74c3c;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:20px;">ℹ️ &nbsp;Istruzioni</button>
   <div class="sub">Polizia Provinciale di Cremona</div>
 </div>
 
@@ -59,15 +59,15 @@ h1{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;color:#f5a
 
 <div class="card">
   <div class="card-title">🔍 Stato dati locali</div>
-  <div class="status-row"><span class="status-label">Login portale (OTP)</span><span class="badge badge-wait" id="s1">—</span></div>
-  <div class="status-row"><span class="status-label">PIN operatore</span><span class="badge badge-wait" id="s2">—</span></div>
-  <div class="status-row"><span class="status-label">Cache app (Service Worker)</span><span class="badge badge-wait" id="s3">—</span></div>
-  <div class="status-row"><span class="status-label">Dati temporanei</span><span class="badge badge-wait" id="s4">—</span></div>
+  <div class="status-row"><span class="status-label">Login portale (OTP)</span><span class="badge badge-wait" id="s1">Assente</span></div>
+  <div class="status-row"><span class="status-label">PIN operatore</span><span class="badge badge-wait" id="s2">Assente</span></div>
+  <div class="status-row"><span class="status-label">Cache app (Service Worker)</span><span class="badge badge-wait" id="s3">Nessuno</span></div>
+  <div class="status-row"><span class="status-label">Dati temporanei</span><span class="badge badge-wait" id="s4">Vuoti</span></div>
 </div>
 
 <button class="btn btn-reset" onclick="resetTutto()">🧹 Cancella tutti i dati</button>
-<div class="result" id="result">✅ Dati cancellati! Torna al portale e accedi di nuovo.</div>
-<button class="btn btn-back" onclick="window.location.href='index.html'">← Torna al portale</button>
+<div class="result" id="result">✅ Dati cancellati! Verrai reindirizzato al portale tra 3 secondi per effettuare un nuovo accesso...</div>
+<button class="btn btn-back" onclick="window.location.href=&#39;index.html&#39;">← Torna al portale</button>
 
 <script>
 // Mostra stato attuale
@@ -126,6 +126,10 @@ async function resetTutto(){
   setBadge('s2','✅ Cancellato','badge-ok');
 
   document.getElementById('result').classList.add('show');
+  // Reindirizza al portale dopo 3 secondi per forzare nuovo login
+  setTimeout(function(){
+    window.location.href = 'portale.html';
+  }, 3000);
 }
 
 function setBadge(id, text, cls){
@@ -150,9 +154,10 @@ function setBadge(id, text, cls){
       <div class="istr-title">Quando usarla</div>
       <div class="istr-text">
         • Hai cambiato dispositivo e vuoi configurarlo da zero<br>
-        • Il tuo PIN non viene riconosciuto<br>
-        • Hai ricevuto un nuovo codice operatore<br>
-        • Un'app non si comporta correttamente
+        • Il tuo PIN personale o quello originale non viene riconosciuto<br>
+        • Hai ricevuto un nuovo codice operatore dall'amministratore<br>
+        • Un'app non si comporta correttamente<br>
+        • Vuoi forzare un nuovo accesso al portale
       </div>
     </div>
 
@@ -160,6 +165,7 @@ function setBadge(id, text, cls){
       <div class="istr-title">Cosa viene cancellato</div>
       <div class="istr-text">
         <strong>✗</strong> Codice operatore salvato sul dispositivo<br>
+        <strong>✗</strong> PIN personali impostati da te<br>
         <strong>✗</strong> PIN sincronizzati dal server<br>
         <strong>✗</strong> Token di accesso al portale<br>
         <strong>✗</strong> Tutti i dati memorizzati localmente
@@ -176,9 +182,11 @@ function setBadge(id, text, cls){
     <div class="istr-section">
       <div class="istr-title">Come si usa</div>
       <div class="istr-text">
-        1. Tocca <strong>Reset Dati</strong><br>
-        2. Conferma l'operazione<br>
-        3. Al prossimo accesso verrà richiesto nuovamente il codice operatore
+        1. Tocca <strong>🧹 Cancella tutti i dati</strong><br>
+        2. Attendi 3 secondi — verrai reindirizzato automaticamente al portale<br>
+        3. Inserisci password e codice OTP per rientrare<br>
+        4. In ogni app reinserisci il tuo <strong>PIN originale</strong> assegnato dall'amministratore<br>
+        5. Dopo puoi reimpostare il tuo PIN personale con il bottone 🔑
       </div>
     </div>
 
@@ -188,8 +196,9 @@ function setBadge(id, text, cls){
       📧 riccardo.borrini@provincia.cremona.it
     </div>
 
-    <button class="btn-istr-close" onclick="document.getElementById('modalIstruzioni').classList.remove('show')">Chiudi</button>
+    <button class="btn-istr-close" onclick="document.getElementById(&#39;modalIstruzioni&#39;).classList.remove(&#39;show&#39;)">Chiudi</button>
   </div>
 </div>
-</body>
-</html>
+
+
+</body></html>
