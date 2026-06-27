@@ -152,37 +152,13 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('pwdAccesso').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAccesso();});
   document.getElementById('otpCode').addEventListener('keydown',function(e){if(e.key==='Enter')verificaOTP();});
   // Controlla accesso al caricamento
-  function controllaAccesso(resetStep){
-    // Se arrivi dal reset, cancella il token e rimuovi il parametro dall'URL
-    if(window.location.search.indexOf('reset=1') !== -1){
-      try { localStorage.removeItem('pp_accesso_v1'); } catch(e){}
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-    var ok = false;
-    try { ok = localStorage.getItem('pp_accesso_v1') === 'ok'; } catch(e){}
-    var overlay = document.getElementById('loginOverlay');
-    if(ok){
-      overlay.style.display='none';
-    } else {
-      // Mostra overlay solo se non è già visibile o se resetStep=true
-      if(overlay.style.display !== 'flex' || resetStep){
-        overlay.style.display='flex';
-        // Resetta ai campi iniziali solo al primo caricamento
-        if(resetStep){
-          try { document.getElementById('pwdAccesso').value=''; } catch(e){}
-          try { document.getElementById('otpCode').value=''; } catch(e){}
-          try { document.getElementById('stepPwd').style.display='block'; } catch(e){}
-          try { document.getElementById('stepOtp').style.display='none'; } catch(e){}
-        }
-      }
-    }
+  var ok = false;
+  try { ok = localStorage.getItem('pp_accesso_v1') === 'ok'; } catch(e){}
+  if(ok){
+    document.getElementById('loginOverlay').style.display='none';
+  } else {
+    document.getElementById('loginOverlay').style.display='flex';
   }
-  controllaAccesso(true);
-  document.addEventListener('visibilitychange', function(){
-    if(document.visibilityState==='visible') controllaAccesso(false);
-  });
-  window.addEventListener('focus', function(){ controllaAccesso(false); });
-  window.addEventListener('pageshow', function(){ controllaAccesso(false); });
 });
 </script>
 
