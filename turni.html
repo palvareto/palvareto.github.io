@@ -864,14 +864,22 @@ function showArchivio(){ switchTab('archivio'); }
 function buildArchivio(){
   var grid = document.getElementById('mesiGrid');
   grid.innerHTML = '';
-  // Genera lista mesi dal primo mese disponibile (gen 2026) fino al mese corrente
-  var startYear = 2026, startMonth = 1;
-  var endYear = currentYear, endMonth = currentMonth;
   var mesi = [];
-  var y = startYear, m = startMonth;
-  while(y < endYear || (y === endYear && m <= endMonth)){
-    mesi.push({y:y, m:m});
-    m++; if(m>12){m=1;y++;}
+  // Usa mesiDisponibili dal server se disponibili
+  if(SCHED && SCHED.mesiDisponibili && SCHED.mesiDisponibili.length > 0){
+    SCHED.mesiDisponibili.forEach(function(key){
+      var pp = key.split('-');
+      mesi.push({y: parseInt(pp[0]), m: parseInt(pp[1])});
+    });
+  } else {
+    // Fallback: genera da gen 2026 a mese corrente
+    var startYear = 2026, startMonth = 1;
+    var endYear = currentYear, endMonth = currentMonth;
+    var y = startYear, m = startMonth;
+    while(y < endYear || (y === endYear && m <= endMonth)){
+      mesi.push({y:y, m:m});
+      m++; if(m>12){m=1;y++;}
+    }
   }
   // Mostra dal più recente
   mesi.reverse();
