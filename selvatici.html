@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://palvareto.github.io/selvatici.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a3a15">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Selvatici">
+<title>Registro Selvatici</title>
+<link href="./Registro Selvatici_files/css2" rel="stylesheet">
+<style>
+:root{--verde:#2d5a27;--verde2:#4a8c3f;--scuro:#1a3a15;--ocra:#c8922a;--ocra2:#e8a830;--crema:#f5f0e8;--rosso:#c0392b;--azzurro:#2980b9;--bg:#1c2b1a;--grigio:rgba(255,255,255,0.06);--bordo:rgba(255,255,255,0.12);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--crema);max-width:520px;margin:0 auto;min-height:100vh;}
+.header{background:linear-gradient(135deg,var(--scuro),#0f1f0d);padding:13px 16px 10px;border-bottom:3px solid var(--ocra);text-align:center;position:sticky;top:0;z-index:10;}
+.header-icon{font-size:24px;line-height:1;}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--crema);line-height:1;}
+.header h1 span{color:var(--ocra2);}
+.header p{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(245,240,232,0.45);text-transform:uppercase;}
+.screen{display:none;padding:16px;}
+.screen.active{display:block;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px;margin-top:12px;}
+.stat-card{background:var(--grigio);border:1px solid rgba(200,146,42,0.3);border-radius:10px;padding:12px 8px;text-align:center;}
+.stat-card .num{font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;color:var(--ocra2);}
+.stat-card .label{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(245,240,232,0.55);margin-top:3px;font-family:'Barlow Condensed',sans-serif;}
+.stat-card.total{border-color:var(--ocra);background:rgba(200,146,42,0.1);}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(245,240,232,0.4);margin-bottom:10px;}
+.main-buttons{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.btn-main{display:flex;align-items:center;gap:14px;padding:18px 16px;border:none;border-radius:14px;cursor:pointer;text-align:left;width:100%;transition:opacity 0.15s;}
+.btn-main:hover{opacity:0.85;}
+.btn-main.zoo{background:linear-gradient(135deg,#2d5a27,#1a3a15);border:1px solid rgba(74,140,63,0.5);}
+.btn-main.cras{background:linear-gradient(135deg,#1a3a5c,#0f2340);border:1px solid rgba(41,128,185,0.5);}
+.btn-main-icon{font-size:34px;flex-shrink:0;}
+.btn-main-text strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;line-height:1;color:var(--crema);}
+.btn-main-text span{font-size:11px;color:rgba(245,240,232,0.5);font-family:'Barlow Condensed',sans-serif;}
+.btn-main-arrow{margin-left:auto;font-size:20px;opacity:0.35;}
+.btn-report{width:100%;padding:13px;background:rgba(200,146,42,0.1);border:1px solid rgba(200,146,42,0.3);border-radius:10px;color:var(--ocra2);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px;display:block;}
+.btn-report:hover{background:rgba(200,146,42,0.2);}
+.btn-sheet{width:100%;padding:13px;background:rgba(41,128,185,0.1);border:1px solid rgba(41,128,185,0.3);border-radius:10px;color:#7dc4f0;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:block;}
+.btn-sheet:hover{background:rgba(41,128,185,0.2);}
+.install-banner{display:none;margin-bottom:14px;padding:12px 14px;background:rgba(200,146,42,0.12);border:1px solid var(--ocra);border-radius:10px;align-items:center;gap:10px;margin-top:12px;}
+.install-banner.show{display:flex;}
+.install-banner span{font-family:'Barlow Condensed',sans-serif;font-size:13px;flex:1;}
+.install-banner button{padding:8px 14px;background:var(--ocra2);border:none;border-radius:6px;color:#1a1a1a;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.form-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-top:12px;}
+.btn-back{background:var(--grigio);border:1px solid var(--bordo);border-radius:8px;color:var(--crema);width:38px;height:38px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.form-header-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;line-height:1.1;}
+.form-header-title span{display:block;font-family:'Barlow',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.35);font-weight:300;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.5);margin-bottom:5px;}
+.form-label .req{color:var(--ocra);}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--grigio);border:1px solid var(--bordo);border-radius:8px;color:var(--crema);font-family:'Barlow',sans-serif;font-size:15px;padding:11px 13px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--ocra);}
+.form-select option{background:#1c2b1a;}
+.form-textarea{resize:none;height:80px;}
+input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.7);}
+.agenti-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
+.agente-btn{padding:9px 6px;border-radius:8px;border:1px solid var(--bordo);background:transparent;color:rgba(245,240,232,0.45);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;cursor:pointer;text-align:center;}
+.agente-btn.sel{background:rgba(200,146,42,0.25);border-color:var(--ocra);color:var(--ocra2);}
+.btn-gestisci{width:100%;padding:9px;background:rgba(200,146,42,0.08);border:1px dashed rgba(200,146,42,0.3);border-radius:8px;color:rgba(245,240,232,0.4);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:6px;}
+.btn-gestisci:hover{background:rgba(200,146,42,0.15);color:var(--ocra2);}
+.tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tipo-btn{padding:10px;border-radius:8px;border:1px solid var(--bordo);background:transparent;color:rgba(245,240,232,0.45);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-align:center;}
+.tipo-btn.active{background:rgba(200,146,42,0.2);border-color:var(--ocra);color:var(--ocra2);}
+.tipo-btn.active-blue{background:rgba(41,128,185,0.2);border-color:var(--azzurro);color:#7dc4f0;}
+.toggle-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.toggle-btn{padding:11px 8px;border-radius:8px;border:1px solid var(--bordo);background:transparent;color:rgba(245,240,232,0.45);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;}
+.toggle-btn.active-zoo{background:rgba(45,90,39,0.5);border-color:var(--verde2);color:#7dcf70;}
+.toggle-btn.active-lib{background:rgba(41,128,185,0.3);border-color:var(--azzurro);color:#7dc4f0;}
+.liberazione-fields{display:none;margin-top:10px;padding:12px;background:rgba(41,128,185,0.07);border:1px solid rgba(41,128,185,0.2);border-radius:8px;}
+.liberazione-fields.visible{display:block;}
+.num-selector{display:flex;align-items:center;gap:10px;}
+.num-selector-btn{width:40px;height:40px;border:1px solid var(--bordo);background:var(--grigio);border-radius:8px;color:var(--crema);font-size:22px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.num-selector-val{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ocra2);min-width:40px;text-align:center;}
+.btn-submit{width:100%;padding:15px;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;margin-top:18px;margin-bottom:30px;}
+.btn-submit:hover{opacity:0.85;}
+.btn-submit.zoo{background:linear-gradient(135deg,var(--verde2),var(--scuro));color:var(--crema);}
+.btn-submit.cras{background:linear-gradient(135deg,#2980b9,#1a5c8a);color:var(--crema);}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.tab-btn{padding:10px;border-radius:8px;border:1px solid var(--bordo);background:transparent;color:rgba(245,240,232,0.4);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;}
+.tab-btn.active{background:rgba(200,146,42,0.15);border-color:var(--ocra);color:var(--ocra2);}
+.record-card{background:var(--grigio);border:1px solid var(--bordo);border-radius:10px;padding:13px;margin-bottom:8px;}
+.record-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
+.record-animale{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;}
+.record-data{font-size:10px;color:rgba(245,240,232,0.4);text-align:right;}
+.record-detail{font-size:12px;color:rgba(245,240,232,0.55);line-height:1.7;}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;margin-top:6px;}
+.badge-naturale{background:rgba(100,100,100,0.3);color:#aaa;}
+.badge-investito{background:rgba(192,57,43,0.25);color:#e07060;}
+.badge-abbattuto{background:rgba(200,146,42,0.25);color:var(--ocra2);}
+.badge-consegnato{background:rgba(41,128,185,0.25);color:#7dc4f0;}
+.badge-liberato{background:rgba(45,90,39,0.4);color:#7dcf70;}
+.empty-state{text-align:center;padding:40px 20px;color:rgba(245,240,232,0.28);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+.empty-state div{font-size:38px;margin-bottom:10px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:#27ae60;color:white;padding:11px 22px;border-radius:30px;font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:1px;z-index:1000;transition:transform 0.3s;white-space:nowrap;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--rosso);}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+.loading-overlay.show{display:flex;}
+.spinner{width:42px;height:42px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--ocra2);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;font-size:12px;color:rgba(255,255,255,0.6);text-transform:uppercase;}
+
+.modal-overlay.show{display:flex;}
+.modal-box{background:#1a3a15;border:1px solid var(--ocra);border-radius:16px;padding:24px;max-width:340px;width:100%;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:12px;}
+.modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.modal-btn{padding:11px;border:none;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;}
+.modal-btn.cancel{background:var(--grigio);border:1px solid var(--bordo);color:var(--crema);}
+.modal-btn.confirm{background:var(--ocra2);color:#1a1a1a;font-weight:700;}
+.agenti-manager-list{max-height:200px;overflow-y:auto;margin:10px 0;}
+.agenti-manager-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:13px;}
+.agenti-manager-item:last-child{border-bottom:none;}
+.btn-del{background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.4);border-radius:6px;color:#e07060;cursor:pointer;font-size:12px;padding:3px 8px;font-family:'Barlow Condensed',sans-serif;}
+.agenti-add-row{display:flex;gap:8px;margin-top:10px;}
+.btn-add{padding:9px 12px;background:rgba(74,140,63,0.2);border:1px solid rgba(74,140,63,0.5);border-radius:8px;color:#7dcf70;font-family:'Barlow Condensed',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.modal-istruzioni{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8888;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.modal-istruzioni.show{display:flex;}
+.modal-istr-box{background:#1a2e1a;border:1px solid rgba(39,174,96,0.4);border-radius:16px;padding:24px 20px;max-width:480px;width:100%;margin:auto;}
+.modal-istr-box h2{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#7dcfaa;margin-bottom:2px;}
+.modal-istr-box h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(125,207,170,0.6);margin-bottom:16px;text-transform:uppercase;}
+.istr-section{margin-bottom:16px;}
+.istr-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#7dcfaa;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid rgba(125,207,170,0.2);}
+.istr-text{font-size:16px;color:rgba(232,234,240,0.7);line-height:1.7;}
+.istr-text strong{color:#7dcfaa;}
+.istr-firma{font-size:13px;color:rgba(232,234,240,0.4);margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);line-height:1.7;}
+.btn-istr-close{width:100%;padding:12px;border:none;border-radius:10px;background:#27ae60;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;margin-top:12px;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:#1a3a15;border:1px solid var(--ocra2);border-radius:16px;padding:24px;max-width:300px;width:100%;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:12px;}
+.modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
+</style>
+<link rel="manifest" href="blob:https://palvareto.github.io/ad2ee047-f8b5-40f4-bbb3-23df5505fe26"><link rel="manifest" href="blob:https://palvareto.github.io/5b36a31d-f08c-4720-bcb8-e5045427e616"><link rel="manifest" href="blob:https://palvareto.github.io/56337bb2-ce80-424c-938a-d2fd3cb5b694"></head>
+<body>
+
+<!-- MODAL ISTRUZIONI SELVATICI -->
+<div class="modal-overlay" id="modalIstruzioni" style="display:none;z-index:8888;align-items:flex-start;overflow-y:auto;">
+  <div class="modal-box" style="max-width:480px;margin:auto;background:#1a2e1a;border-color:rgba(39,174,96,0.4);max-height:90vh;overflow-y:auto;">
+    <h2>🦌 Registro Selvatici</h2>
+    <h3>Istruzioni — Polizia Provinciale di Cremona</h3>
+    <div class="istr-section">
+      <div class="istr-title">Cos'è e a cosa serve</div>
+      <div class="istr-text">Il Registro Selvatici gestisce tutti gli interventi di recupero animali selvatici sul territorio provinciale. Permette di registrare consegne all'Istituto Zooprofilassi, interventi CRAS e di generare automaticamente il <strong>Verbale Ufficiale di Recupero e Consegna Fauna Selvatica</strong> pronto per la firma.</div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Codice Operatore</div>
+      <div class="istr-text">Ad ogni accesso viene richiesto il tuo <strong>codice personale a 4 cifre</strong>. Identifica univocamente chi ha effettuato ogni inserimento e garantisce la piena tracciabilità degli atti. <strong>Non condividerlo con altri.</strong></div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Cambia PIN Personale 🔑</div>
+      <div class="istr-text">Dalla home tocca <strong>🔑 Cambia PIN personale</strong> per impostare un PIN noto solo a te. Inserisci il PIN attuale, poi il tuo nuovo PIN a 4 cifre. Viene salvato <strong>solo su questo dispositivo</strong> — se cambi telefono usa il PIN originale dell'amministratore.</div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Come si registra un intervento</div>
+      <div class="istr-text">
+        1. Scegli il tipo: <strong>Zooprofilassi</strong> o <strong>CRAS</strong><br>
+        2. Seleziona data/ora e agenti intervenuti<br>
+        3. Inserisci specie animale e località di recupero<br>
+        4. Indica chi ha consegnato il selvatico (nome, indirizzo, tel.)<br>
+        5. Seleziona esito: <strong>Consegnato al CRAS</strong> o <strong>Liberato</strong><br>
+        6. Tocca <strong>Registra intervento</strong> — dati inviati immediatamente
+      </div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Stampa Verbale Ufficiale</div>
+      <div class="istr-text">Dalla sezione <strong>Storico</strong> puoi selezionare qualsiasi intervento registrato e generare il <strong>Verbale di Recupero e Consegna Fauna Selvatica</strong> in PDF — doppia copia automatica, pronta per la firma dell'agente e del CRAS.</div>
+    </div>
+    <div class="istr-section">
+      <div class="istr-title">Quanto lavoro si risparmia</div>
+      <div class="istr-text">Elimina la compilazione manuale del verbale cartaceo. Tutti i dati già inseriti nell'app vengono riportati automaticamente nel documento ufficiale — basta selezionare l'intervento e stampare.</div>
+    </div>
+    <div class="istr-firma">
+      Borrini Riccardo — Assistente Scelto di Polizia Locale<br>
+      Polizia Provinciale di Cremona<br>
+      📧 riccardo.borrini@provincia.cremona.it
+    </div>
+    <button class="btn-istr-close" onclick="document.getElementById(&#39;modalIstruzioni&#39;).style.display=&#39;none&#39;;">Chiudi</button>
+  </div>
+</div>
+
+<!-- MODAL STAMPA TUTTI RITIRI -->
+<div class="modal-overlay" id="modalStampaTutti" style="display:none;z-index:8888;">
+  <div class="modal-box" style="background:#1a0a0a;border-color:rgba(192,57,43,0.4);max-width:320px;">
+    <div class="modal-title" style="color:#e07060;">🖨️ Stampa Ritiri CRAS</div>
+    <div class="modal-text">Seleziona il giorno da stampare</div>
+    <input type="date" id="dataStampaTutti" class="form-input" style="margin-bottom:12px;font-size:16px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.4);margin-bottom:12px;">Verranno stampati tutti gli interventi CRAS del giorno selezionato</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button class="modal-btn cancel" onclick="document.getElementById(&#39;modalStampaTutti&#39;).style.display=&#39;none&#39;;">Annulla</button>
+      <button class="modal-btn confirm" style="background:#e07060;" onclick="eseguiStampaTutti()">Stampa</button>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Salvataggio...</div></div>
+<div class="toast" id="toast">PIN copiato!</div>
+
+<!-- MODAL GOOGLE SHEET -->
+<div class="modal-overlay" id="modalSheet">
+  <div class="modal-box">
+    <div class="modal-title">🔒 Accesso protetto</div>
+    <div class="modal-text">Inserisci la password per accedere al Google Sheet</div>
+    <input type="password" class="form-input" id="pwdSheet" placeholder="Password..." style="margin-bottom:6px;">
+    <div id="errSheet" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="chiudiModal(&#39;modalSheet&#39;)">Annulla</button>
+      <button class="modal-btn confirm" onclick="verificaSheet()">Accedi</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GESTIONE AGENTI -->
+<div class="modal-overlay" id="modalAgenti">
+  <div class="modal-box">
+    <div class="modal-title">🔒 Gestione Agenti</div>
+    <div class="modal-text">Inserisci la password per modificare gli agenti</div>
+    <div id="agentiPwdSection">
+      <input type="password" class="form-input" id="pwdAgenti" placeholder="Password..." style="margin-bottom:6px;">
+      <div id="errAgenti" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="chiudiModal(&#39;modalAgenti&#39;)">Annulla</button>
+        <button class="modal-btn confirm" onclick="verificaAgenti()">Accedi</button>
+      </div>
+    </div>
+    <div id="agentiManagerSection" style="display:none;">
+      <div class="agenti-manager-list" id="agentiManagerList"></div>
+      <div class="agenti-add-row" style="flex-direction:column;gap:8px;">
+        <input type="text" class="form-input" id="nuovoAgente" placeholder="Nome agente (es. ROSSI)..." style="font-size:13px;padding:8px 10px;">
+        <div style="display:flex;gap:8px;">
+          <input type="text" class="form-input" id="nuovoPin" placeholder="PIN 4 cifre..." maxlength="4" style="font-size:13px;padding:8px 10px;width:130px;" inputmode="numeric">
+          <button class="btn-add" onclick="aggiungiAgente()" style="flex:1;">+ Aggiungi</button>
+        </div>
+      </div>
+      <button class="modal-btn cancel" style="width:100%;margin-top:12px;" onclick="chiudiModal(&#39;modalAgenti&#39;)">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- MODAL CAMBIA PIN -->
+<div class="modal-overlay" id="modalCambiaPin" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-title">🔑 Cambia PIN</div>
+    <div class="modal-text">Scegli un PIN personale salvato solo su questo dispositivo.</div>
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">PIN attuale</div>
+    <input type="text" class="form-input" id="cp-attuale" placeholder="PIN attuale" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:10px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">Nuovo PIN</div>
+    <input type="text" class="form-input" id="cp-nuovo" placeholder="Nuovo PIN (4 cifre)" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:10px;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin-bottom:6px;">Conferma nuovo PIN</div>
+    <input type="text" class="form-input" id="cp-conferma" placeholder="Ripeti nuovo PIN" inputmode="numeric" maxlength="4" style="text-align:center;font-size:20px;letter-spacing:8px;margin-bottom:8px;">
+    <div id="cp-err" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="document.getElementById(&#39;modalCambiaPin&#39;).style.display=&#39;none&#39;">Annulla</button>
+      <button class="modal-btn confirm" onclick="salvaNuovoPin()">Salva PIN</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay show" id="modalLogin" style="z-index:10000;">
+  <div class="modal-box">
+    <div class="modal-title">👤 Identificazione</div>
+    <div class="modal-text">Inserisci il tuo codice operatore (4 cifre).</div>
+    <input type="text" class="form-input" id="pinLogin" placeholder="es. 1234" inputmode="numeric" maxlength="4" style="margin-bottom:6px;text-align:center;font-size:22px;letter-spacing:8px;font-family:&#39;Bebas Neue&#39;,sans-serif;">
+    <div style="font-size:11px;color:rgba(245,240,232,0.5);margin:6px 0 4px;">Parola segreta</div>
+    <input type="text" class="form-input" id="parolaLogin" placeholder="PAROLA" maxlength="5" style="margin-bottom:6px;text-align:center;font-size:20px;letter-spacing:6px;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+    <div id="errLogin" style="font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:4px;"></div>
+    <div style="margin-top:10px;">
+      <button class="modal-btn confirm" onclick="verificaPinLogin()" style="width:100%;padding:12px;border:none;border-radius:8px;background:var(--ocra2);color:#0d2010;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Conferma</button>
+    </div>
+  </div>
+</div>
+<div class="header">
+  <div class="header-icon">🦌</div>
+  <h1>REGISTRO <span>SELVATICI</span></h1>
+  <p id="headerUtente"></p>
+</div>
+
+<!-- HOME -->
+<div class="screen active" id="screenHome">
+  <div class="install-banner" id="installBanner">
+    <span>📲 Installa l'app sulla schermata home</span>
+    <button onclick="installApp()">INSTALLA</button>
+  </div>
+  <button onclick="var mi=document.getElementById(&#39;modalIstruzioni&#39;);mi.style.display=&#39;flex&#39;;mi.style.alignItems=&#39;flex-start&#39;;" style="width:100%;padding:11px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.3);border-radius:10px;color:#7dcfaa;font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;">ℹ️ &nbsp;Istruzioni</button>
+  <div class="stats-row">
+    <div class="stat-card"><div class="num" id="statZoo">—</div><div class="label">Zooprofilassi</div></div>
+    <div class="stat-card"><div class="num" id="statCras">—</div><div class="label">CRAS</div></div>
+    <div class="stat-card total"><div class="num" id="statTot">—</div><div class="label">Totale</div></div>
+  </div>
+  <div class="section-title">Nuova registrazione</div>
+  <div class="main-buttons">
+    <button class="btn-main zoo" onclick="vai(&#39;screenZoo&#39;)">
+      <span class="btn-main-icon">🔬</span>
+      <div class="btn-main-text"><strong>Istituto Zooprofilassi</strong><span>Consegna campioni / animali</span></div>
+      <span class="btn-main-arrow">›</span>
+    </button>
+    <button class="btn-main cras" onclick="vai(&#39;screenCras&#39;)">
+      <span class="btn-main-icon">🦅</span>
+      <div class="btn-main-text"><strong>CRAS</strong><span>Centro Recupero Animali Selvatici</span></div>
+      <span class="btn-main-arrow">›</span>
+    </button>
+  </div>
+  <div class="section-title">Archivio</div>
+  <button class="btn-report" onclick="vai(&#39;screenStorico&#39;)">📋 &nbsp;Storico consegne</button>
+  <button class="btn-report" onclick="apriStampaTutti()" style="background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.4);color:#e07060;margin-top:8px;">🖨️ &nbsp;Stampa tutti i ritiri di oggi</button>
+  <button class="btn-sheet" onclick="apriModalSheet()">📋 &nbsp;Apri Google Sheet</button>
+  <button class="btn-sheet" style="margin-top:8px;background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.3);color:#e07060;" onclick="cambiUtente()">🔄 &nbsp;Cambia utente</button>
+  <button class="btn-sheet" style="margin-top:8px;background:rgba(200,146,42,0.08);border-color:rgba(200,146,42,0.3);color:var(--ocra2);" onclick="mostraCambiaPin()">🔑 &nbsp;Cambia PIN personale</button>
+</div>
+
+<!-- ZOOPROFILASSI -->
+<div class="screen" id="screenZoo">
+  <div class="form-header">
+    <button class="btn-back" onclick="vai(&#39;screenHome&#39;)">‹</button>
+    <div class="form-header-title"><span>Nuova registrazione</span>Istituto Zooprofilassi</div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Data e ora <span class="req">*</span></label>
+    <input type="datetime-local" class="form-input" id="zooDataOra">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Agente <span class="req">*</span></label>
+    <div class="agenti-grid" id="zooAgentiGrid"></div>
+    <button class="btn-gestisci" onclick="apriGestioneAgenti()">⚙️ Gestisci agenti</button>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Tipo di animale <span class="req">*</span></label>
+    <input type="text" class="form-input" id="zooAnimale" placeholder="Es. Capriolo, Cinghiale, Volpe...">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Causa morte <span class="req">*</span></label>
+    <select class="form-select" id="zooCausa">
+      <option value="">— Seleziona —</option>
+      <option>Naturale</option><option>Abbattuto</option><option>Investito</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Tipo consegna IZP <span class="req">*</span></label>
+    <div class="tipo-grid">
+      <button class="tipo-btn" id="btnCarcassa" onclick="setTipoIzp(&#39;Carcassa&#39;)">🦴 Carcassa</button>
+      <button class="tipo-btn" id="btnCampioni" onclick="setTipoIzp(&#39;Campioni&#39;)">🧪 Campioni</button>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Località di recupero <span class="req">*</span></label>
+    <input type="text" class="form-input" id="zooLocalita" placeholder="Via / Frazione / Comune">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Chi ha consegnato il capo</label>
+    <input type="text" class="form-input" id="zooConsegnante" placeholder="Nome, cognome o ente">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Ore impiegate <span class="req">*</span></label>
+    <input type="number" class="form-input" id="zooOre" placeholder="Es. 1.5" step="0.25" min="0">
+  </div>
+  <div class="form-group">
+    <label class="form-label">N° animali (crea N righe nel foglio)</label>
+    <div class="num-selector">
+      <button class="num-selector-btn" onclick="cambiaMolt(&#39;zoo&#39;,-1)">−</button>
+      <div class="num-selector-val" id="zooMoltVal">1</div>
+      <button class="num-selector-btn" onclick="cambiaMolt(&#39;zoo&#39;,1)">+</button>
+      <span style="font-size:12px;color:rgba(245,240,232,0.4);font-family:&#39;Barlow Condensed&#39;,sans-serif;">animali identici</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Note</label>
+    <textarea class="form-textarea" id="zooNote" placeholder="Tipo campioni, osservazioni..."></textarea>
+  </div>
+  <button class="btn-submit zoo" onclick="submitZoo()">🔬 Registra consegna</button>
+</div>
+
+<!-- CRAS -->
+<div class="screen" id="screenCras">
+  <div class="form-header">
+    <button class="btn-back" onclick="vai(&#39;screenHome&#39;)">‹</button>
+    <div class="form-header-title"><span>Nuova registrazione</span>CRAS</div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Data e ora <span class="req">*</span></label>
+    <input type="datetime-local" class="form-input" id="crasDataOra">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Agente <span class="req">*</span></label>
+    <div class="agenti-grid" id="crasAgentiGrid"></div>
+    <button class="btn-gestisci" onclick="apriGestioneAgenti()">⚙️ Gestisci agenti</button>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Centro CRAS <span class="req">*</span></label>
+    <div class="tipo-grid">
+      <button class="tipo-btn" id="btnLoghino" onclick="setCentroCras(&#39;Loghino Bosco&#39;)">🌲 Loghino Bosco</button>
+      <button class="tipo-btn" id="btnParco" onclick="setCentroCras(&#39;Parcobaleno&#39;)">🌈 Parcobaleno</button>
+    </div>
+    <input type="text" class="form-input" id="crasAltro" placeholder="Oppure scrivi altro centro CRAS..." style="margin-top:8px;" oninput="setCentroCrasLibero(this.value)">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Tipo di animale <span class="req">*</span></label>
+    <input type="text" class="form-input" id="crasAnimale" placeholder="Es. Capriolo, Rapace...">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Località di recupero <span class="req">*</span></label>
+    <input type="text" class="form-input" id="crasLocalita" placeholder="Via / Frazione / Comune">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Chi ha consegnato il selvatico</label>
+    <input type="text" class="form-input" id="crasConsegnante" placeholder="Nome, cognome o ente">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Ore impiegate <span class="req">*</span></label>
+    <input type="number" class="form-input" id="crasOre" placeholder="Es. 1.5" step="0.25" min="0">
+  </div>
+  <div class="form-group">
+    <label class="form-label">Esito <span class="req">*</span></label>
+    <div class="toggle-group">
+      <button class="toggle-btn" id="btnEsitoCras" onclick="setEsito(&#39;consegnato&#39;)">🏥 Consegnato al CRAS</button>
+      <button class="toggle-btn" id="btnEsitoLib" onclick="setEsito(&#39;liberato&#39;)">🌿 Liberato</button>
+    </div>
+    <div class="liberazione-fields" id="liberazioneFields">
+      <div class="form-group" style="margin-bottom:10px;">
+        <label class="form-label">Luogo di liberazione</label>
+        <select class="form-select" id="liberazioneTipo" onchange="toggleLiberazioneAltro()">
+          <option value="">— Seleziona —</option>
+          <option>Stesso luogo di recupero</option>
+          <option>Altro luogo</option>
+        </select>
+      </div>
+      <div id="liberazioneAltroDiv" style="display:none;">
+        <label class="form-label">Specifica luogo</label>
+        <input type="text" class="form-input" id="liberazioneAltro" placeholder="Via / Zona / Comune">
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">N° animali (crea N righe nel foglio)</label>
+    <div class="num-selector">
+      <button class="num-selector-btn" onclick="cambiaMolt(&#39;cras&#39;,-1)">−</button>
+      <div class="num-selector-val" id="crasMoltVal">1</div>
+      <button class="num-selector-btn" onclick="cambiaMolt(&#39;cras&#39;,1)">+</button>
+      <span style="font-size:12px;color:rgba(245,240,232,0.4);font-family:&#39;Barlow Condensed&#39;,sans-serif;">animali identici</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Note</label>
+    <textarea class="form-textarea" id="crasNote" placeholder="Condizioni animale, osservazioni..."></textarea>
+  </div>
+  <button class="btn-submit cras" onclick="submitCras()">🦅 Registra intervento</button>
+</div>
+
+<!-- STORICO -->
+<div class="screen" id="screenStorico">
+  <div class="form-header">
+    <button class="btn-back" onclick="vai(&#39;screenHome&#39;)">‹</button>
+    <div class="form-header-title"><span>Archivio</span>Storico consegne</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tabZoo" onclick="switchTab(&#39;zoo&#39;)">🔬 Zooprofilassi</button>
+    <button class="tab-btn" id="tabCras" onclick="switchTab(&#39;cras&#39;)">🦅 CRAS</button>
+  </div>
+  <div id="recordsList"><div class="empty-state"><div>📋</div>Caricamento...</div></div>
+</div>
+
+
+
+<script>
+var URL_GS = 'https://script.google.com/macros/s/AKfycbw4fsyb_piMrM8QfPGF3x9QSMEugzDyIZHPextk3rYziSJLMjXMUEyrMlN5IKcKCGWz6w/exec';
+var URL_TURNI = 'https://script.google.com/macros/s/AKfycbyVBPIGRRJigXuoQsHialZiFugbN-jKRM-rB6jUnKHw7w52AE_H9rVr20TYxE-sazMs/exec';
+var SHEET_URL = 'https://docs.google.com/spreadsheets/d/1TNZsjHoymi47wk2cdNXlPWcj0MdJ0bNs1IZ0UYTks0A/edit';
+var PWD = '12345611';
+
+// AGENTI
+// Agenti: usa localStorage se esiste, altrimenti usa default
+var AGENTI_DEFAULT = ['ARISI','BANDERA','BORRINI','CAMBIATI','CHIODA','COLLA','FUSARI','GUARNERI','PERSONALE VOLONTARIO','PREANI','RIZZI','TRENTAROSSI','VIVIANI'];
+var _agentiSaved = localStorage.getItem('selvatici_agenti');
+var agenti = _agentiSaved ? JSON.parse(_agentiSaved) : AGENTI_DEFAULT.slice();
+var zooSel = [];
+var crasSel = [];
+var storicoTab = 'zoo';
+var allRecords = {zoo:[], cras:[]};
+var esitoCras = '';
+var tipoIzp = '';
+var centroCras = '';
+var zooMolt = 1;
+var crasMolt = 1;
+
+// PWA
+var manifest={name:'Registro Selvatici',short_name:'Selvatici',start_url:'.',display:'standalone',background_color:'#1c2b1a',theme_color:'#1a3a15',orientation:'portrait',icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a3a15'/><text y='.9em' font-size='80' x='10'>🦌</text></svg>",sizes:'192x192',type:'image/svg+xml'}]};
+document.head.appendChild(Object.assign(document.createElement('link'),{rel:'manifest',href:URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}))}));
+var swCode='self.addEventListener(\'install\',e=>self.skipWaiting());self.addEventListener(\'activate\',e=>clients.claim());self.addEventListener(\'fetch\',e=>{if(e.request.method===\'GET\')e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});';
+if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}))).catch(function(){});
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').classList.add('show');});
+window.addEventListener('appinstalled',function(){document.getElementById('installBanner').classList.remove('show');deferredPrompt=null;});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){deferredPrompt=null;document.getElementById('installBanner').classList.remove('show');});}}
+
+function toast(msg,isErr){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isErr?' error':'')+' show';setTimeout(function(){t.className='toast'+(isErr?' error':'');},3000);}
+function loading(v){document.getElementById('loadingOverlay').className='loading-overlay'+(v?' show':'');}
+function chiudiModal(id){document.getElementById(id).classList.remove('show');}
+
+function vai(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='screenHome') loadStats();
+  if(id==='screenZoo'){setNow('zooDataOra');renderAgenti('zoo');tipoIzp='';zooSel=[];zooMolt=1;}
+  if(id==='screenCras'){setNow('crasDataOra');renderAgenti('cras');esitoCras='';centroCras='';crasSel=[];crasMolt=1;}
+  if(id==='screenStorico') loadStorico();
+}
+
+// PIN SYSTEM
+var PIN_MAP_DEFAULT = {
+  '7342': 'ARISI', '2916': 'BANDERA', '5483': 'BORRINI', '8751': 'CAMBIATI', '3629': 'COLLA', '3688': 'FUSARI', '4817': 'GUARNERI', '9364': 'PREANI', '6193': 'RIZZI', '2748': 'TRENTAROSSI', '2766': 'VIVIANI', '5522': 'CHIODA', '1013': 'TORTINI', '1014': 'MARIOTTI'
+};
+var PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT);
+var utenteLoggato = localStorage.getItem('selvatici_utente') || '';
+// Aggiorna header subito se già loggato
+if (utenteLoggato) { var _hu = document.getElementById('headerUtente'); if(_hu) _hu.textContent = '👮 ' + utenteLoggato; }
+
+
+function checkLogin() {
+  if (!utenteLoggato) {
+    document.getElementById('pinLogin').value = '';
+    document.getElementById('errLogin').textContent = '';
+    document.getElementById('modalLogin').classList.add('show');
+  } else {
+    var hu = document.getElementById('headerUtente');
+    if(hu) hu.textContent = '👮 ' + utenteLoggato;
+  }
+}
+
+function verificaPinLogin() {
+  var pin = document.getElementById('pinLogin').value.trim();
+  var parola = document.getElementById('parolaLogin') ? document.getElementById('parolaLogin').value.trim().toUpperCase() : '';
+  fetch(URL_TURNI + '?anno=2026&mese=6')
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var pm = data.pinMap || {};
+      var entry = pm[pin];
+      var nome = null;
+      if (entry && typeof entry === 'object') {
+        if (entry.parola && entry.parola === parola) nome = entry.nome;
+      } else if (entry && typeof entry === 'string') {
+        nome = entry;
+      }
+      if (!nome) {
+        try {
+          var keys = Object.keys(localStorage);
+          for (var ki = 0; ki < keys.length; ki++) {
+            if (keys[ki].indexOf('selvatici_pin_personale_') === 0) {
+              if (localStorage.getItem(keys[ki]) === pin) { nome = keys[ki].replace('selvatici_pin_personale_', ''); break; }
+            }
+          }
+        } catch(e) {}
+      }
+      if (nome) {
+        utenteLoggato = nome;
+        localStorage.setItem('selvatici_utente', nome);
+        document.getElementById('modalLogin').classList.remove('show');
+        var hu = document.getElementById('headerUtente');
+        if(hu) hu.textContent = '👮 ' + nome;
+        toast('👤 Benvenuto, ' + nome + '!');
+      } else {
+        document.getElementById('errLogin').textContent = '❌ PIN o parola segreta non validi';
+        document.getElementById('pinLogin').value = '';
+        if(document.getElementById('parolaLogin')) document.getElementById('parolaLogin').value = '';
+      }
+    }).catch(function(){
+      document.getElementById('errLogin').textContent = '❌ Errore connessione — riprova';
+    });
+}
+
+async function syncPinMapDaSheet() {
+  try {
+    var res = await fetch(URL_GS + '?action=pinmap');
+    var d = await res.json();
+    if (d.pinMap && typeof d.pinMap === 'object' && Object.keys(d.pinMap).length > 0) {
+      PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT, d.pinMap);
+      // Ricava agenti dalla pinmap del foglio
+      var nomi = Object.values(PIN_MAP).filter(function(n){ return n && n.trim(); });
+      nomi = nomi.filter(function(n,i){ return nomi.indexOf(n)===i; });
+      nomi.sort();
+      agenti = nomi;
+      if (utenteLoggato) {
+        var pinValido = Object.keys(PIN_MAP).some(function(p){ return PIN_MAP[p] === utenteLoggato; });
+        if (!pinValido) { localStorage.removeItem('selvatici_utente'); utenteLoggato = ''; }
+      }
+    }
+  } catch(e) {}
+}
+
+
+function mostraPinPopup(nome, pin) {
+  alert('✅ Agente "' + nome + '" aggiunto!\n\nIl suo PIN è: ' + pin + '\n\nComunicaglielo: lo inserirà al prossimo accesso.\n\n📋 PIN salvato sul foglio Google "PIN Agenti".');
+}
+
+function mostraCambiaPin() {
+  if (!utenteLoggato) { toast('Devi prima accedere', true); return; }
+  document.getElementById('cp-attuale').value = '';
+  document.getElementById('cp-nuovo').value = '';
+  document.getElementById('cp-conferma').value = '';
+  document.getElementById('cp-err').textContent = '';
+  document.getElementById('modalCambiaPin').style.display='flex';
+}
+
+function salvaNuovoPin() {
+  var attuale = document.getElementById('cp-attuale').value.trim();
+  var nuovo = document.getElementById('cp-nuovo').value.trim();
+  var conferma = document.getElementById('cp-conferma').value.trim();
+  var err = document.getElementById('cp-err');
+
+  // Verifica PIN attuale (server o locale)
+  var pinLocale = null;
+  try { pinLocale = localStorage.getItem('selvatici_pin_personale_' + utenteLoggato); } catch(e) {}
+  var valido = (pinLocale && attuale === pinLocale) || PIN_MAP[attuale] === utenteLoggato;
+
+  if (!valido) { err.textContent = '❌ PIN attuale non corretto'; return; }
+  if (nuovo.length !== 4 || isNaN(nuovo)) { err.textContent = '❌ Il nuovo PIN deve essere 4 cifre'; return; }
+  if (nuovo !== conferma) { err.textContent = '❌ I PIN non coincidono'; return; }
+
+  try {
+    localStorage.setItem('selvatici_pin_personale_' + utenteLoggato, nuovo);
+  } catch(e) {}
+  document.getElementById('modalCambiaPin').style.display='none';
+  toast('✅ PIN cambiato! Nuovo PIN: ' + nuovo);
+}
+
+function cambiUtente() {
+  localStorage.removeItem('selvatici_utente');
+  utenteLoggato = '';
+  pinCurrent = '';
+  aggiornaDisplay();
+  document.getElementById('modalLogin').classList.add('show');
+}
+
+
+
+function setNow(id){
+  var now=new Date();
+  var loc=new Date(now.getTime()-now.getTimezoneOffset()*60000);
+  document.getElementById(id).value=loc.toISOString().slice(0,16);
+}
+
+// AGENTI
+function renderAgenti(tipo){
+  var gridId=tipo==='zoo'?'zooAgentiGrid':'crasAgentiGrid';
+  var selArr=tipo==='zoo'?zooSel:crasSel;
+  var grid=document.getElementById(gridId);
+  if(!grid) return;
+  grid.innerHTML='';
+  agenti.forEach(function(a){
+    var btn=document.createElement('button');
+    btn.className='agente-btn'+(selArr.indexOf(a)>=0?' sel':'');
+    btn.textContent=a;
+    btn.onclick=(function(nome){return function(){
+      var arr=tipo==='zoo'?zooSel:crasSel;
+      var idx=arr.indexOf(nome);
+      if(idx>=0) arr.splice(idx,1); else arr.push(nome);
+      renderAgenti(tipo);
+    };})(a);
+    grid.appendChild(btn);
+  });
+}
+
+function apriGestioneAgenti(){
+  document.getElementById('pwdAgenti').value='';
+  document.getElementById('errAgenti').textContent='';
+  document.getElementById('agentiPwdSection').style.display='block';
+  document.getElementById('agentiManagerSection').style.display='none';
+  document.getElementById('modalAgenti').classList.add('show');
+}
+
+function verificaAgenti(){
+  if(document.getElementById('pwdAgenti').value===PWD){
+    document.getElementById('agentiPwdSection').style.display='none';
+    document.getElementById('agentiManagerSection').style.display='block';
+    renderAgentiManager();
+  } else {
+    document.getElementById('errAgenti').textContent='❌ Password errata';
+    document.getElementById('pwdAgenti').value='';
+  }
+}
+
+function renderAgentiManager(){
+  var list=document.getElementById('agentiManagerList');
+  list.innerHTML='';
+  agenti.forEach(function(a){
+    var div=document.createElement('div');div.className='agenti-manager-item';
+    var sp=document.createElement('span');sp.textContent=a;sp.style.fontSize='12px';
+    var btn=document.createElement('button');btn.className='btn-del';btn.textContent='Rimuovi';
+    btn.onclick=(function(nome){return async function(){
+      loading(true);
+      try {
+        var res = await fetch(URL_GS, {method:'POST', body: JSON.stringify({tipo:'PIN_REMOVE', nome:nome})});
+        var d = await res.json();
+        if(d.status !== 'ok'){ toast('Errore rimozione', true); return; }
+      } catch(e){ toast('Errore di connessione', true); return; }
+      finally{ loading(false); }
+      var idx=agenti.indexOf(nome);if(idx>=0)agenti.splice(idx,1);
+      var zi=zooSel.indexOf(nome);if(zi>=0)zooSel.splice(zi,1);
+      var ci=crasSel.indexOf(nome);if(ci>=0)crasSel.splice(ci,1);
+      renderAgenti('zoo');renderAgenti('cras');renderAgentiManager();
+    };})(a);
+    div.appendChild(sp);div.appendChild(btn);list.appendChild(div);
+  });
+}
+
+async function aggiungiAgente(){
+  var input=document.getElementById('nuovoAgente');
+  var pinInput=document.getElementById('nuovoPin');
+  var nome=input.value.trim().toUpperCase();
+  var pin=pinInput.value.trim();
+  if(!nome||agenti.indexOf(nome)>=0) return;
+  if(pin.length!==4||isNaN(pin)){toast('Inserisci un PIN valido di 4 cifre',true);return;}
+  if(PIN_MAP[pin]){toast('PIN già usato da '+PIN_MAP[pin],true);return;}
+  loading(true);
+  try {
+    var res = await fetch(URL_GS, {method:'POST', body: JSON.stringify({tipo:'PIN', pin:pin, nome:nome})});
+    var d = await res.json();
+    if(d.status !== 'ok'){ toast('Errore salvataggio: '+(d.message||''), true); return; }
+  } catch(e){ toast('Errore di connessione', true); return; }
+  finally{ loading(false); }
+  agenti.push(nome);agenti.sort();
+  PIN_MAP[pin]=nome;
+  input.value='';pinInput.value='';
+  chiudiModal('modalAgenti');
+  renderAgenti('zoo');renderAgenti('cras');
+  mostraPinPopup(nome, pin);
+}
+
+// FORM SELECTORS
+function setTipoIzp(val){
+  tipoIzp = (tipoIzp===val) ? '' : val;
+  document.getElementById('btnCarcassa').className='tipo-btn'+(tipoIzp==='Carcassa'?' active':'');
+  document.getElementById('btnCampioni').className='tipo-btn'+(tipoIzp==='Campioni'?' active':'');
+}
+
+function setCentroCrasLibero(val){
+  if(val.trim()){
+    centroCras = val.trim();
+    // Deseleziona i bottoni fissi
+    document.getElementById('btnLoghino').className='tipo-btn';
+    document.getElementById('btnParco').className='tipo-btn';
+  } else {
+    centroCras = '';
+  }
+}
+
+function setCentroCras(val){
+  centroCras = (centroCras===val) ? '' : val;
+  document.getElementById('btnLoghino').className='tipo-btn'+(centroCras==='Loghino Bosco'?' active':'');
+  document.getElementById('btnParco').className='tipo-btn'+(centroCras==='Parcobaleno'?' active':'');
+  document.getElementById('crasAltro').value=''; // pulisce campo libero
+}
+
+function setEsito(val){
+  esitoCras = (esitoCras===val) ? '' : val;
+  document.getElementById('btnEsitoCras').className='toggle-btn'+(esitoCras==='consegnato'?' active-zoo':'');
+  document.getElementById('btnEsitoLib').className='toggle-btn'+(esitoCras==='liberato'?' active-lib':'');
+  document.getElementById('liberazioneFields').className='liberazione-fields'+(esitoCras==='liberato'?' visible':'');
+}
+
+function toggleLiberazioneAltro(){
+  document.getElementById('liberazioneAltroDiv').style.display=document.getElementById('liberazioneTipo').value==='Altro luogo'?'block':'none';
+}
+
+function cambiaMolt(tipo,delta){
+  if(tipo==='zoo'){zooMolt=Math.min(10,Math.max(1,zooMolt+delta));document.getElementById('zooMoltVal').textContent=zooMolt;}
+  else{crasMolt=Math.min(10,Math.max(1,crasMolt+delta));document.getElementById('crasMoltVal').textContent=crasMolt;}
+}
+
+function fmtDT(val){if(!val)return'';var d=new Date(val);return d.toLocaleDateString('it-IT');}
+function fmtDTOra(val){if(!val)return'';var d=new Date(val);return d.toLocaleDateString('it-IT')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+
+// SUBMIT ZOO
+async function submitZoo(){
+  var dataOra=document.getElementById('zooDataOra').value;
+  var agente=zooSel.join(', ');
+  var animale=document.getElementById('zooAnimale').value.trim();
+  var causa=document.getElementById('zooCausa').value;
+  var localita=document.getElementById('zooLocalita').value.trim();
+  var ore=document.getElementById('zooOre').value;
+  if(!dataOra||!agente.length||!animale||!causa||!localita||!ore){toast('Seleziona almeno un agente e compila tutti i campi',true);return;}
+  if(!tipoIzp){toast('Seleziona tipo consegna: Carcassa o Campioni',true);return;}
+  var ok=await invia({tipo:'ZOO',dataOra:fmtDTOra(dataOra),agente,animale,causa,localita,
+    consegnante:document.getElementById('zooConsegnante').value.trim(),
+    ore:parseFloat(ore),tipoIzp:tipoIzp,
+    note:document.getElementById('zooNote').value.trim(),moltiplicatore:zooMolt,inseritoDa:utenteLoggato});
+  if(!ok) return;
+  resetZoo();
+  vai('screenHome');
+}
+
+function resetZoo(){
+  ['zooAnimale','zooLocalita','zooConsegnante','zooNote'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('zooCausa').value='';document.getElementById('zooOre').value='';
+  zooSel=[];tipoIzp='';zooMolt=1;document.getElementById('zooMoltVal').textContent='1';
+  document.getElementById('btnCarcassa').className='tipo-btn';document.getElementById('btnCampioni').className='tipo-btn';
+  renderAgenti('zoo');
+}
+
+// SUBMIT CRAS
+async function submitCras(){
+  var dataOra=document.getElementById('crasDataOra').value;
+  var agente=crasSel.join(', ');
+  var animale=document.getElementById('crasAnimale').value.trim();
+  var localita=document.getElementById('crasLocalita').value.trim();
+  var ore=document.getElementById('crasOre').value;
+  if(!dataOra||!agente.length||!animale||!localita||!ore||!esitoCras){toast('Seleziona almeno un agente, esito e compila tutti i campi',true);return;}
+  if(esitoCras==='consegnato'&&!centroCras){toast('Seleziona il centro CRAS',true);return;}
+  var luogo='';
+  if(esitoCras==='liberato'){
+    var tipo=document.getElementById('liberazioneTipo').value;
+    if(!tipo){toast('Specifica il luogo di liberazione',true);return;}
+    luogo=tipo==='Altro luogo'?'Altro: '+document.getElementById('liberazioneAltro').value.trim():tipo;
+  }
+  var ok=await invia({tipo:'CRAS',dataOra:fmtDTOra(dataOra),agente,animale,localita,
+    consegnante:document.getElementById('crasConsegnante').value.trim(),
+    ore:parseFloat(ore),esito:esitoCras==='consegnato'?'Consegnato al CRAS':'Liberato',
+    luogoLiberazione:luogo,centroCras:centroCras,
+    note:document.getElementById('crasNote').value.trim(),moltiplicatore:crasMolt,inseritoDa:utenteLoggato});
+  if(!ok) return;
+  resetCras();
+  vai('screenHome');
+}
+
+function resetCras(){
+  ['crasAnimale','crasLocalita','crasConsegnante','crasNote','liberazioneAltro','crasAltro'].forEach(function(id){document.getElementById(id).value='';}); 
+  document.getElementById('crasOre').value='';document.getElementById('liberazioneTipo').value='';
+  document.getElementById('liberazioneAltroDiv').style.display='none';
+  document.getElementById('liberazioneFields').classList.remove('visible');
+  crasSel=[];esitoCras='';centroCras='';crasMolt=1;document.getElementById('crasMoltVal').textContent='1';
+  document.getElementById('btnEsitoCras').className='toggle-btn';document.getElementById('btnEsitoLib').className='toggle-btn';
+  document.getElementById('btnLoghino').className='tipo-btn';document.getElementById('btnParco').className='tipo-btn';
+  renderAgenti('cras');
+}
+
+async function invia(payload){
+  loading(true);
+  try{
+    var res=await fetch(URL_GS,{method:'POST',body:JSON.stringify(payload)});
+    var d=await res.json();
+    if(d.status==='ok'){toast('✅ Registrazione salvata!');return true;}
+    else{toast('Errore: '+(d.message||'?'),true);return false;}
+  }
+  catch(e){toast('Errore di connessione',true);return false;}
+  finally{loading(false);}
+}
+
+async function loadStats(){
+  try{var res=await fetch(URL_GS+'?action=stats');var d=await res.json();
+    document.getElementById('statZoo').textContent=d.zoo??0;
+    document.getElementById('statCras').textContent=d.cras??0;
+    document.getElementById('statTot').textContent=((d.zoo??0)+(d.cras??0));}
+  catch(e){['statZoo','statCras','statTot'].forEach(function(id){document.getElementById(id).textContent='—';});}
+}
+
+async function loadStorico(){
+  document.getElementById('recordsList').innerHTML='<div class="empty-state"><div>📋</div>Caricamento...</div>';
+  try{var res=await fetch(URL_GS+'?action=storico');var d=await res.json();
+    allRecords.zoo=d.zoo||[];allRecords.cras=d.cras||[];renderRecords(storicoTab);}
+  catch(e){document.getElementById('recordsList').innerHTML='<div class="empty-state"><div>⚠️</div>Errore</div>';}
+}
+
+function switchTab(tab){
+  storicoTab=tab;
+  document.getElementById('tabZoo').className='tab-btn'+(tab==='zoo'?' active':'');
+  document.getElementById('tabCras').className='tab-btn'+(tab==='cras'?' active':'');
+  renderRecords(tab);
+}
+
+function renderRecords(tab){
+  var list=allRecords[tab];var el=document.getElementById('recordsList');
+  if(!list||!list.length){el.innerHTML='<div class="empty-state"><div>📂</div>Nessuna registrazione</div>';return;}
+  var html='';
+  list.slice().reverse().forEach(function(r,i){
+    var idx=list.length-1-i;
+    if(tab==='zoo'){
+      var bc=r.causa==='Investito'?'badge-investito':r.causa==='Abbattuto'?'badge-abbattuto':'badge-naturale';
+      html+='<div class="record-card"><div class="record-card-top"><div class="record-animale">🦌 '+r.animale+'</div><div class="record-data">'+r.dataOra+'<br><small>'+r.ore+'h</small></div></div><div class="record-detail">👮 '+r.agente+'<br>📍 '+r.localita+(r.consegnante?'<br>👤 '+r.consegnante:'')+(r.tipoIzp?'<br>📦 '+r.tipoIzp:'')+(r.note?'<br>📝 '+r.note:'')+'</div><span class="badge '+bc+'">'+r.causa+'</span></div>';
+    } else {
+      var bc2=r.esito==='Liberato'?'badge-liberato':'badge-consegnato';
+      html+='<div class="record-card"><div class="record-card-top"><div class="record-animale">🦅 '+r.animale+'</div><div class="record-data">'+r.dataOra+'<br><small>'+r.ore+'h</small></div></div><div class="record-detail">👮 '+r.agente+'<br>📍 '+r.localita+(r.centroCras?'<br>🏥 '+r.centroCras:'')+(r.consegnante?'<br>👤 '+r.consegnante:'')+(r.luogoLiberazione?'<br>🌿 '+r.luogoLiberazione:'')+(r.note?'<br>📝 '+r.note:'')+'</div><span class="badge '+bc2+'">'+r.esito+'</span><button onclick="stampaVerbale(allRecords.cras['+idx+'])" style="width:100%;margin-top:8px;padding:9px;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.2);border-radius:8px;color:#f5f0e8;font-size:12px;letter-spacing:1px;cursor:pointer;">🖨️ Stampa Verbale</button></div>';
+    }
+  });
+  el.innerHTML=html;
+}
+
+// SHEET
+function apriModalSheet(){document.getElementById('pwdSheet').value='';document.getElementById('errSheet').textContent='';document.getElementById('modalSheet').classList.add('show');}
+function verificaSheet(){if(document.getElementById('pwdSheet').value===PWD){chiudiModal('modalSheet');window.open(SHEET_URL,'_blank');}else{document.getElementById('errSheet').textContent='❌ Password errata';document.getElementById('pwdSheet').value='';}}
+document.getElementById('pwdSheet').addEventListener('keydown',function(e){if(e.key==='Enter')verificaSheet();});
+document.getElementById('pwdAgenti').addEventListener('keydown',function(e){if(e.key==='Enter')verificaAgenti();});
+document.getElementById('pinLogin').addEventListener('keydown',function(e){if(e.key==='Enter')verificaPinLogin();});
+document.getElementById('nuovoPin').addEventListener('keydown',function(e){if(e.key==='Enter')aggiungiAgente();});
+
+
+loadStats();
+
+// ============================================================
+//  STAMPA VERBALE UFFICIALE
+// ============================================================
+function stampaVerbale(r) {
+  if (!r) { toast('Dati non disponibili', true); return; }
+
+  var avvisi = [];
+  if (!r.agente)      avvisi.push('Agente');
+  if (!r.localita)    avvisi.push('Localita recupero');
+  if (!r.animale)     avvisi.push('Specie animale');
+  if (!r.consegnante) avvisi.push('Chi ha consegnato');
+
+  var procedi = true;
+  if (avvisi.length > 0) {
+    procedi = confirm('Alcuni campi non sono compilati:\n- ' + avvisi.join('\n- ') + '\n\nProcedere comunque?');
+  }
+  if (!procedi) return;
+
+  var CSS = '@page{margin:8mm;size:A4 portrait;}' +
+    'body{font-family:Arial,sans-serif;font-size:11px;color:#000;margin:0;padding:0;}' +
+    '.ricevuta{height:132mm;border-bottom:2px dashed #999;padding:4mm 2mm 3mm;box-sizing:border-box;overflow:hidden;}' +
+    '.ricevuta:last-child{border-bottom:none;}' +
+    '.intestazione{text-align:center;margin-bottom:4px;}' +
+    '.ente{font-size:9px;color:#444;margin:1px 0;}' +
+    '.titolo-ente{font-size:13px;font-weight:bold;letter-spacing:1px;margin:2px 0;}' +
+    '.titolo-doc{font-size:12px;font-weight:bold;text-decoration:underline;text-align:center;margin:4px 0 6px;}' +
+    '.testo{font-size:11px;line-height:1.7;margin-bottom:4px;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:11px;line-height:1.6;}' +
+    '.box{width:12px;height:12px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:11px;font-size:10px;flex-shrink:0;margin-top:1px;}' +
+    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:70px;vertical-align:bottom;}' +
+    '.specie-num{margin:5px 0;font-size:11px;line-height:1.7;}' +
+    '.consegna{font-size:11px;margin:4px 0;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:10px;}' +
+    '.firma-box{text-align:center;font-size:10px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:130px;height:28px;margin-bottom:3px;}' +
+    '.copia-label{font-size:8px;color:#999;float:right;margin-bottom:2px;}' +
+    '@media print{.no-print{display:none;}}';
+
+  var chk = function(ok) { return '<span class="box">'+(ok?'&#10003;':'&nbsp;')+'</span>'; };
+
+  function ricevuta(isCopia) {
+    var dataOra = r.dataOra || '';
+    var dataStr = '', oraStr = '';
+    if (dataOra.indexOf('T') >= 0) {
+      var p = dataOra.split('T');
+      dataStr = p[0].split('-').reverse().join('/');
+      oraStr = (p[1]||'').substring(0,5);
+    } else {
+      var p2 = dataOra.split(' ');
+      dataStr = p2[0] || '';
+      oraStr = p2[1] ? p2[1].substring(0,5) : '';
+    }
+    var agente = (r.agente||'').split(',')[0].trim();
+    var consegnante = r.consegnante || '';
+    var isLibero = r.esito === 'Liberato' || !!r.luogoLiberazione;
+    var luogoEsito = r.luogoLiberazione || r.localita || '';
+    var centro = r.centroCras || '';
+
+    var html = '<div class="ricevuta">';
+    if (isCopia) html += '<div class="copia-label">Copia CRAS</div>';
+    html += '<div class="intestazione">';
+    html += '<div class="ente">Provincia di Cremona</div>';
+    html += '<div class="titolo-ente">POLIZIA LOCALE</div>';
+    html += '<div class="ente">Corso Vittorio Emanuele II, 17 - 26100 CREMONA</div>';
+    html += '</div>';
+    html += '<div class="titolo-doc">VERBALE DI RECUPERO E DI CONSEGNA FAUNA SELVATICA</div>';
+    html += '<div class="testo">Il/I sottoscritto/i <strong>'+agente+'</strong> in servizio presso il Comando di Polizia Locale della Provincia di Cremona, in data <strong>'+dataStr+'</strong> alle ore <strong>'+(oraStr||'__:__')+'</strong> ha/hanno</div>';
+    html += '<div class="check-row">'+chk(false)+' rinvenuto in localit&agrave; <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="check-row">'+chk(!!consegnante)+' ricevuto dal sig./dalla sig.ra <strong>'+(consegnante||'_________________________________')+'</strong> a seguito di rinvenimento in <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="check-row">'+chk(isLibero)+' reimmesso in libert&agrave; in localit&agrave; <strong>'+(luogoEsito||'_________________________________')+'</strong> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="specie-num">n&deg; <strong>1</strong> esemplari di animali '+chk(true)+' vivi / '+chk(false)+' morti appartenenti alla fauna selvatica della specie: <strong>'+(r.animale||'_________________________')+'</strong></div>';
+    if (!isLibero || centro) {
+      html += '<div class="consegna">Gli esemplari di cui sopra vengono consegnati al personale del C.R.A.S.'+(centro?' <strong>'+centro+'</strong>':'')+'</div>';
+    }
+    html += '<div class="firme">';
+    html += '<div class="firma-box"><div class="firma-line"></div>Firma per ricevuta C.R.A.S.</div>';
+    html += '<div class="firma-box"><div class="firma-line"></div>La Polizia Locale<br><strong>'+agente+'</strong></div>';
+    html += '</div></div>';
+    return html;
+  }
+
+  var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale - '+(r.animale||'')+'</title><style>'+CSS+'</style></head><body>'+ricevuta(false)+ricevuta(true)+
+    '<div class="no-print" style="margin:16px;text-align:center;">'+
+    '<button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a3a15;color:#f5f0e8;border:none;border-radius:8px;">&#128424; Stampa / Salva PDF</button> '+
+    '<button onclick="window.close()" style="padding:12px 20px;font-size:14px;cursor:pointer;">&#x2715; Chiudi</button></div></body></html>';
+
+  var blob = new Blob([html],{type:'text/html'});
+  window.open(URL.createObjectURL(blob),'_blank');
+}
+
+
+
+
+// ============================================================
+//  STAMPA TUTTI I RITIRI CRAS DI UN GIORNO
+// ============================================================
+function apriStampaTutti() {
+  var oggi = new Date();
+  var y = oggi.getFullYear();
+  var m = String(oggi.getMonth()+1).padStart(2,'0');
+  var d = String(oggi.getDate()).padStart(2,'0');
+  document.getElementById('dataStampaTutti').value = y+'-'+m+'-'+d;
+  document.getElementById('modalStampaTutti').style.display = 'flex';
+}
+
+async function eseguiStampaTutti() {
+  var dataVal = document.getElementById('dataStampaTutti').value;
+  if (!dataVal) { alert('Seleziona una data'); return; }
+  
+  document.getElementById('modalStampaTutti').style.display = 'none';
+  
+  // Converti data selezionata in formato dd/mm/yyyy per confronto
+  var parts = dataVal.split('-');
+  var dataFmt = parts[2]+'/'+parts[1]+'/'+parts[0]; // DD/MM/YYYY
+  var dataLabel = parts[2]+'/'+parts[1]+'/'+parts[0];
+
+  // Usa allRecords se già caricati, altrimenti carica
+  var records = allRecords.cras || [];
+  if (!records.length) {
+    try {
+      var res = await fetch(URL_GS+'?action=storico');
+      var d = await res.json();
+      allRecords.cras = d.cras || [];
+      records = allRecords.cras;
+    } catch(e) {
+      alert('Errore caricamento dati');
+      return;
+    }
+  }
+
+  // Filtra per data - il dataOra è salvato come "DD/MM/YYYY" o "DD/MM/YYYY HH:MM"
+  var filtrati = records.filter(function(r) {
+    if (!r.dataOra) return false;
+    var d = r.dataOra.toString().trim();
+    // Prendi solo la parte data (prima dello spazio)
+    var dataRecord = d.split(' ')[0].split(',')[0].trim();
+    return dataRecord === dataFmt;
+  });
+
+  if (!filtrati.length) {
+    alert('Nessun intervento CRAS trovato per il ' + dataLabel);
+    return;
+  }
+
+  stampaTuttiRitiri(filtrati, dataLabel);
+}
+
+function stampaTuttiRitiri(records, dataLabel) {
+  var CSS = '@page{margin:8mm;size:A4 portrait;}' +
+    'body{font-family:Arial,sans-serif;font-size:11px;color:#000;margin:0;padding:0;}' +
+    '.pagina{width:100%;page-break-after:always;}' +
+    '.pagina:last-child{page-break-after:avoid;}' +
+    '.ricevuta{height:132mm;border-bottom:2px dashed #999;padding:4mm 2mm 3mm;box-sizing:border-box;overflow:hidden;}' +
+    '.ricevuta:last-child{border-bottom:none;}' +
+    '.intestazione{text-align:center;margin-bottom:4px;}' +
+    '.ente{font-size:9px;color:#444;margin:1px 0;}' +
+    '.titolo-ente{font-size:13px;font-weight:bold;letter-spacing:1px;margin:2px 0;}' +
+    '.titolo-doc{font-size:12px;font-weight:bold;text-decoration:underline;text-align:center;margin:4px 0 6px;}' +
+    '.testo{font-size:11px;line-height:1.7;margin-bottom:4px;}' +
+    '.check-row{display:flex;align-items:flex-start;gap:6px;margin:3px 0;font-size:11px;line-height:1.6;}' +
+    '.box{width:12px;height:12px;border:1.5px solid #000;display:inline-block;text-align:center;line-height:11px;font-size:10px;flex-shrink:0;margin-top:1px;}' +
+    '.linea{border-bottom:1px solid #000;display:inline-block;min-width:70px;vertical-align:bottom;}' +
+    '.specie-num{margin:5px 0;font-size:11px;line-height:1.7;}' +
+    '.consegna{font-size:11px;margin:4px 0;}' +
+    '.firme{display:flex;justify-content:space-between;margin-top:10px;}' +
+    '.firma-box{text-align:center;font-size:10px;}' +
+    '.firma-line{border-bottom:1px solid #000;width:130px;height:28px;margin-bottom:3px;}' +
+    '.copia-label{font-size:8px;color:#999;float:right;margin-bottom:2px;}' +
+    '@media print{.no-print{display:none;}}';
+
+  var chk = function(ok) { return '<span class="box">'+(ok?'&#10003;':'&nbsp;')+'</span>'; };
+
+  function ricevuta(r, isCopia) {
+    var dataOra = r.dataOra || '';
+    var dataStr = '', oraStr = '';
+    if (dataOra.indexOf('T') >= 0) {
+      var p = dataOra.split('T');
+      dataStr = p[0].split('-').reverse().join('/');
+      oraStr = (p[1]||'').substring(0,5);
+    } else {
+      var p2 = dataOra.split(' ');
+      dataStr = p2[0] || '';
+      oraStr = p2[1] ? p2[1].substring(0,5) : '';
+    }
+    var agente = (r.agente||'').split(',')[0].trim();
+    var consegnante = r.consegnante || '';
+    var isLibero = r.esito === 'Liberato' || !!r.luogoLiberazione;
+    var luogoEsito = r.luogoLiberazione || r.localita || '';
+    var centro = r.centroCras || '';
+
+    var html = '<div class="ricevuta">';
+    if (isCopia) html += '<div class="copia-label">Copia CRAS</div>';
+    html += '<div class="intestazione">';
+    html += '<div class="ente">Provincia di Cremona</div>';
+    html += '<div class="titolo-ente">POLIZIA LOCALE</div>';
+    html += '<div class="ente">Corso Vittorio Emanuele II, 17 - 26100 CREMONA</div>';
+    html += '</div>';
+    html += '<div class="titolo-doc">VERBALE DI RECUPERO E DI CONSEGNA FAUNA SELVATICA</div>';
+    html += '<div class="testo">Il/I sottoscritto/i <strong>'+agente+'</strong> in servizio presso il Comando di Polizia Locale della Provincia di Cremona, in data <strong>'+dataStr+'</strong> alle ore <strong>'+(oraStr||'__:__')+'</strong> ha/hanno</div>';
+    html += '<div class="check-row">'+chk(false)+' rinvenuto in localit&agrave; <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="check-row">'+chk(!!consegnante)+' ricevuto dal sig./dalla sig.ra <strong>'+(consegnante||'_________________________________')+'</strong> a seguito di rinvenimento in <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="check-row">'+chk(isLibero)+' reimmesso in libert&agrave; in localit&agrave; <strong>'+(luogoEsito||'_________________________________')+'</strong> Comune di <span class="linea">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ;</div>';
+    html += '<div class="specie-num">n&deg; <strong>1</strong> esemplari di animali '+chk(true)+' vivi / '+chk(false)+' morti appartenenti alla fauna selvatica della specie: <strong>'+(r.animale||'_________________________')+'</strong></div>';
+    if (!isLibero || centro) {
+      html += '<div class="consegna">Gli esemplari di cui sopra vengono consegnati al personale del C.R.A.S.'+(centro?' <strong>'+centro+'</strong>':'')+'</div>';
+    }
+    html += '<div class="firme">';
+    html += '<div class="firma-box"><div class="firma-line"></div>Firma per ricevuta C.R.A.S.</div>';
+    html += '<div class="firma-box"><div class="firma-line"></div>La Polizia Locale<br><strong>'+agente+'</strong></div>';
+    html += '</div></div>';
+    return html;
+  }
+
+  var body = '';
+  records.forEach(function(r, i) {
+    var isLast = i === records.length - 1;
+    body += '<div class="pagina">' + ricevuta(r, false) + ricevuta(r, true) + '</div>';
+  });
+
+  var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Ritiri CRAS - '+dataLabel+'</title><style>'+CSS+'</style></head><body>'+body+
+    '<div class="no-print" style="margin:16px;text-align:center;"><p style="font-size:14px;margin-bottom:12px;"><strong>'+records.length+'</strong> verbali per il '+dataLabel+'</p>'+
+    '<button onclick="window.print()" style="padding:12px 30px;font-size:16px;cursor:pointer;background:#1a3a15;color:#f5f0e8;border:none;border-radius:8px;">&#128424; Stampa / Salva PDF</button> '+
+    '<button onclick="window.close()" style="padding:12px 20px;font-size:14px;cursor:pointer;">&#x2715; Chiudi</button></div></body></html>';
+
+  var blob = new Blob([html],{type:'text/html'});
+  window.open(URL.createObjectURL(blob),'_blank');
+}
+
+
+syncPinMapDaSheet().then(checkLogin);
+</script>
+
+
+
+</body></html>
