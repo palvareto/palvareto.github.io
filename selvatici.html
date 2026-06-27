@@ -155,7 +155,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--ocra2);margin-bottom:12px;}
 .modal-text{font-size:13px;color:rgba(245,240,232,0.6);margin-bottom:14px;}
 </style>
-<link rel="manifest" href="blob:https://palvareto.github.io/ad2ee047-f8b5-40f4-bbb3-23df5505fe26"><link rel="manifest" href="blob:https://palvareto.github.io/5b36a31d-f08c-4720-bcb8-e5045427e616"><link rel="manifest" href="blob:https://palvareto.github.io/56337bb2-ce80-424c-938a-d2fd3cb5b694"><link rel="manifest" href="blob:https://palvareto.github.io/08c6d167-c94f-4483-954c-16abd60b0871"></head>
+<link rel="manifest" href="blob:https://palvareto.github.io/ad2ee047-f8b5-40f4-bbb3-23df5505fe26"><link rel="manifest" href="blob:https://palvareto.github.io/5b36a31d-f08c-4720-bcb8-e5045427e616"><link rel="manifest" href="blob:https://palvareto.github.io/56337bb2-ce80-424c-938a-d2fd3cb5b694"><link rel="manifest" href="blob:https://palvareto.github.io/08c6d167-c94f-4483-954c-16abd60b0871"><link rel="manifest" href="blob:https://palvareto.github.io/d89e7833-a767-481b-a98d-a5fb999439c3"></head>
 <body>
 
 <!-- MODAL ISTRUZIONI SELVATICI -->
@@ -346,7 +346,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Agente <span class="req">*</span></label>
-    <div class="agenti-grid" id="zooAgentiGrid"></div>
+    <div class="agenti-grid" id="zooAgentiGrid"><button class="agente-btn">2748</button><button class="agente-btn">2766</button><button class="agente-btn">2916</button><button class="agente-btn">3629</button><button class="agente-btn">3688</button><button class="agente-btn">4817</button><button class="agente-btn">5483</button><button class="agente-btn">5522</button><button class="agente-btn">6193</button><button class="agente-btn">7342</button><button class="agente-btn">8751</button><button class="agente-btn">9364</button><button class="agente-btn">ARISI</button><button class="agente-btn">BANDERA</button><button class="agente-btn">BORRINI</button><button class="agente-btn">CAMBIATI</button><button class="agente-btn">CHIODA</button><button class="agente-btn">COLLA</button><button class="agente-btn">FUSARI</button><button class="agente-btn">GUARNERI</button><button class="agente-btn">MARIOTTI</button><button class="agente-btn">PREANI</button><button class="agente-btn">RIZZI</button><button class="agente-btn">TORTINI</button><button class="agente-btn">TRENTAROSSI</button><button class="agente-btn">VIVIANI</button></div>
     <button class="btn-gestisci" onclick="apriGestioneAgenti()">⚙️ Gestisci agenti</button>
   </div>
   <div class="form-group">
@@ -407,7 +407,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator{filter:invert(0.
   </div>
   <div class="form-group">
     <label class="form-label">Agente <span class="req">*</span></label>
-    <div class="agenti-grid" id="crasAgentiGrid"></div>
+    <div class="agenti-grid" id="crasAgentiGrid"><button class="agente-btn">2748</button><button class="agente-btn">2766</button><button class="agente-btn">2916</button><button class="agente-btn">3629</button><button class="agente-btn">3688</button><button class="agente-btn">4817</button><button class="agente-btn">5483</button><button class="agente-btn">5522</button><button class="agente-btn">6193</button><button class="agente-btn">7342</button><button class="agente-btn">8751</button><button class="agente-btn">9364</button><button class="agente-btn">ARISI</button><button class="agente-btn">BANDERA</button><button class="agente-btn">BORRINI</button><button class="agente-btn">CAMBIATI</button><button class="agente-btn">CHIODA</button><button class="agente-btn">COLLA</button><button class="agente-btn">FUSARI</button><button class="agente-btn">GUARNERI</button><button class="agente-btn">MARIOTTI</button><button class="agente-btn">PREANI</button><button class="agente-btn">RIZZI</button><button class="agente-btn">TORTINI</button><button class="agente-btn">TRENTAROSSI</button><button class="agente-btn">VIVIANI</button></div>
     <button class="btn-gestisci" onclick="apriGestioneAgenti()">⚙️ Gestisci agenti</button>
   </div>
   <div class="form-group">
@@ -599,13 +599,19 @@ async function syncPinMapDaSheet() {
     var d = await res.json();
     if (d.pinMap && typeof d.pinMap === 'object' && Object.keys(d.pinMap).length > 0) {
       PIN_MAP = Object.assign({}, PIN_MAP_DEFAULT, d.pinMap);
-      // Ricava agenti dalla pinmap del foglio
-      var nomi = Object.values(PIN_MAP).filter(function(n){ return n && n.trim(); });
+      // Ricava agenti dalla pinmap del foglio - gestisce sia stringa che oggetto {nome,parola}
+      var nomi = Object.values(PIN_MAP).map(function(n){
+        if (typeof n === 'object' && n !== null) return n.nome || '';
+        return n || '';
+      }).filter(function(n){ return n && n.trim(); });
       nomi = nomi.filter(function(n,i){ return nomi.indexOf(n)===i; });
       nomi.sort();
       agenti = nomi;
       if (utenteLoggato) {
-        var pinValido = Object.keys(PIN_MAP).some(function(p){ return PIN_MAP[p] === utenteLoggato; });
+        var pinValido = Object.keys(PIN_MAP).some(function(p){
+          var v = PIN_MAP[p];
+          return (typeof v === 'object' ? v.nome : v) === utenteLoggato;
+        });
         if (!pinValido) { localStorage.removeItem('selvatici_utente'); utenteLoggato = ''; }
       }
     }
@@ -635,7 +641,9 @@ function salvaNuovoPin() {
   // Verifica PIN attuale (server o locale)
   var pinLocale = null;
   try { pinLocale = localStorage.getItem('selvatici_pin_personale_' + utenteLoggato); } catch(e) {}
-  var valido = (pinLocale && attuale === pinLocale) || PIN_MAP[attuale] === utenteLoggato;
+  var _entry = PIN_MAP[attuale];
+  var _nome = (typeof _entry === 'object' && _entry) ? _entry.nome : _entry;
+  var valido = (pinLocale && attuale === pinLocale) || _nome === utenteLoggato;
 
   if (!valido) { err.textContent = '❌ PIN attuale non corretto'; return; }
   if (nuovo.length !== 4 || isNaN(nuovo)) { err.textContent = '❌ Il nuovo PIN deve essere 4 cifre'; return; }
@@ -735,7 +743,7 @@ async function aggiungiAgente(){
   var pin=pinInput.value.trim();
   if(!nome||agenti.indexOf(nome)>=0) return;
   if(pin.length!==4||isNaN(pin)){toast('Inserisci un PIN valido di 4 cifre',true);return;}
-  if(PIN_MAP[pin]){toast('PIN già usato da '+PIN_MAP[pin],true);return;}
+  var _ex=PIN_MAP[pin]; if(_ex){toast('PIN già usato da '+(typeof _ex==='object'?_ex.nome:_ex),true);return;}
   loading(true);
   try {
     var res = await fetch(URL_GS, {method:'POST', body: JSON.stringify({tipo:'PIN', pin:pin, nome:nome})});
