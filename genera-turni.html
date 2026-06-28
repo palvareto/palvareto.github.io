@@ -307,38 +307,56 @@ function generaTurni(){
 
   // ============================================================
   // STEP 4: Turni lun-sab con ciclo 6 lavoro / 1 riposo
+  // Prima assegna i turni, poi metti il riposo solo se c'è copertura
   // ============================================================
-  // Conta giorni già assegnati per ogni agente
   var contaCiclo = {};
   AGENTI.forEach(function(a){ contaCiclo[a]=0; });
 
+  // Prima passata: assegna M o P a tutti gli agenti disponibili
   date.forEach(function(d,i){
     var dow = d.getDay();
-    if(dow===0) return; // domenica già gestita
+    if(dow===0) return;
 
     AGENTI.forEach(function(a){
-      if(!isDisp(a,i)) return; // già assegnato
+      if(!isDisp(a,i)) return;
 
-      // Ciclo: ogni 7 posizioni → 6 lavoro + 1 riposo
-      var pos = contaCiclo[a] % 7;
-      if(pos===6){
-        T[a][i].tipo='R';
-      } else {
-        // Preferenze richieste
-        var prefM = richieste[a] && richieste[a].prefMattina;
-        var prefP = richieste[a] && richieste[a].prefPomeriggio;
-        // Conta M e P assegnati
-        var nM=0, nP=0;
-        for(var k=0;k<i;k++){
-          if(T[a][k].tipo==='M'||T[a][k].tipo==='CO') nM++;
-          if(T[a][k].tipo==='P') nP++;
-        }
-        if(prefM) T[a][i].tipo='M';
-        else if(prefP) T[a][i].tipo='P';
-        else T[a][i].tipo = nM<=nP ? 'M' : 'P';
+      var prefM = richieste[a] && richieste[a].prefMattina;
+      var prefP = richieste[a] && richieste[a].prefPomeriggio;
+      var nM=0, nP=0;
+      for(var k=0;k<i;k++){
+        if(T[a][k].tipo==='M'||T[a][k].tipo==='CO') nM++;
+        if(T[a][k].tipo==='P') nP++;
       }
-      contaCiclo[a]++;
+      if(prefM) T[a][i].tipo='M';
+      else if(prefP) T[a][i].tipo='P';
+      else T[a][i].tipo = nM<=nP ? 'M' : 'P';
     });
+  });
+
+  // Seconda passata: applica il riposo (1 ogni 7 giorni)
+  // ma solo se quel giorno ha abbastanza copertura (min 2 M + 2 P)
+  AGENTI.forEach(function(a){
+    var contatoreRiposo = 0;
+    for(var i=0;i<nGiorni;i++){
+      var dow = date[i].getDay();
+      if(dow===0) continue; // domenica già gestita
+      if(T[a][i].tipo!=='M' && T[a][i].tipo!=='P') continue; // già assegnato altrimenti
+
+      contatoreRiposo++;
+      if(contatoreRiposo % 7 === 0){
+        // Controlla copertura del giorno
+        var nM=0, nP=0;
+        AGENTI.forEach(function(b){
+          if(T[b][i].tipo==='M'||T[b][i].tipo==='CO') nM++;
+          if(T[b][i].tipo==='P') nP++;
+        });
+        // Metti riposo solo se il giorno ha copertura sufficiente
+        if(nM > 2 && nP > 1){
+          T[a][i].tipo='R';
+        }
+        // altrimenti salta il riposo questo giorno e lo rimanda
+      }
+    }
   });
 
   // Risolvi '?' rimanenti
