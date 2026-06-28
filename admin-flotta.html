@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Flotta — PP Cremona</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height:100vh;padding:24px 16px;}
+.header{text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.header-title{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;color:#f5a623;}
+.header-sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-top:4px;text-transform:uppercase;}
+.card{background:#16213e;border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;margin-bottom:16px;max-width:420px;margin-left:auto;margin-right:auto;}
+.card-title{font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;color:#f5a623;margin-bottom:12px;}
+.targa-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:6px;}
+.targa-nome{font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;color:#fff;}
+.btn-del{background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.3);color:#e74c3c;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;font-family:'Barlow',sans-serif;}
+.btn-del:hover{background:rgba(231,76,60,0.3);}
+.form-row{display:flex;gap:8px;margin-top:12px;}
+.form-input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(245,166,35,0.3);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;font-family:'Barlow',sans-serif;outline:none;text-transform:uppercase;}
+.btn-add{padding:12px 16px;border-radius:10px;border:none;background:#f5a623;color:#0f1115;font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;cursor:pointer;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:10px;font-size:13px;z-index:9999;display:none;max-width:90%;}
+.toast.ok{background:rgba(39,174,96,0.9);color:#fff;}
+.toast.err{background:rgba(231,76,60,0.9);color:#fff;}
+
+/* LOGIN */
+#loginOverlay{position:fixed;inset:0;background:#0f1115;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.login-box{width:100%;max-width:320px;text-align:center;}
+.login-title{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;color:#f5a623;margin-bottom:8px;}
+.login-sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:24px;text-transform:uppercase;}
+.login-input{width:100%;padding:14px;border-radius:10px;border:1px solid rgba(231,76,60,0.4);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;margin-bottom:8px;outline:none;text-align:center;}
+.login-err{font-size:11px;color:#e74c3c;min-height:16px;margin-bottom:8px;}
+.login-btn{width:100%;padding:14px;border-radius:10px;border:none;background:#e74c3c;color:#fff;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;cursor:pointer;}
+.warning{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:10px;padding:12px;font-size:12px;color:rgba(231,76,60,0.8);margin-bottom:16px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginOverlay">
+  <div class="login-box">
+    <div class="login-title">🔒 ADMIN FLOTTA</div>
+    <div class="login-sub">Polizia Provinciale di Cremona</div>
+    <input type="password" id="pwdAdmin" class="login-input" placeholder="Password amministratore..." maxlength="20">
+    <div class="login-err" id="errAdmin"></div>
+    <button class="login-btn" onclick="verificaAdmin()">Accedi →</button>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-title">🚗 Admin Flotta</div>
+  <div class="header-sub">Gestione Veicoli — Polizia Provinciale di Cremona</div>
+</div>
+
+<div class="warning">
+  ⚠️ <strong>Area riservata all'amministratore.</strong> Le modifiche alle targhe si applicano immediatamente a tutte le app. Non condividere questo link con gli agenti.
+</div>
+
+<div class="card">
+  <div class="card-title">🚗 Veicoli attivi</div>
+  <div id="listaTarghe"><div style="text-align:center;color:rgba(255,255,255,0.3);padding:16px;">⏳ Caricamento...</div></div>
+  <div class="form-row">
+    <input type="text" class="form-input" id="nuovaTarga" placeholder="ES. YA123AB" maxlength="10">
+    <button class="btn-add" onclick="aggiungTarga()">+ Aggiungi</button>
+  </div>
+</div>
+
+<div id="toastEl" class="toast"></div>
+
+<script>
+var URL_GS = 'https://script.google.com/macros/s/AKfycbzY8hcFw4FJueOFcFaTGJniKu64Y-36fFeJ6FDsGC1N_GpuxMYteCTrtknnsivOakY/exec';
+var PWD_ADMIN = 'kgbx9875';
+
+function verificaAdmin(){
+  var pwd = document.getElementById('pwdAdmin').value;
+  if(pwd === PWD_ADMIN){
+    document.getElementById('loginOverlay').style.display = 'none';
+    caricaTarghe();
+  } else {
+    document.getElementById('errAdmin').textContent = '❌ Password errata';
+    document.getElementById('pwdAdmin').value = '';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('pwdAdmin').addEventListener('keydown', function(e){ if(e.key==='Enter') verificaAdmin(); });
+  document.getElementById('nuovaTarga').addEventListener('keydown', function(e){ if(e.key==='Enter') aggiungTarga(); });
+});
+
+function toast(msg, err){
+  var el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.className = 'toast ' + (err ? 'err' : 'ok');
+  el.style.display = 'block';
+  setTimeout(function(){ el.style.display = 'none'; }, 3000);
+}
+
+async function caricaTarghe(){
+  try {
+    var res = await fetch(URL_GS + '?action=targhe');
+    var d = await res.json();
+    renderTarghe(d.targhe || []);
+  } catch(e){
+    document.getElementById('listaTarghe').innerHTML = '<div style="color:#e74c3c;text-align:center;">❌ Errore caricamento</div>';
+  }
+}
+
+function renderTarghe(targhe){
+  var el = document.getElementById('listaTarghe');
+  if(!targhe.length){
+    el.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:16px;">Nessun veicolo presente</div>';
+    return;
+  }
+  el.innerHTML = targhe.map(function(t){
+    return '<div class="targa-row"><span class="targa-nome">🚗 ' + t + '</span>' +
+      '<button class="btn-del" onclick="rimuoviTarga(\'' + t + '\')">🗑 Rimuovi</button></div>';
+  }).join('');
+}
+
+async function aggiungTarga(){
+  var targa = document.getElementById('nuovaTarga').value.trim().toUpperCase();
+  if(!targa || targa.length < 4){ toast('Inserisci una targa valida', true); return; }
+  try {
+    var res = await fetch(URL_GS, {
+      method: 'POST',
+      body: JSON.stringify({ tipo: 'TARGA_ADD', targa: targa })
+    });
+    var d = await res.json();
+    if(d.status === 'ok'){
+      document.getElementById('nuovaTarga').value = '';
+      toast('✅ Targa ' + targa + ' aggiunta!');
+      caricaTarghe();
+    } else {
+      toast('❌ ' + (d.message || 'Errore'), true);
+    }
+  } catch(e){ toast('❌ Errore connessione', true); }
+}
+
+async function rimuoviTarga(targa){
+  if(!confirm('Rimuovere il veicolo ' + targa + '?\nI dati storici rimarranno nel foglio Google.')){ return; }
+  try {
+    var res = await fetch(URL_GS, {
+      method: 'POST',
+      body: JSON.stringify({ tipo: 'TARGA_REMOVE', targa: targa })
+    });
+    var d = await res.json();
+    if(d.status === 'ok'){
+      toast('✅ Targa ' + targa + ' rimossa!');
+      caricaTarghe();
+    } else {
+      toast('❌ Errore rimozione', true);
+    }
+  } catch(e){ toast('❌ Errore connessione', true); }
+}
+</script>
+</body>
+</html>
