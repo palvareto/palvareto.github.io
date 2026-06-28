@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Turni — PP Cremona</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0f1115;color:#e2e8f0;font-family:'Barlow',sans-serif;min-height:100vh;padding:16px;}
+h1{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:#f5a623;text-align:center;margin-bottom:4px;}
+.sub{text-align:center;font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:20px;letter-spacing:1px;}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:14px;}
+.card-title{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:2px;color:#f5a623;margin-bottom:12px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+label{font-size:11px;color:rgba(255,255,255,0.5);display:block;margin-bottom:4px;letter-spacing:.5px;}
+input,select,textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:#e2e8f0;font-family:'Barlow',sans-serif;font-size:13px;padding:8px 10px;}
+textarea{resize:vertical;min-height:90px;line-height:1.5;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#f5a623;}
+select option{background:#1a1d23;}
+.btn{width:100%;padding:14px;border:none;border-radius:8px;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;cursor:pointer;margin-top:4px;transition:opacity .2s;}
+.btn-gen{background:linear-gradient(135deg,#f5a623,#e8920a);color:#000;}
+.btn-gen:hover{opacity:.9;}
+.btn-reset{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);margin-top:8px;}
+.btn-reset:hover{background:rgba(255,255,255,0.1);}
+.btn-copy{background:rgba(125,207,170,0.15);color:#7dcfaa;border:1px solid rgba(125,207,170,0.3);font-size:13px;font-family:'Barlow',sans-serif;letter-spacing:1px;padding:10px;margin-top:8px;}
+.chat-wrap{display:none;margin-top:4px;}
+.chat-box{background:#0a0a14;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;min-height:120px;max-height:500px;overflow-y:auto;font-size:13px;line-height:1.7;}
+.msg-ai{color:#e2e8f0;}
+.msg-ai .thinking{color:rgba(255,255,255,0.35);font-style:italic;font-size:12px;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(245,166,35,0.3);border-top-color:#f5a623;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status{text-align:center;font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px;min-height:18px;}
+.gs-output{background:#0a0a1a;border:1px solid rgba(125,207,170,0.3);border-radius:8px;padding:12px;font-size:11px;font-family:monospace;color:#7dcfaa;white-space:pre-wrap;max-height:280px;overflow-y:auto;margin-top:10px;display:none;}
+.section-ai{display:none;}
+.agente-row{display:grid;grid-template-columns:110px 140px 1fr;gap:8px;align-items:center;margin-bottom:6px;}
+.agente-nome{font-size:13px;font-weight:600;color:#e2e8f0;}
+.giorni-hint{font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+#loginOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f1115;z-index:9999;display:flex;align-items:center;justify-content:center;}
+.login-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px 28px;width:100%;max-width:340px;text-align:center;}
+.login-logo{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:4px;color:#f5a623;margin-bottom:4px;}
+.login-sub{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:2px;margin-bottom:24px;}
+.login-box input{margin-bottom:12px;text-align:center;font-size:16px;letter-spacing:2px;padding:12px;}
+.login-box input::placeholder{letter-spacing:1px;font-size:13px;}
+.btn-login{width:100%;padding:12px;background:linear-gradient(135deg,#f5a623,#e8920a);border:none;border-radius:8px;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;color:#000;cursor:pointer;margin-top:4px;}
+.btn-login:hover{opacity:.9;}
+#loginErr{color:#f87171;font-size:12px;margin-top:10px;min-height:16px;}
+#loginSpinner{display:none;margin-top:10px;font-size:12px;color:rgba(255,255,255,0.4);}
+
+</style>
+</head>
+<body>
+
+<div id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">⚡ AI TURNI</div>
+    <div class="login-sub">PP CREMONA — ACCESSO RISERVATO</div>
+    <input type="password" id="loginPin" placeholder="PIN agente" maxlength="10" onkeydown="if(event.key==='Enter')document.getElementById('loginParola').focus()">
+    <input type="password" id="loginParola" placeholder="Parola segreta" maxlength="20" onkeydown="if(event.key==='Enter')verificaLogin()">
+    <button class="btn-login" onclick="verificaLogin()">ENTRA</button>
+    <div id="loginSpinner"><span class="spinner"></span> Verifica in corso...</div>
+    <div id="loginErr"></div>
+  </div>
+</div>
+
+<h1>⚡ AI Turni</h1>
+<div class="sub">PP CREMONA — GENERATORE INTELLIGENTE</div>
+
+<div class="card">
+  <div class="card-title">📅 Periodo</div>
+  <div class="row3">
+    <div><label>MESE</label>
+      <select id="mese">
+        <option value="1">Gennaio</option><option value="2">Febbraio</option>
+        <option value="3">Marzo</option><option value="4">Aprile</option>
+        <option value="5">Maggio</option><option value="6">Giugno</option>
+        <option value="7" selected>Luglio</option><option value="8">Agosto</option>
+        <option value="9">Settembre</option><option value="10">Ottobre</option>
+        <option value="11">Novembre</option><option value="12">Dicembre</option>
+      </select>
+    </div>
+    <div><label>ANNO</label><input type="text" id="anno" value="2026"></div>
+    <div><label>GIORNI</label><input type="text" id="giorni" value="31"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">🚫 Assenze e vincoli per agente</div>
+  <div id="agentiWrap"></div>
+</div>
+
+<div class="card">
+  <div class="card-title">💬 Istruzioni libere all'AI</div>
+  <textarea id="istruzioni" placeholder="Scrivi qui qualsiasi regola o preferenza in italiano libero. Es:&#10;BANDERA vuole sempre mattine&#10;BORRINI e COLLA non insieme la domenica&#10;Servono almeno 5 mattine ogni giorno feriale&#10;RIZZI evitare turni il venerdì&#10;ARISI rientra dalle ferie il 16"></textarea>
+  <div class="giorni-hint" style="margin-top:6px;">L'AI legge e applica queste istruzioni durante la generazione</div>
+</div>
+
+<button class="btn btn-gen" onclick="generaAI()">⚡ GENERA CON AI</button>
+<button class="btn btn-reset" onclick="resetTutto()">↺ Reset</button>
+
+<div class="chat-wrap" id="chatWrap">
+  <div class="card" style="margin-top:14px;">
+    <div class="card-title">🤖 Ragionamento AI</div>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="status" id="statusTxt"></div>
+  </div>
+  <div class="card section-ai" id="outputCard">
+    <div class="card-title">📋 Script Apps Script</div>
+    <button class="btn btn-copy" onclick="copiaScript()">📋 Copia negli appunti</button>
+    <div class="gs-output" id="gsOutput"></div>
+  </div>
+</div>
+
+<script>
+const AGENTI = ['ARISI','BANDERA','BORRINI','CAMBIATI','CHIODA','COLLA','GUARNERI','PREANI','RIZZI','TRENTAROSSI','VIVIANI'];
+const MESI_NOMI = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+
+function initAgenti() {
+  const wrap = document.getElementById('agentiWrap');
+  wrap.innerHTML = '';
+  AGENTI.forEach(function(a) {
+    const row = document.createElement('div');
+    row.className = 'agente-row';
+    row.innerHTML =
+      '<div class="agente-nome">'+a+'</div>'+
+      '<select id="stato_'+a+'">'+
+        '<option value="disponibile">Disponibile</option>'+
+        '<option value="ferie">Ferie</option>'+
+        '<option value="malattia">Malattia</option>'+
+        '<option value="altro">Altro</option>'+
+      '</select>'+
+      '<div>'+
+        '<input type="text" id="giorni_'+a+'" placeholder="es. 1-15 oppure 1,5,10">'+
+        '<div class="giorni-hint">Giorni assenza (vuoto = tutto il mese)</div>'+
+      '</div>';
+    wrap.appendChild(row);
+  });
+}
+
+function buildContesto() {
+  const mese = document.getElementById('mese').value;
+  const anno = document.getElementById('anno').value;
+  const nG = parseInt(document.getElementById('giorni').value);
+  const meseName = MESI_NOMI[parseInt(mese)];
+  const istr = document.getElementById('istruzioni').value.trim();
+
+  // Assenze
+  let assenze = [];
+  AGENTI.forEach(function(a) {
+    const stato = document.getElementById('stato_'+a).value;
+    const gg = document.getElementById('giorni_'+a).value.trim();
+    if(stato !== 'disponibile') {
+      assenze.push(a + ': ' + stato.toUpperCase() + (gg ? ' giorni ' + gg : ' tutto il mese'));
+    }
+  });
+
+  // Calcola giorni della settimana
+  const d0 = new Date(parseInt(anno), parseInt(mese)-1, 1);
+  const GG = ['DOM','LUN','MAR','MER','GIO','VEN','SAB'];
+  let calStr = '';
+  for(let i=0;i<nG;i++){
+    const d = new Date(d0);
+    d.setDate(d.getDate()+i);
+    calStr += (i+1)+'/'+GG[d.getDay()]+' ';
+  }
+
+  return `Sei un esperto pianificatore di turni per la Polizia Provinciale di Cremona. Devi generare i turni per ${meseName} ${anno} (${nG} giorni).
+
+AGENTI (${AGENTI.length} totali): ${AGENTI.join(', ')}
+
+CALENDARIO GIORNI:
+${calStr}
+
+REGOLE BASE OBBLIGATORIE:
+1. Ciclo 6 giorni lavorativi / 1 giorno di RIPOSO per ogni agente
+2. Turni disponibili: 7/13 (mattina), 13/19 (pomeriggio), C/O (continuato), RECUPERO, RIPOSO, FERIE, MALATTIA
+3. Ogni domenica: esattamente 4 agenti lavorano (2 fanno 7/13, 2 fanno 13/19) a rotazione
+4. Chi lavora domenica ha diritto a un giorno di RECUPERO nella settimana successiva, distribuito su giorni diversi (non tutti lunedì)
+5. Reperibilità notturna: ruota a blocchi di 5 giorni tra gli agenti, indicata con "SI" nella colonna E
+6. C/O distribuito equamente (circa 2-3 per agente al mese)
+7. Obiettivo copertura giornaliera feriale: 5-6 mattine, 4-5 pomeriggi
+8. Domenica gli agenti non in servizio fanno DOM (non RIPOSO)
+9. Nessun agente deve superare 8 giorni consecutivi di lavoro senza riposo
+10. Equilibrio mattine/pomeriggi per agente: max 60/40
+
+${assenze.length > 0 ? 'ASSENZE DICHIARATE:\n' + assenze.join('\n') : 'Nessuna assenza dichiarata.'}
+
+${istr ? 'ISTRUZIONI AGGIUNTIVE E PREFERENZE:\n' + istr : ''}
+
+FORMATO OUTPUT RICHIESTO:
+Rispondi SOLO con un JSON valido nel seguente formato, senza testo prima o dopo:
+{
+  "turni": [
+    {"agente": "ARISI", "data": "2026-07-01", "turno": "7/13", "reperibile": ""},
+    ...
+  ],
+  "note": "breve commento sui criteri applicati"
+}
+
+Dove "turno" è uno tra: 7/13, 13/19, C/O, RECUPERO, RIPOSO, DOM, FERIE, MALATTIA
+E "reperibile" è "SI" o ""
+
+Genera TUTTI i ${nG * AGENTI.length} record (${AGENTI.length} agenti x ${nG} giorni).`;
+}
+
+async function generaAI() {
+  const chatWrap = document.getElementById('chatWrap');
+  const chatBox = document.getElementById('chatBox');
+  const statusTxt = document.getElementById('statusTxt');
+  const outputCard = document.getElementById('outputCard');
+
+  chatWrap.style.display = 'block';
+  outputCard.style.display = 'none';
+  chatBox.innerHTML = '<div class="msg-ai"><span class="spinner"></span> L\'AI sta analizzando i vincoli e generando i turni...</div>';
+  statusTxt.textContent = 'Questo può richiedere 20-40 secondi...';
+
+  const prompt = buildContesto();
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 16000,
+        thinking: {type: 'enabled', budget_tokens: 8000},
+        messages: [{role:'user', content: prompt}]
+      })
+    });
+
+    const data = await resp.json();
+
+    // Estrai thinking e risposta
+    let thinkingText = '';
+    let responseText = '';
+    data.content.forEach(function(block) {
+      if(block.type === 'thinking') thinkingText = block.thinking;
+      if(block.type === 'text') responseText = block.text;
+    });
+
+    // Mostra ragionamento AI
+    chatBox.innerHTML =
+      (thinkingText ? '<div class="msg-ai thinking">💭 Ragionamento AI:\n' + thinkingText.substring(0,600) + (thinkingText.length>600?'...':'') + '</div><hr style="border-color:rgba(255,255,255,0.08);margin:10px 0">' : '') +
+      '<div class="msg-ai">✅ Generazione completata</div>';
+
+    // Parsa JSON
+    const clean = responseText.replace(/```json|```/g,'').trim();
+    const risultato = JSON.parse(clean);
+
+    if(risultato.note) {
+      chatBox.innerHTML += '<div class="msg-ai" style="margin-top:8px;color:#7dcfaa">📝 ' + risultato.note + '</div>';
+    }
+
+    statusTxt.textContent = risultato.turni.length + ' record generati';
+
+    // Genera script GS
+    const mese = document.getElementById('mese').value;
+    const anno = document.getElementById('anno').value;
+    generaScript(risultato.turni, parseInt(mese), parseInt(anno));
+
+  } catch(e) {
+    chatBox.innerHTML = '<div style="color:#f87171">❌ Errore: ' + e.message + '</div>';
+    statusTxt.textContent = 'Riprova o controlla la connessione';
+  }
+}
+
+function generaScript(turni, mese, anno) {
+  const outputCard = document.getElementById('outputCard');
+  const gsOutput = document.getElementById('gsOutput');
+  const nG = parseInt(document.getElementById('giorni').value);
+  const pad = function(n){return n<10?'0'+n:''+n;};
+
+  // importaTurniGenerati
+  let lines = ['// Script generato da AI — PP Cremona'];
+  lines.push('function importaTurniGenerati() {');
+  lines.push('  var ss = SpreadsheetApp.getActiveSpreadsheet();');
+  lines.push('  var sheet = ss.getSheetByName("Turni");');
+  lines.push('  var righe = [');
+  turni.forEach(function(r) {
+    var ts = r.turno === '7/13' ? '7/13' : r.turno === '13/19' ? '13/19' : r.turno;
+    lines.push('    ["'+r.agente+'","'+r.data+'","'+ts+'","","'+(r.reperibile||'')+'","GENERATORE AI","'+r.data+'"],');
+  });
+  lines.push('  ];');
+  lines.push('  righe.forEach(function(r){ sheet.appendRow(r); });');
+  lines.push('  SpreadsheetApp.getUi().alert("✅ Importati " + righe.length + " record!");');
+  lines.push('}');
+  lines.push('');
+
+  // creaCalendarioVisivo
+  const d0 = new Date(anno, mese-1, 1);
+  const GGsett = ['DOM','LUN','MAR','MER','GIO','VEN','SAB'];
+  const date = [];
+  for(let i=0;i<nG;i++){const d=new Date(d0);d.setDate(d.getDate()+i);date.push(d);}
+
+  lines.push('function creaCalendarioVisivo() {');
+  lines.push('  var ss = SpreadsheetApp.getActiveSpreadsheet();');
+  lines.push('  var nome = "CALENDARIO '+mese+'/'+anno+'";');
+  lines.push('  var sh = ss.getSheetByName(nome);');
+  lines.push('  if(sh) ss.deleteSheet(sh);');
+  lines.push('  sh = ss.insertSheet(nome);');
+  lines.push('  sh.getRange(1,1).setValue("TURNI '+mese+'/'+anno+'").setFontSize(14).setFontWeight("bold");');
+  lines.push('  sh.getRange(1,1,1,'+(nG+3)+').merge().setBackground("#1a237e").setFontColor("#ffffff").setHorizontalAlignment("center");');
+  lines.push('  sh.getRange(2,1).setValue("AGENTE").setFontWeight("bold").setBackground("#283593").setFontColor("#ffffff");');
+
+  date.forEach(function(d,i){
+    const isDOM = d.getDay()===0;
+    lines.push('  sh.getRange(2,'+(i+2)+').setValue("'+GGsett[d.getDay()]+'\\n'+d.getDate()+'").setBackground("'+(isDOM?'#b71c1c':'#283593')+'").setFontColor("#ffffff").setHorizontalAlignment("center").setFontWeight("bold").setWrap(true);');
+  });
+  lines.push('  sh.getRange(2,'+(nG+2)+').setValue("LAV").setBackground("#283593").setFontColor("#ffffff").setHorizontalAlignment("center").setFontWeight("bold");');
+  lines.push('  sh.getRange(2,'+(nG+3)+').setValue("RIP").setBackground("#283593").setFontColor("#ffffff").setHorizontalAlignment("center").setFontWeight("bold");');
+
+  // Raggruppa turni per agente
+  const byAgente = {};
+  AGENTI.forEach(function(a){byAgente[a]={};});
+  turni.forEach(function(r){
+    const d = r.data.split('-')[2];
+    byAgente[r.agente][parseInt(d)] = {t:r.turno, rep:r.reperibile==='SI'};
+  });
+
+  AGENTI.forEach(function(a,ai){
+    const riga = ai+3;
+    let totLav=0, totRip=0;
+    lines.push('  sh.getRange('+riga+',1).setValue("'+a+'").setFontWeight("bold");');
+    date.forEach(function(d,i){
+      const g = i+1;
+      const info = byAgente[a][g] || {t:'RIPOSO',rep:false};
+      let label='', colore='#ffffff';
+      switch(info.t){
+        case '7/13': label='M 7-13'; colore='#e8f5e9'; totLav++; break;
+        case '13/19': label='P 13-19'; colore='#fff8e1'; totLav++; break;
+        case 'C/O': label='C/O'; colore='#e3f2fd'; totLav++; break;
+        case 'RECUPERO': label='REC'; colore='#f3e5f5'; totLav++; break;
+        case 'FERIE': label='FER'; colore='#fce4ec'; totRip++; break;
+        case 'MALATTIA': label='MAL'; colore='#ffccbc'; totRip++; break;
+        case 'DOM': label='DOM'; colore='#eceff1'; totRip++; break;
+        default: label='R'; colore='#eceff1'; totRip++;
+      }
+      if(info.rep) label+=' 🔔';
+      lines.push('  sh.getRange('+riga+','+(i+2)+').setValue("'+label+'").setBackground("'+colore+'").setHorizontalAlignment("center");');
+    });
+    lines.push('  sh.getRange('+riga+','+(nG+2)+').setValue('+totLav+').setBackground("#c8e6c9").setHorizontalAlignment("center").setFontWeight("bold");');
+    lines.push('  sh.getRange('+riga+','+(nG+3)+').setValue('+totRip+').setBackground("#f8bbd0").setHorizontalAlignment("center").setFontWeight("bold");');
+  });
+
+  // Copertura giornaliera
+  const rigaM = AGENTI.length+3;
+  const rigaP = AGENTI.length+4;
+  lines.push('  sh.getRange('+rigaM+',1).setValue("M TOT").setFontWeight("bold").setBackground("#b2dfdb");');
+  lines.push('  sh.getRange('+rigaP+',1).setValue("P TOT").setFontWeight("bold").setBackground("#fff9c4");');
+  date.forEach(function(d,i){
+    const g = i+1;
+    const nM = AGENTI.filter(function(a){const info=byAgente[a][g]||{t:''};return info.t==='7/13'||info.t==='C/O';}).length;
+    const nP = AGENTI.filter(function(a){const info=byAgente[a][g]||{t:''};return info.t==='13/19';}).length;
+    lines.push('  sh.getRange('+rigaM+','+(i+2)+').setValue('+nM+').setBackground("#b2dfdb").setHorizontalAlignment("center");');
+    lines.push('  sh.getRange('+rigaP+','+(i+2)+').setValue('+nP+').setBackground("#fff9c4").setHorizontalAlignment("center");');
+  });
+
+  lines.push('  sh.setFrozenRows(2);');
+  lines.push('  sh.setFrozenColumns(1);');
+  lines.push('  sh.setColumnWidth(1,110);');
+  lines.push('  for(var c=2;c<='+(nG+3)+';c++) sh.setColumnWidth(c,52);');
+  lines.push('  sh.getRange(2,1,'+(AGENTI.length+4)+','+(nG+3)+').setBorder(true,true,true,true,true,true,"#cccccc",SpreadsheetApp.BorderStyle.SOLID);');
+  lines.push('  SpreadsheetApp.setActiveSheet(sh);');
+  lines.push('  SpreadsheetApp.getUi().alert("✅ Calendario creato: " + nome);');
+  lines.push('}');
+
+  gsOutput.textContent = lines.join('\n');
+  gsOutput.style.display = 'block';
+  outputCard.style.display = 'block';
+}
+
+function copiaScript() {
+  const testo = document.getElementById('gsOutput').textContent;
+  navigator.clipboard.writeText(testo).then(function(){
+    alert('✅ Copiato! Incolla in Apps Script e lancia importaTurniGenerati() poi creaCalendarioVisivo()');
+  });
+}
+
+function resetTutto() {
+  document.getElementById('chatWrap').style.display = 'none';
+  document.getElementById('istruzioni').value = '';
+  initAgenti();
+}
+
+
+const TURNI_URL = 'https://script.google.com/macros/s/AKfycbyVBPIGRRJigXuoQsHialZiFugbN-jKRM-rB6jUnKHw7w52AE_H9rVr20TYxE-sazMs/exec';
+
+const PAROLE = {
+  '7342':'PIXEL','2916':'CACHE','5483':'PROXY','8751':'PATCH',
+  '5522':'QUERY','3629':'TOKEN','3688':'STELL','4817':'STACK',
+  '1014':'BYTER','9364':'LINUX','6193':'HTTPS','1013':'DEBUG',
+  '2748':'SHELL','2766':'ARRAY'
+};
+
+async function verificaLogin() {
+  const pin = document.getElementById('loginPin').value.trim();
+  const parola = document.getElementById('loginParola').value.trim().toUpperCase();
+  const err = document.getElementById('loginErr');
+  const spinner = document.getElementById('loginSpinner');
+  err.textContent = '';
+
+  if(!pin || !parola) { err.textContent = 'Inserisci PIN e parola segreta'; return; }
+
+  // Verifica parola segreta lato client
+  if(PAROLE[pin] !== parola) {
+    err.textContent = 'PIN o parola segreta non corretti';
+    return;
+  }
+
+  // Verifica PIN via Apps Script
+  spinner.style.display = 'block';
+  try {
+    const r = await fetch(TURNI_URL + '?action=login&pin=' + encodeURIComponent(pin));
+    const d = await r.json();
+    spinner.style.display = 'none';
+    if(d.success) {
+      document.getElementById('loginOverlay').style.display = 'none';
+      sessionStorage.setItem('aiturni_ok','1');
+    } else {
+      err.textContent = 'PIN non riconosciuto';
+    }
+  } catch(e) {
+    spinner.style.display = 'none';
+    // Fallback: se Apps Script non risponde ma parola ok, entra comunque
+    document.getElementById('loginOverlay').style.display = 'none';
+    sessionStorage.setItem('aiturni_ok','1');
+  }
+}
+
+// Se già loggato in sessione, salta login
+if(sessionStorage.getItem('aiturni_ok')==='1') {
+  document.getElementById('loginOverlay').style.display = 'none';
+}
+
+initAgenti();
+</script>
+</body>
+</html>
